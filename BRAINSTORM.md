@@ -32,7 +32,9 @@ Laser-like.
 
 # Reference
 
-Strider/Shatterhand/Contra
+Strider/Shatterhand/Contra (Hard Corps)
+
+https://www.youtube.com/watch?v=qVOOiCFktU4
 
 
 # Music
