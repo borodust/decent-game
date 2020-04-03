@@ -33,3 +33,10 @@ Laser-like.
 # Reference
 
 Strider/Shatterhand/Contra
+
+
+# Music
+
+https://soundcloud.com/david-otoole-876993646/blob2test
+https://soundcloud.com/david-otoole-876993646/sky-war
+https://soundcloud.com/david-otoole-876993646/melcrov8r
