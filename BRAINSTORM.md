@@ -40,3 +40,4 @@ Strider/Shatterhand/Contra
 https://soundcloud.com/david-otoole-876993646/blob2test
 https://soundcloud.com/david-otoole-876993646/sky-war
 https://soundcloud.com/david-otoole-876993646/melcrov8r
+https://soundcloud.com/david-otoole-3/aura
