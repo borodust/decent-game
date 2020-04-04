@@ -1,5 +1,43 @@
 # Script Proposal
 
+# Script in brief
+
+You start off with nothing, battling progressing monsters towards a final fight. You pick alien or cyborg gear and progress through tougher abilities vs tougher monsters.
+
+After the Big Boss fight, you have a choice to make - hit the self-destruct, destroying the Evil System, or run for it? The boss is dead.
+
+
+The final ending (via text and flat graphics ) is affected by whether you helped others, if you used Alien or Cyborg gear, and how you handle the self-destruct.
+
+# Quick Sketches
+
+
+* Player Alien, No Self Destruct. 
+
+Alien glyphs flash. You can read them now. "You are now one of us. Life eternal, life united. Life is the choice."
+This makes sense. Mom? But you don't remember Your mother's face anymore. You hear the machines around you stop.
+
+Alien tentacles spread through world
+
+* Player Cyborg, No Self Destruct.
+
+By allways concentrating on Victory and Power, you have become a machine. As you are consumed by The Leader's Network, You think: "I gave up my freedom, my humanity for power". There is a flash.
+You feel yourself engulfed in a vast network of moving machinery.
+
+Then there is only the machine. 
+
+* Alien or Cyborg, hit self-destruct, no help to npcs
+
+You made the hard choice. You sacrificed yourself and others. Now, it must be finished. You hit the button. In a few seconds, both the alien network and The Leader's machines will be destroyed. Both are a threat. Humanity is finished. You know this now. There is a flash.
+
+
+*Helped NPCs, hit self-destruct
+
+You hit the button, yet nothing happens. "Wait, Hero!" You hear one the people you helped scream. "We have found another way. You don't have to die! You've done Your part, now let us help!". As you faint from your wounds, you feel caring hands embrace You and carry You away from The Facility. "We stayed human through it all",  You think, as you finally let yourself sleep.
+
+
+
+
 # Core Ideas to discuss
 
 Features must be cheap to produce, concentrate on player involvement and connection to game. 
