@@ -11,6 +11,7 @@ The final ending (via text and flat graphics ) is affected by whether you helped
 
 # Quick Sketches
 
+* Final ending texts, choices impact. 
 
 * Player Alien, No Self Destruct. 
 
@@ -45,14 +46,21 @@ Boss proposal - fundamentalist cyborg that spews a mixture of all power ideas th
 Sample Quotes (needs more humor):
 
 "Only a Free Market Will Bring along the Final Reich, Comrades!"
-"We need leibensraum for our non-gendered aryan tovarisches!"
-"My pronouns are: "Fuhrer, Your Prophet!"
-"I'm sending you the bill for freedom, by drone delivery! Freedom isn't free!"
-"The triumph of will over power comes with security of no choice!"
-"You have the choice to join us or the choice to die!"
-"You're on the wrong side of history but the right side of our non-violent guns!"
-"Resistance to voluntary freedom is an act of initiating agression!"
 
+"We need leibensraum for our non-gendered aryan tovarisches!"
+
+"My pronouns are: "Fuhrer, Your Prophet!"
+
+"I'm sending you the bill for freedom, by drone delivery! Freedom isn't free!"
+
+"The triumph of will over power comes with security of no choice!"
+
+"You have the choice to join us or the choice to die!"
+
+"You're on the wrong side of history but the right side of our non-violent guns!"
+
+"Resistance to voluntary freedom is an act of initiating agression!"
+----------
 # Core Ideas to discuss
 
 Features must be cheap to produce, concentrate on player involvement and connection to game. 
