@@ -36,7 +36,22 @@ You made the hard choice. You sacrificed yourself and others. Now, it must be fi
 You hit the button, yet nothing happens. "Wait, Hero!" You hear one the people you helped scream. "We have found another way. You don't have to die! You've done Your part, now let us help!". As you faint from your wounds, you feel caring hands embrace You and carry You away from The Facility. "We stayed human through it all",  You think, as you finally let yourself sleep.
 
 
+# Final Boss Interaction - discuss
 
+Boss proposal - fundamentalist cyborg that spews a mixture of all power ideas throughout the ages. Think Handsom Jack from Borderlands 2 with Stalin, Hillary and Trump and Hitler. 
+
+? Do as full-screen prompts between gameplay or partial on-screen display with text? OSD would give cheap interaction with NPCs as well.
+
+Sample Quotes (needs more humor):
+
+"Only a Free Market Will Bring along the Final Reich, Comrades!"
+"We need leibensraum for our non-gendered aryan tovarisches!"
+"My pronouns are: "Fuhrer, Your Prophet!"
+"I'm sending you the bill for freedom, by drone delivery! Freedom isn't free!"
+"The triumph of will over power comes with security of no choice!"
+"You have the choice to join us or the choice to die!"
+"You're on the wrong side of history but the right side of our non-violent guns!"
+"Resistance to voluntary freedom is an act of initiating agression!"
 
 # Core Ideas to discuss
 
