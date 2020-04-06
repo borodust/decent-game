@@ -45,3 +45,10 @@ https://soundcloud.com/david-otoole-876993646/sky-war
 https://soundcloud.com/david-otoole-876993646/melcrov8r
 
 https://soundcloud.com/david-otoole-3/aura
+
+
+# Fonts
+
+https://fontlibrary.org/en/font/cave-story
+
+https://fontlibrary.org/en/font/pixel-operator
