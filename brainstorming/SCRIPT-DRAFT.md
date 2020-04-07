@@ -19,8 +19,11 @@ Affect the ending text information.
 # NPCs - questions
 
 save NPCs from enemies or walk by. recorded as karma. 
+
 an NPC to allow the player to upgrade himself by using collected robo or alien parts
+
 npc element can give a bonus weapon, npc can give some unique stuff though if you talk right to them or smth
+
 tip about which weapon is effective against upcoming enemy
 
 # Gear  and upgrades.
@@ -42,6 +45,7 @@ like the chinese virus.
 # Planned Enemies
 
 2 enemy types for both categories.
+
 .:decent-username:. alien stinger, machine stinger, alien shooter, machine shooter.
 Currently as it stand we would have two different enemy types. a flying stinger and a melee one. 4 total. the boss and maybe a miniboss are extra.
 
@@ -86,7 +90,7 @@ for showing info, boss taunts, npc messages
 
 # Design requests  - non-mandatory
 
-As many small details that promote user connection to the game
+As many small details that promote user connection to the game as possible.
 
 
 * Living Environment
