@@ -26,6 +26,7 @@ tip about which weapon is effective against upcoming enemy
 
 the upgrade system to also be split into two categories of stats/skills. The ones you upgrade with alien material, and the ones you upgrade using mechanical parts.
 But once you've crossed a threshold in one of the two trees/stats, you are locked into that category and the player sprite changes accordingly.
+and that comes as A SURPRISE! like suddenly, you're stuck with your choices
 
 # Aliens
 
