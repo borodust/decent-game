@@ -35,6 +35,8 @@ like the chinese virus.
 
 # Planned Enemies
 
+2 enemy types for both categories.
+.:decent-username:. alien stinger, machine stinger, alien shooter, machine shooter.
 Currently as it stand we would have two different enemy types. a flying stinger and a melee one. 4 total. the boss and maybe a miniboss are extra.
 
 # Necessary Environment
@@ -42,6 +44,10 @@ Currently as it stand we would have two different enemy types. a flying stinger 
 Outside of a [Self-Destruct button], visual and stage elements are optional. From the wrighters perspective, the world can have a dream aspect of darkness and minimal elements, with resources gone to monster / enemies / NPCS designs.
 
 Request - Graphics Design should follow up with writer as to what major stage changes, enemy progressions or environmental interaction / NPC animations etc are going to be implemented, so that the script can be modified accordingly.
+
+# Saves
+
+probably check-point 
 
 # Minimal information elements for storytelling aspects
 
