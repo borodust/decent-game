@@ -80,9 +80,9 @@ Interaction with computers or NPCs in game
 Like saving an npc against enemy swarm or running by. 
 
 
-Minimal features
+# Minimal features
 
-Boss text taunts throughout game
+Boss text taunts throughout game ( see Strider, shovel knight games)
 Different endings based on core game choices 
 
 
@@ -178,7 +178,7 @@ TODO script and storyline
 
 Decide on what is doable, make a file with 
 
-# Level break-down 
+# Level break-down example
 
 * Jungle
 
