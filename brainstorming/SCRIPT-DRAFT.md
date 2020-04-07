@@ -8,13 +8,14 @@ When the player arrives to The Leader, the before that "insane" leader informs t
 the base to be the ultimate weapon. The Leader offers the player to join or die and informs that if The Leader loses the fight, the leader plans to hit 
 the [Self-Destruct Button]. The player defeats The Leader and decides whether to activate the self-destruct. Text prompts based on user actions throughout game:
 
-1 - picked alien or cyborg
+1 - picked alien or cyborg, and did upgrades, or did no upgrades (player skill required to beat game without upgrades)
 
-2 - helped npcs from enemy swarms or walked by
+2 - helped npcs from enemy swarms or walked by.
 
 3 - decides to hit the self-destruct button or not
 
-Affect the ending text information. 
+Affect the ending text information. Affect if player becomes alien or cyborg, or stays human. Player can be saved from alien or cyborg fate if helped NPCs throughout 
+game. 
 
 # NPCs - questions
 
