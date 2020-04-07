@@ -13,7 +13,7 @@ the [Self-Destruct Button]. The player defeats The Leader and decides whether to
 
 3 - decides to hit the self-destruct button or not
 
-Affect the ending text information.
+Affect the ending text information. 
 
 # Necessary Environment
 
