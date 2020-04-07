@@ -1,6 +1,10 @@
 # Script Proposal
 
-# Script in brief
+!! See 
+
+brainstorming/SCRIPT-DRAFT.md
+
+# Script in brief ( to clean-up, right now some updated ideas are in SCRIPT-DRAFT.md )
 
 You start off with nothing, battling progressing monsters towards a final fight. You pick alien or cyborg gear and progress through tougher abilities vs tougher monsters.
 
