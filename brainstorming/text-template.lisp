@@ -5,7 +5,7 @@
                           (:type :osd)
                           ;; here's the smallish avatar-like image because :osd
                           (:image :boss-image-id)
-                          ;; thise is
+                          ;; dialogue might have choices
                           (:choices :event-1 "This is the choice 1. This triggers :event-1"
                                     :event-2 "This is the choice 2. This triggers :event-2. See next dialogue"))
     "Multiline text goes here.
@@ -21,4 +21,4 @@ This is the main text that takes the most space.")
                           ;; default choice w/o a text
                           (:choices :event-stop-game))
     "Another multiline text goes here.
-It is not autoscrolling, so you would need to define a dialogue for each screen text.")
+It is not autoscrolled, and you would need to define a dialogue for each screen of text.")
