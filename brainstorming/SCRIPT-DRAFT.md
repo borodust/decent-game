@@ -14,6 +14,14 @@ the [Self-Destruct Button]. The player defeats The Leader and decides whether to
 3 - decides to hit the self-destruct button or not
 
 Affect the ending text information. 
+
+# NPCs - questions
+
+save NPCs from enemies or walk by. recorded as karma. 
+an NPC to allow the player to upgrade himself by using collected robo or alien parts
+npc element can give a bonus weapon, npc can give some unique stuff though if you talk right to them or smth
+tip about which weapon is effective against upcoming enemy
+
 # Planned Enemies
 
 Currently as it stand we would have two different enemy types. a flying stinger and a melee one. 4 total. the boss and maybe a miniboss are extra.
@@ -73,9 +81,6 @@ dead enemy units have agony reach out for player going by
 my emotional vision for the audio is based on the game premise as i see it - nightmare like state, as when you play too many games and continue in your sleep. it's pixelated and chiptuny, but has this larger atmospheric REAL feel to it - wider scope, reverb, switch to silence, etc.
 and if we break to silence or just pure atomospherics without lead keyboard or drums, it breaks the game-like aspect, promoting a WTF feeling of disorientation
 
-NEEDED from devs - what can be done programmatically ? 
-
-i would like a reply from decent-username  and borodust as far as game engine limitations on what we can do with the track changes throughout game.
 
 - minimal option would be intro track - game track - ending track. sound effects on top.
 
