@@ -22,6 +22,11 @@ an NPC to allow the player to upgrade himself by using collected robo or alien p
 npc element can give a bonus weapon, npc can give some unique stuff though if you talk right to them or smth
 tip about which weapon is effective against upcoming enemy
 
+# Aliens
+
+first in game, alien is thought to be alien. Then the big AHA moment is that the alien tech is actually human biotech/nanotech technology gone out of control
+like the chinese virus.
+
 # Planned Enemies
 
 Currently as it stand we would have two different enemy types. a flying stinger and a melee one. 4 total. the boss and maybe a miniboss are extra.
