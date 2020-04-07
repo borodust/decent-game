@@ -44,7 +44,9 @@ Reference Screen from Strider, animations optional:
 
 # Optional Storytelling
 
--On-Screen Display (OSD) [like in shovel knight, icon and text box on top] for showing info, boss taunts, npc messages
+-On-Screen Display (OSD) [like in shovel knight, icon and text box on top] 
+https://66.media.tumblr.com/80fed9664fc0b33a902495be1cca2702/tumblr_op3m67nN6p1w8neb2o1_1280.png
+for showing info, boss taunts, npc messages
 
 
 # Design requests  - non-mandatory
