@@ -1,6 +1,7 @@
 # General Premise
 
-The general premise is a player picking a cyborg or alien evolution path, battling aliens on cyborgs on his journey to confront The Leader.
+The general premise is a player picking a cyborg or alien evolution path, battling aliens on cyborgs on his journey to confront The Leader. A skilled player can
+beat the game without any upgrades. 
 The world is ravaged by total war, with aliens and cyborgs fighting each other (optional), the player, npcs (optional).
 
 When the player arrives to The Leader, the before that "insane" leader informs the Player that he is one of many prototypes tricked into coming to 
@@ -107,4 +108,8 @@ and if we break to silence or just pure atomospherics without lead keyboard or d
 - minimal option would be intro track - game track - ending track. sound effects on top.
 
 More interaction with game welcome (like tie-in music to status changes, stage changes, boss arrival, etc)
+
+# Credits
+
+repl / z1x, borodust, decent-username
 
