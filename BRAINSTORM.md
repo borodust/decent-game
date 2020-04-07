@@ -53,3 +53,8 @@ https://tomorrowmars.bandcamp.com/
 https://fontlibrary.org/en/font/cave-story
 
 https://fontlibrary.org/en/font/pixel-operator
+
+# Dave's advice on "Keeping game designs simple and accessible"
+
+http://xelf.me/design-flat.html
+
