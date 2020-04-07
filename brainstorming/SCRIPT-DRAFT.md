@@ -30,6 +30,7 @@ Request - Graphics Design should follow up with writer as to what major stage ch
 These will be used for informing the player and for end credits.
 
 Reference Screen from Strider, animations optional: 
+https://youtu.be/qVOOiCFktU4?t=113
 
 *Scenes / Story points where FS-CS will be used, mandatory
 
