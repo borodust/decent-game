@@ -14,6 +14,9 @@ the [Self-Destruct Button]. The player defeats The Leader and decides whether to
 3 - decides to hit the self-destruct button or not
 
 Affect the ending text information. 
+# Planned Enemies
+
+Currently as it stand we would have two different enemy types. a flying stinger and a melee one. 4 total. the boss and maybe a miniboss are extra.
 
 # Necessary Environment
 
