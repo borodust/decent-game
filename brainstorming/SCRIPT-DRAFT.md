@@ -22,6 +22,11 @@ an NPC to allow the player to upgrade himself by using collected robo or alien p
 npc element can give a bonus weapon, npc can give some unique stuff though if you talk right to them or smth
 tip about which weapon is effective against upcoming enemy
 
+# Gear 
+
+the upgrade system to also be split into two categories of stats/skills. The ones you upgrade with alien material, and the ones you upgrade using mechanical parts.
+But once you've crossed a threshold in one of the two trees/stats, you are locked into that category and the player sprite changes accordingly.
+
 # Aliens
 
 first in game, alien is thought to be alien. Then the big AHA moment is that the alien tech is actually human biotech/nanotech technology gone out of control
