@@ -63,3 +63,17 @@ when hostages are freed, graffiti appear on walls - "We live" "They don't live" 
 
 alien growth responds to player going by
 dead enemy units have agony reach out for player going by
+
+# Music
+
+my emotional vision for the audio is based on the game premise as i see it - nightmare like state, as when you play too many games and continue in your sleep. it's pixelated and chiptuny, but has this larger atmospheric REAL feel to it - wider scope, reverb, switch to silence, etc.
+and if we break to silence or just pure atomospherics without lead keyboard or drums, it breaks the game-like aspect, promoting a WTF feeling of disorientation
+
+NEEDED from devs - what can be done programmatically ? 
+
+i would like a reply from decent-username  and borodust as far as game engine limitations on what we can do with the track changes throughout game.
+
+- minimal option would be intro track - game track - ending track. sound effects on top.
+
+More interaction with game welcome (like tie-in music to status changes, stage changes, boss arrival, etc)
+
