@@ -18,6 +18,10 @@ These will be used for informing the player and for end credits.
 
 - 6 Final Credits
 
+# Optional Storytelling
+
+-On-Screen Display (OSD) [like in shovel knight, icon and text box on top] for showing info, boss taunts, npc messages
+
 
 # Design requests  - non-mandatory
 
