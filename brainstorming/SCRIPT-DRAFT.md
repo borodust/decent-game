@@ -26,6 +26,8 @@ Request - Graphics Design should follow up with writer as to what major stage ch
 * Full-screen cut-screens (FS-CS) with in-code editable text and insertable image 
 These will be used for informing the player and for end credits.
 
+Reference Screen from Strider, animations optional: 
+
 *Scenes / Story points where FS-CS will be used, mandatory
 
 - 1 Information to player at start of game
