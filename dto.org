@@ -1,0 +1,12 @@
+* TODO loading
+* TODO escape 
+* TODO intro
+* TODO death
+* TODO transform
+* TODO distress
+* TODO grateful 
+* TODO boss-monologue
+* TODO boss-battle
+* TODO self-destruct
+* TODO final-outcome
+* TODO credits
