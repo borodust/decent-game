@@ -6,8 +6,12 @@
                           ;; here's the smallish avatar-like image because :osd
                           (:image :boss-image-id)
                           ;; dialogue might have choices
-                          (:choices :event-1 "This is the choice 1. This triggers :event-1"
-                                    :event-2 "This is the choice 2. This triggers :event-2. See next dialogue"))
+                          ;; choices can have predicates that control if particular choice is shown or not
+                          (:choices
+                           ;; this choice also uses a predicated user-have-label-p
+                           ;; if it returns true - choice is shown, otherwise choice is hidden
+                           (:event-1 :test #'user-have-label-p) "This is the choice 1. This triggers :event-1"
+                           :event-2 "This is the choice 2. This triggers :event-2. See next dialogue"))
     "Multiline text goes here.
 This is the main text that takes the most space.")
 
