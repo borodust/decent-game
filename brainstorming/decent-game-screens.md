@@ -1,3 +1,5 @@
+# My MD format seems to be off with tables for me, so use RTF document in same folder instead. 
+
 ** **** Breakdown of game screens / key scenes. To be Discussed.** _See table below for information on (game-elements)_
 
 Key Mandatory Screens:
