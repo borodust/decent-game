@@ -1,0 +1,12 @@
+# lisp junk
+*.FASL
+*.fasl
+*.lisp-temp
+
+# system dependent junk
+local/
+
+# macOS crap
+**/.DS_Store
+
+build/
