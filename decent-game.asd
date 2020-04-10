@@ -12,4 +12,7 @@
   :serial t
   :components ((:file "packages")
                (:file "util")
+               (:module "states"
+                :components ((:file "main-menu")
+                             (:file "loading")))
                (:file "main")))
