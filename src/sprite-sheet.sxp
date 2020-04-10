@@ -1,0 +1,34 @@
+;; tile size 8px
+(
+ ;; player-idle
+ (:player-idle-0 '(0 0 3 4))
+ (:player-idle-1 '(3 0 3 4))
+ ;; player-run
+ (:player-run-0 '(6 0 4 3))
+ (:player-run-1 '(10 0 2 4))
+ (:player-run-2 '(12 0 4 3))
+ ;; player-slash
+ (:player-attack-melee-0 '(16 0 3 4))
+ (:player-attack-melee-1 '(19 0 4 5))
+ (:player-attack-melee-2 '(23 0 3 5))
+ ;; player-shoot
+ (:player-attack-ranged-0 '(26 0 3 4))
+ (:player-attack-ranged-1 '(29 0 3 4))
+ ;; bullet
+ (:player-bullet-0 '(0 4 1 1))
+
+ ;; alien-stinger-idle
+ (:alien-stinger-idle-0 '(0 5 5 5))
+ (:alien-stinger-idle-1 '(5 5 5 5))
+ ;; alien-stinger-attack
+ (:alien-stinger-attack-0 '(10 5 6 6))
+
+ ;; alien-shooter-idle
+ (:alien-shooter-idle-0 '(0 11 4 3))
+ ;; alien-shooter-walk
+ (:alien-shooter-walk-0 '(0 11 4 3))
+ (:alien-shooter-walk-1 '(4 11 4 3))
+ (:alien-shooter-walk-2 '(8 11 4 3))
+ ;; alien-shooter-attack
+ (:alien-shooter-attack-0 '(12 11 4 3))
+ (:alien-shooter-attack-1 '(16 11 5 3)))
