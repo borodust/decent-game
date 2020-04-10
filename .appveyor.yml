@@ -29,7 +29,7 @@ install:
 
 build_script:
   - >
-    sh -c "$HOME/.bodge/bin/lisp $HOME/bodge/scripts/build-experimental-gamekit-system.lisp
+    sh -c "$HOME/.bodge/bin/lisp build-experimental-gamekit-system
     %GAMEKIT_SYSTEM_NAME% %GAMEKIT_APPLICATION_PACKAGE% %GAMEKIT_APPLICATION_MAIN_CLASS%
     $(cygpath -u '%APPVEYOR_BUILD_FOLDER%')
     $(cygpath -u '%GAMEKIT_BUILD_DIR%')"
