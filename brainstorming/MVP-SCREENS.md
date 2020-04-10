@@ -23,8 +23,8 @@ Fast-moving game. 2 gear selection trees. Boss at end.
 
 | Visual | Description | Assets / Notes |
 | ------ | ------ | ------ |
-|Great visuals representing the game, up to AD (art-director) | (main-load-screen) |Graphic – Image or  optional Animation   Music, M: Custom Load music or intro / beginning music
-Sound-effect, S/F: Menu choice  |
+|Great visuals representing the game, up to AD (art-director) | (main-load-screen) | Graphic – 
+Image or  optional Animation   Music, M: Custom Load music or intro / beginning music. Sound-effect, S/F: Menu choice  |
 | cell | (info-on-start) | cell |
 | cell | (main-esc-menu)|| cell |
 | cell | (boss-battle) | cell |
