@@ -15,3 +15,12 @@
 (defmethod gk:pre-destroy :around ((this state-input-handler))
   (call-next-method)
   (gk.input:deactivate-input-handler this))
+
+
+(defgeneric render (object)
+  (:method (object) (declare (ignore object))))
+
+
+(defmethod render :around (object)
+  (gk:with-pushed-canvas ()
+    (call-next-method)))

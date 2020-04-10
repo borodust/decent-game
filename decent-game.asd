@@ -14,6 +14,8 @@
   :serial t
   :components ((:file "packages")
                (:file "util")
+               (:module "models"
+                :components ((:file "menu")))
                (:module "states"
                 :components ((:file "main-menu")
                              (:file "loading")))
