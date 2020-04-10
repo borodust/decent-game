@@ -1,3 +1,5 @@
+(cl:pushnew :bodge-gl2 cl:*features*)
+
 (asdf:defsystem :decent-game
   :description "Spring Lisp Game Jam 2020 entry"
   :author "decent-username, Ryan Burnside, David O'Toole, readeval, Pavel Korolev"
