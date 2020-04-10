@@ -6,7 +6,8 @@
   (:viewport-height 600)
   (:viewport-title "DECENT-GAME")
   (:depends-on ge.phy:physics-system)
-  (:prepare-resources nil))
+  (:prepare-resources nil)
+  (:default-initargs :initial-state 'loading-screen))
 
 
 (defun play ()
