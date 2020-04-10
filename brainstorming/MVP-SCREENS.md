@@ -18,6 +18,9 @@ Fast-moving game. 2 gear selection trees. Boss at end.
 
 
 * Load Screen - text menu 	(main-load-screen)
+
+
+
 | Visual | Description | Assets / Notes |
 | ------ | ------ | ------ |
 | cell | (info-on-start) | cell |
