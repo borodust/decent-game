@@ -4,8 +4,8 @@
 ; Death screen - text menu (death-screen)
 ; Boss Fight (boss-battle)
 ; Final Outcome Text Summary (final-outcome)
-; End Credits (end-credits))
-; Template
+; End Credits (end-credits)
+; Template is at *
 ; https://gitlab.com/borodust/decent-game/-/blob/master/brainstorming/text-template.lisp
 
 ;; First cut-scene giving premise
