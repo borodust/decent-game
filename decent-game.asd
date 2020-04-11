@@ -14,6 +14,7 @@
   :serial t
   :components ((:file "packages")
                (:file "util")
+               (:file "resources")
                (:file "event")
                (:file "spritesheet")
                (:file "dialogue")
@@ -23,4 +24,7 @@
                (:module "states"
                 :components ((:file "main-menu")
                              (:file "loading")))
-               (:file "main")))
+               (:file "main")
+
+               (:module "debug"
+                :components ((:file "animation")))))
