@@ -14,6 +14,10 @@
   :serial t
   :components ((:file "packages")
                (:file "util")
+               (:file "event")
+               (:file "spritesheet")
+               (:file "dialogue")
+               (:file "animation")
                (:module "models"
                 :components ((:file "menu")))
                (:module "states"
