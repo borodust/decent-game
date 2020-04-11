@@ -38,6 +38,7 @@ Pick one or go without?")
               ;; player dead , player dead custom, player dead with background, or maybe game paused with death info as OSD and menu?
               (:image :death-screen)
               (:choices
+               ;; TODO is this how we do the death screen menu?
                (:last-checkpoint ) "Load last checkpoint"
                (:restart) "New game / Restart"))
   "You died.")
@@ -56,3 +57,4 @@ Pick one or go without?")
                           (:type :osd)
                           (:image :boss-image-id))
  "Not You! Again! Let me know when you get tired of dying... Again.")
+;; TODO - should osd / taounts be done at all? How would they be implemented / hooks events? On every enemy kill?
