@@ -27,3 +27,10 @@
 (defmethod render :around (object)
   (gk:with-pushed-canvas ()
     (call-next-method)))
+
+
+(defun draw-multiline-text (text position)
+  (gk:with-pushed-canvas ()
+    (bodge-util:dolines (line text)
+      (gk:draw-text line position)
+      (gk:translate-canvas 0 -17))))

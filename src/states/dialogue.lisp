@@ -60,8 +60,8 @@
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 10 94)
       (gk:draw-rect *zero-pos* 236 40 :stroke-paint *black*)
-      (gk:translate-canvas 5 25)
-      (gk:draw-text (dialogue-text dialogue) *zero-pos*))
+      (gk:translate-canvas 5 24)
+      (draw-multiline-text (dialogue-text dialogue) *zero-pos*))
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 60 75)
       (loop with i = 0
