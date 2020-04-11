@@ -38,7 +38,7 @@
   (with-slots (selected items) this
     (loop for (name . action) across items
           for i from 0
-          do (gk:translate-canvas 0 (* i -20))
+          do (gk:translate-canvas 0 -20)
              (when (= selected i)
                (gk:draw-text ">>" *menu-item-selector-pos*))
              (gk:draw-text name *zero-pos*))))

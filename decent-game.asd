@@ -23,8 +23,10 @@
                 :components ((:file "menu")))
                (:module "states"
                 :components ((:file "main-menu")
-                             (:file "loading")))
+                             (:file "loading")
+                             (:file "dialogue")))
                (:file "main")
 
                (:module "debug"
-                :components ((:file "animation")))))
+                :components ((:file "animation")
+                             (:file "dialogue")))))
