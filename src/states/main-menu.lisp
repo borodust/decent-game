@@ -15,6 +15,14 @@
                                                    "EXIT" #'%exit))))))
 
 
+(defmethod gk:post-initialize ((this main-menu))
+  (gk:play-sound :menu-theme :looped-p t))
+
+
+(defmethod gk:pre-destroy ((this main-menu))
+  (gk:stop-sound :menu-theme))
+
+
 (defmethod gk.input:button-pressed ((this main-menu) (key (eql :down)))
   (with-slots (menu) this
     (select-next-menu-item menu)))
