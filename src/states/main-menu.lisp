@@ -48,6 +48,5 @@
 (defmethod gk:draw ((this main-menu))
   (with-slots (menu) this
     (gk:with-pushed-canvas ()
-      (gk:translate-canvas 200 280)
-      (gk:scale-canvas 2 2)
+      (gk:translate-canvas 80 60)
       (render menu))))

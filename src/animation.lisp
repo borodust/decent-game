@@ -9,6 +9,7 @@
   (let ((sprite-width (/ (gk:image-width image) frame-count))
         (current-frame (mod (truncate (* time *animation-fps*)) frame-count)))
     (setf (gk:x *animation-sprite-origin*) (* current-frame sprite-width))
+    (bodge-canvas:antialias-shapes nil)
     (gk:draw-image position image :origin *animation-sprite-origin*
                                   :width sprite-width)))
 
@@ -20,6 +21,6 @@
   (unless frames
     (error ":frames must be specified"))
   `(progn
-     (gk:define-image ,name ,path)
+     (gk:define-image ,name ,path :use-nearest-interpolation t)
      (defmethod draw-animation ((id (eql ',name)) time position)
        (draw-animation-sprite id time position ,frames))))

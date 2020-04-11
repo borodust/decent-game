@@ -2,8 +2,10 @@
 
 (gk:defgame decent-game (gk.fsm:fistmachine)
   ()
-  (:viewport-width 800)
-  (:viewport-height 600)
+  (:viewport-width 768)
+  (:viewport-height 432)
+  (:canvas-width 256)
+  (:canvas-height 144)
   (:viewport-title "DECENT-GAME")
   (:depends-on ge.phy:physics-system)
   (:default-initargs :initial-state 'loading-screen))
