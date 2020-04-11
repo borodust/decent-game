@@ -25,7 +25,9 @@
 ;;;
 (defclass dialogue-screen (state-input-handler)
   ((dialogue :initform nil)
-   (selected :initform 0)))
+   (selected :initform 0)
+   (box-font :initform (gk:make-font :bold-pixel-operator 8))
+   (choice-font :initform (gk:make-font :pixel-operator 8))))
 
 
 (defmethod initialize-instance :after ((this dialogue-screen) &key event)
@@ -56,14 +58,16 @@
 
 
 (defmethod gk:draw ((this dialogue-screen))
-  (with-slots (dialogue selected) this
+  (with-slots (dialogue selected box-font choice-font) this
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 10 94)
       (gk:draw-rect *zero-pos* 236 40 :stroke-paint *black*)
       (gk:translate-canvas 5 24)
-      (draw-multiline-text (dialogue-text dialogue) *zero-pos*))
+      (draw-multiline-text (dialogue-text dialogue) *zero-pos*
+                           :font box-font
+                           :line-height 16))
     (gk:with-pushed-canvas ()
-      (gk:translate-canvas 60 75)
+      (gk:translate-canvas 75 75)
       (loop with i = 0
             for choice in (dialogue-choices dialogue)
             for text = (dialogue-choice-text dialogue choice)
@@ -71,9 +75,9 @@
               do (when (eq selected i)
                    (gk:with-pushed-canvas ()
                      (gk:translate-canvas -20 0)
-                     (gk:draw-text ">>" *zero-pos*)))
-                 (gk:draw-text text *zero-pos*)
-                 (gk:translate-canvas 0 -15)
+                     (gk:draw-text ">>" *zero-pos* :font box-font)))
+                 (gk:draw-text text *zero-pos* :font choice-font)
+                 (gk:translate-canvas 0 -10)
                  (incf i)))))
 
 

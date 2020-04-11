@@ -29,8 +29,8 @@
     (call-next-method)))
 
 
-(defun draw-multiline-text (text position)
+(defun draw-multiline-text (text position &key font line-height)
   (gk:with-pushed-canvas ()
     (bodge-util:dolines (line text)
-      (gk:draw-text line position)
-      (gk:translate-canvas 0 -17))))
+      (gk:draw-text line position :font font)
+      (gk:translate-canvas 0 (- (or line-height 0))))))
