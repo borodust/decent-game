@@ -20,7 +20,10 @@
                (:file "animation")
                (:module "objects"
                 :components ((:file "dialogue")
-                             (:file "menu")))
+                             (:file "menu")
+                             (:file "enemy")
+                             (:file "player")
+                             (:file "world")))
                (:module "states"
                 :components ((:file "init")
                              (:file "loading")
