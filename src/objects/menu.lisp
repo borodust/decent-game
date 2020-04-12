@@ -1,6 +1,12 @@
 (cl:in-package :decent-game)
 
 
+(define-resource-pack font-resources ()
+  :pixel-operator
+  :bold-pixel-operator)
+
+
+
 (defparameter *menu-item-selector-pos* (gk:vec2 -20 0))
 
 

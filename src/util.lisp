@@ -29,6 +29,11 @@
     (call-next-method)))
 
 
+(defun shout (control &rest args)
+  (format t "~&~A" (apply #'format nil control args))
+  (finish-output t))
+
+
 (defun draw-multiline-text (text position &key font line-height)
   (let ((total-height 0)
         (line-height (- (or line-height 0))))

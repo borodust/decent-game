@@ -12,5 +12,14 @@
   (:default-initargs :initial-state 'init-screen))
 
 
+(defmethod gk:notice-resources ((this decent-game) &rest names)
+  (shout "Resources loaded: ~A" names)
+  (apply #'notice-pack-resources names))
+
+
+(defmethod gk:pre-destroy :after ((this decent-game))
+  (dispose-pack-resources))
+
+
 (defun play ()
   (gk:start 'decent-game))
