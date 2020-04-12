@@ -9,8 +9,8 @@
   ((menu :initform nil)))
 
 
-(defmethod initialize-instance :after ((this main-menu) &key packs)
-  (declare (ignore packs))
+(defmethod initialize-instance :after ((this main-menu) &key pack)
+  (declare (ignore pack))
   (with-slots (menu) this
     (flet ((%loading-screen ()
              (gk.fsm:transition-to 'loading-screen :resources nil :next-state 'main-menu))

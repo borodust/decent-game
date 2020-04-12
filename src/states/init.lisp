@@ -6,5 +6,5 @@
 
 (defmethod gk:post-initialize ((this init-screen))
   (gk.fsm:transition-to 'loading-screen
-                        :packs '(font-resources main-menu-resources)
+                        :pack 'main-menu-resources
                         :next-state 'main-menu))

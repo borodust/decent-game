@@ -31,4 +31,4 @@
                (:module "debug"
                 :components ((:file "animation")
                              (:file "dialogue")
-                             (:file "world")))))
+                             (:file "gameplay")))))

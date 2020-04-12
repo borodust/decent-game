@@ -2,35 +2,31 @@
 
 
 (defclass loading-screen (state-input-handler)
-  ((pack-names :initarg :packs :initform (error ":packs missing"))
-   (packs :initform nil)
+  ((pack-name :initarg :pack :initform (error ":pack missing"))
+   (pack :initform nil)
    (next-state :initform (error ":next-state missing") :initarg :next-state)
    (prepared-percentage :initform 0)))
 
 
 (defmethod gk:post-initialize ((this loading-screen))
-  (with-slots (pack-names packs) this
-    (loop for name in pack-names
-          do (push (load-resource-pack name) packs))))
+  (with-slots (pack-name pack) this
+    (setf pack (load-resource-pack pack-name))))
 
 
 (defmethod gk:act ((this loading-screen))
-  (with-slots (packs next-state prepared-percentage) this
-    (multiple-value-bind (count total)
-        (loop for pack in packs
-              sum (pack-prepared-count pack) into count
-              sum (pack-total-count pack) into total
-              finally (return (values count total)))
+  (with-slots (pack next-state prepared-percentage) this
+    (let ((count (pack-prepared-count pack))
+          (total (pack-total-count pack)))
       (setf prepared-percentage (truncate (* (if (> total 0)
                                                  (/ count total)
                                                  1)
                                              100)))
       (when (= count total)
-        (gk.fsm:transition-to next-state :packs packs)))))
+        (gk.fsm:transition-to next-state :pack pack)))))
 
 
 (defmethod gk:draw ((this loading-screen))
-  (with-slots (resources prepared-percentage) this
+  (with-slots (prepared-percentage) this
     (let ((time (bodge-util:real-time-seconds)))
       (gk:with-pushed-canvas ()
         (gk:translate-canvas (+ 128 (* (sin time) 20))
