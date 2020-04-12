@@ -22,9 +22,9 @@
                (:module "objects"
                 :components ((:file "dialogue")
                              (:file "menu")
+                             (:file "world")
                              (:file "enemy")
-                             (:file "player")
-                             (:file "world")))
+                             (:file "player")))
                (:module "states"
                 :components ((:file "init")
                              (:file "loading")
