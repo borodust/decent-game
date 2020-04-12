@@ -7,18 +7,32 @@
 (defparameter *body-fill-color* (gk:vec4 1 0 0 0.5))
 (defparameter *body-stroke-color* (gk:vec4 1 0 0 0.8))
 
-
 ;;;
 ;;; UNIVERSE
 ;;;
+(defgeneric collide (this that)
+  (:method (this that)
+    (declare (ignore this that))
+    t))
+
+(defgeneric process-collision (this that)
+  (:method (this that) (declare (ignore this that))))
+
+
 (defclass universe (b:disposable)
   ((universe :initform nil :reader %universe-of)))
 
 
 (defmethod initialize-instance :after ((this universe) &key gravity)
   (with-slots (universe) this
-    (setf universe (b.phy:make-universe :2d)
-          (b.phy:gravity universe) (b:div gravity *universe-scale*))))
+    (flet ((%collide (this that)
+             (collide (b.phy:shape-substance this) (b.phy:shape-substance that)))
+           (%process-collision (this that)
+             (process-collision (b.phy:shape-substance this) (b.phy:shape-substance that))))
+      (setf universe (b.phy:make-universe :2d
+                                          :on-pre-solve #'%collide
+                                          :on-post-solve #'%process-collision)
+            (b.phy:gravity universe) (b:div gravity *universe-scale*)))))
 
 
 (b:define-destructor universe (universe)
@@ -70,6 +84,24 @@
     (setf (b.phy:body-linear-velocity body) (b:div value *universe-scale*))))
 
 
+(defun apply-force (body force)
+  (with-slots (body) body
+    (b.phy:apply-force body (b:div force *universe-scale*))))
+
+
+(defun apply-torque (body force)
+  (with-slots (body) body
+    (b.phy:apply-torque body (/ force *universe-scale*))))
+
+
+(defun (setf collision-surface-velocity) (value)
+  (setf (b.phy:collision-surface-velocity) (b:div value *universe-scale*)))
+
+
+(defun (setf collision-friction) (value)
+  (setf (b.phy:collision-friction) (/ value *universe-scale*)))
+
+
 (defmethod provide-body ((this body) universe &key kinematic)
   (if kinematic
       (b.phy:make-kinematic-body universe)
@@ -101,18 +133,20 @@
    (height :initarg :height)))
 
 
-(defmethod provide-shape ((this box-body) body universe &key width height)
+(defmethod provide-shape ((this box-body) body universe &key width height substance)
   (b.phy:make-box-shape universe
                         (/ width *universe-scale*) (/ height *universe-scale*)
                         :body body
+                        :substance substance
                         :offset (b:vec2 (/ width 2 *universe-scale*)
                                         (/ height 2 *universe-scale*))))
 
 
-(defun make-box-body (universe width height &key kinematic)
+(defun make-box-body (universe width height &key kinematic owner)
   (make-instance 'box-body :universe (%universe-of universe)
                            :width width
                            :height height
+                           :substance owner
                            :kinematic kinematic
                            :allow-other-keys t))
 
@@ -132,13 +166,16 @@
   ((radius :initarg :radius)))
 
 
-(defmethod provide-shape ((this circle-body) body universe &key radius)
-  (b.phy:make-circle-shape universe (/ radius *universe-scale*) :body body))
+(defmethod provide-shape ((this circle-body) body universe &key radius substance)
+  (b.phy:make-circle-shape universe (/ radius *universe-scale*)
+                           :body body
+                           :substance substance))
 
 
-(defun make-circle-body (universe radius)
+(defun make-circle-body (universe radius &key owner)
   (make-instance 'circle-body :universe (%universe-of universe)
                               :radius radius
+                              :substance owner
                               :allow-other-keys t))
 
 

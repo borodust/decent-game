@@ -8,9 +8,10 @@
 
 (defmethod initialize-instance :after ((this world) &key)
   (with-slots (universe ground) this
-    (setf universe (make-universe (gk:vec2 0 -100))
-          ground (make-box-body universe 100 10
-                                :kinematic t))))
+    (setf universe (make-universe (gk:vec2 0 -500))
+          ground (make-box-body universe 150 10
+                                :kinematic t
+                                :owner this))))
 
 
 (defun make-world ()

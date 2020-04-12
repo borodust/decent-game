@@ -69,3 +69,8 @@
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :a)))
   (with-slots (player) this
     (stop-player player)))
+
+
+(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))
+  (with-slots (player) this
+    (jump-player player)))

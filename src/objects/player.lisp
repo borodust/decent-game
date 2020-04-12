@@ -28,7 +28,7 @@
 
 (defmethod initialize-instance :after ((this player) &key world)
   (with-slots (body) this
-    (setf body (make-circle-body (universe-of world) 5)
+    (setf body (make-circle-body (universe-of world) 5 :owner this)
           (body-position body) (gk:vec2 50 20))))
 
 
@@ -43,20 +43,23 @@
 
 (defun move-player-right (player)
   (with-slots (state body) player
-    (setf state :moving-right
-          (body-linear-velocity body) (gk:vec2 100 0))))
+    (setf state :moving-right)))
 
 
 (defun move-player-left (player)
   (with-slots (state body) player
-    (setf state :moving-left
-          (body-linear-velocity body) (gk:vec2 -100 0))))
+    (setf state :moving-left)))
 
 
 (defun stop-player (player)
   (with-slots (state body) player
-    (setf state :idle
-          (body-linear-velocity body) (gk:vec2 0 0))))
+    (setf state :idle)))
+
+
+(defun jump-player (player)
+  (with-slots (state body) player
+    (setf state :idle)
+    (apply-force body (gk:vec2 0 20000))))
 
 
 (defmethod render ((this player))
@@ -70,3 +73,17 @@
         (:moving-right (draw-animation 'player-walk time *zero-pos*))
         (:moving-left (gk:with-pushed-canvas ()
                         (draw-animation 'player-walk time *zero-pos* :mirror-x t)))))))
+
+
+(defmethod collide ((this player) (that world))
+  (with-slots (state) this
+    (setf (collision-friction) 100)
+    (case state
+      (:idle (setf (collision-surface-velocity) (gk:vec2 0 0)))
+      (:moving-right (setf (collision-surface-velocity) (gk:vec2 200 0)))
+      (:moving-left (setf (collision-surface-velocity) (gk:vec2 -200 0)))))
+  t)
+
+
+(defmethod collide ((that world) (this player))
+  (collide this that))
