@@ -1,11 +1,16 @@
 (cl:in-package :decent-game)
 
 
+(define-resource-pack main-menu-resources (font-resources)
+  :menu-theme)
+
+
 (defclass main-menu (state-input-handler)
   ((menu :initform nil)))
 
 
-(defmethod initialize-instance :after ((this main-menu) &key)
+(defmethod initialize-instance :after ((this main-menu) &key pack)
+  (declare (ignore pack))
   (with-slots (menu) this
     (flet ((%loading-screen ()
              (gk.fsm:transition-to 'loading-screen :resources nil :next-state 'main-menu))
