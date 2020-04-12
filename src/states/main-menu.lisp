@@ -13,7 +13,7 @@
   (declare (ignore pack))
   (with-slots (menu) this
     (flet ((%loading-screen ()
-             (gk.fsm:transition-to 'loading-screen :resources nil :next-state 'main-menu))
+             (gk.fsm:transition-to 'loading-screen :pack nil :next-state 'main-menu))
            (%exit ()
              (gk:stop)))
       (setf menu (make-instance 'menu :items (list "LOADING SCREEN" #'%loading-screen

@@ -84,7 +84,7 @@
     count))
 
 
-(defun destroy-resource-pack (pack)
+(defun dispose-resource-pack (pack)
   (let ((resources (filter-resource-pack-resources pack)))
     (loop for name in resources
           unless (a:deletef (gethash name *pack-table*) pack)

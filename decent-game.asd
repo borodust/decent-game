@@ -15,6 +15,7 @@
   :components ((:file "packages")
                (:file "util")
                (:file "resources")
+               (:file "physics")
                (:file "event")
                (:file "spritesheet")
                (:file "animation")

@@ -4,6 +4,9 @@
 (define-resource-pack gameplay-debug-resources (player-resources))
 
 
+;;;
+;;; INIT
+;;;
 (defclass init-gameplay-debug-screen () ())
 
 
@@ -12,24 +15,39 @@
                                         :next-state 'gameplay-debug-screen))
 
 
-
+;;;
+;;; SCENE
+;;;
 (defclass gameplay-debug-screen (state-input-handler)
-  ((player :initform (make-player))))
+  ((player :initform nil)
+   (world :initform nil)
+   (pack :initarg :pack)))
 
 
-
-(defmethod initialize-instance :after ((this gameplay-debug-screen) &key pack))
+(defmethod initialize-instance :after ((this gameplay-debug-screen) &key)
+  (with-slots (player world) this
+    (setf world (make-world)
+          player (make-player world))))
 
 
 (defmethod gk:post-initialize ((this gameplay-debug-screen)))
 
 
-(defmethod gk:act ((this gameplay-debug-screen)))
+(defmethod gk:pre-destroy ((this gameplay-debug-screen))
+  (with-slots (player world pack) this
+    (dispose player)
+    (dispose world)
+    (dispose-resource-pack pack)))
+
+
+(defmethod gk:act ((this gameplay-debug-screen))
+  (with-slots (world) this
+    (observe-world world)))
 
 
 (defmethod gk:draw ((this gameplay-debug-screen))
-  (with-slots (player) this
-    (gk:translate-canvas 50 0)
+  (with-slots (world player) this
+    (render world)
     (render player)))
 
 
