@@ -8,7 +8,7 @@
 (defmethod initialize-instance :after ((this main-menu) &key)
   (with-slots (menu) this
     (flet ((%loading-screen ()
-             (gk.fsm:transition-to 'loading-screen))
+             (gk.fsm:transition-to 'loading-screen :resources nil :next-state 'main-menu))
            (%exit ()
              (gk:stop)))
       (setf menu (make-instance 'menu :items (list "LOADING SCREEN" #'%loading-screen

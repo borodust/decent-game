@@ -5,11 +5,11 @@
 
 
 (defun subscribe-to-event (event-id action)
-  (pushnew action (gethash *event-table* event-id)))
+  (pushnew action (gethash event-id *event-table*)))
 
 
-(defun trigger-event (event-id)
-  (loop for action in (gethash *event-table* event-id)
+(defun trigger-event (event-id &rest args &key &allow-other-keys)
+  (loop for action in (gethash event-id *event-table*)
         do (etypecase action
-             (symbol (funcall (symbol-function action)))
-             (function (funcall action)))))
+             (symbol (apply (symbol-function action) event-id args))
+             (function (apply action event-id args)))))
