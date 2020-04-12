@@ -17,13 +17,14 @@
                (:file "resources")
                (:file "event")
                (:file "spritesheet")
-               (:file "dialogue")
                (:file "animation")
                (:module "models"
-                :components ((:file "menu")))
+                :components ((:file "dialogue")
+                             (:file "menu")))
                (:module "states"
-                :components ((:file "main-menu")
+                :components ((:file "init")
                              (:file "loading")
+                             (:file "main-menu")
                              (:file "dialogue")))
                (:file "main")
 

@@ -2,9 +2,8 @@
 
 
 (defclass loading-screen (state-input-handler)
-  ((resources :initform '(:bold-pixel-operator
-                          :pixel-operator
-                          :menu-theme))
+  ((resources :initform (error ":resources missing") :initarg :resources)
+   (next-state :initform (error ":next-state missing") :initarg :next-state)
    (total :initform 0)))
 
 
@@ -22,20 +21,22 @@
 
 
 (defmethod gk:act ((this loading-screen))
-  (with-slots (resources) this
+  (with-slots (resources next-state) this
     (unless resources
-      (gk.fsm:transition-to 'main-menu))))
+      (gk.fsm:transition-to next-state))))
 
 
 (defmethod gk:draw ((this loading-screen))
   (with-slots (resources total) this
     (let ((time (bodge-util:real-time-seconds)))
       (gk:with-pushed-canvas ()
-        (gk:translate-canvas (+ 100 (* (sin time) 20))
+        (gk:translate-canvas (+ 128 (* (sin time) 20))
                              (+ 72 (* (cos time) 20)))
-        (gk:draw-text "LOADING" *zero-pos*))
+        (gk:draw-circle *zero-pos* (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint *black*))
       (gk:with-pushed-canvas ()
         (gk:translate-canvas 230 6)
         (gk:scale-canvas 0.5 0.5)
-        (gk:draw-text (format nil "~A %" (* (truncate (/ (- total (length resources)) total)) 100))
-                      *zero-pos*)))))
+        (let ((resources-loaded-fract (if (> total 0)
+                                          (/ (- total (length resources)) total)
+                                          1)))
+          (gk:draw-text (format nil "~A %" (truncate (* resources-loaded-fract 100))) *zero-pos*))))))

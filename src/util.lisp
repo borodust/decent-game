@@ -30,7 +30,11 @@
 
 
 (defun draw-multiline-text (text position &key font line-height)
-  (gk:with-pushed-canvas ()
-    (bodge-util:dolines (line text)
-      (gk:draw-text line position :font font)
-      (gk:translate-canvas 0 (- (or line-height 0))))))
+  (let ((total-height 0)
+        (line-height (- (or line-height 0))))
+    (gk:with-pushed-canvas ()
+      (bodge-util:dolines (line text)
+        (gk:draw-text line position :font font)
+        (gk:translate-canvas 0 line-height)
+        (incf total-height line-height)))
+    total-height))

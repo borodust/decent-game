@@ -9,7 +9,7 @@
   (:viewport-title "DECENT-GAME")
   (:depends-on ge.phy:physics-system)
   (:prepare-resources nil)
-  (:default-initargs :initial-state 'loading-screen))
+  (:default-initargs :initial-state 'init-screen))
 
 
 (defun play ()
