@@ -18,7 +18,7 @@
                (:file "event")
                (:file "spritesheet")
                (:file "animation")
-               (:module "models"
+               (:module "objects"
                 :components ((:file "dialogue")
                              (:file "menu")))
                (:module "states"
@@ -30,4 +30,5 @@
 
                (:module "debug"
                 :components ((:file "animation")
-                             (:file "dialogue")))))
+                             (:file "dialogue")
+                             (:file "world")))))
