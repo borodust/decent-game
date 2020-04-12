@@ -60,6 +60,16 @@
     (setf (b.phy:body-position body) (b:div value *universe-scale*))))
 
 
+(defun body-linear-velocity (body)
+  (with-slots (body) body
+    (b:mult (b.phy:body-linear-velocity body) *universe-scale*)))
+
+
+(defun (setf body-linear-velocity) (value body)
+  (with-slots (body) body
+    (setf (b.phy:body-linear-velocity body) (b:div value *universe-scale*))))
+
+
 (defmethod provide-body ((this body) universe &key kinematic)
   (if kinematic
       (b.phy:make-kinematic-body universe)
