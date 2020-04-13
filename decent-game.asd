@@ -15,12 +15,16 @@
   :components ((:file "packages")
                (:file "util")
                (:file "resources")
+               (:file "physics")
                (:file "event")
                (:file "spritesheet")
                (:file "animation")
                (:module "objects"
                 :components ((:file "dialogue")
-                             (:file "menu")))
+                             (:file "menu")
+                             (:file "world")
+                             (:file "enemy")
+                             (:file "player")))
                (:module "states"
                 :components ((:file "init")
                              (:file "loading")

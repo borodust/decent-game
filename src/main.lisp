@@ -13,7 +13,7 @@
 
 
 (defmethod gk:notice-resources ((this decent-game) &rest names)
-  (shout "Resources loaded: ~A" names)
+  (shout "Resources loaded: ~{~A ~}" names)
   (apply #'notice-pack-resources names))
 
 

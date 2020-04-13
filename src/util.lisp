@@ -20,6 +20,10 @@
   (gk.input:deactivate-input-handler this))
 
 
+(defgeneric dispose (object)
+  (:method (object) (declare (ignore object))))
+
+
 (defgeneric render (object)
   (:method (object) (declare (ignore object))))
 
