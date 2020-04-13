@@ -13,6 +13,7 @@
   :pathname "src/"
   :serial t
   :components ((:file "packages")
+               (:file "color")
                (:file "util")
                (:file "resources")
                (:file "physics")

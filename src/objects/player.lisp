@@ -69,10 +69,10 @@
       (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
       (case state
-        (:idle (draw-animation 'player-idle time *zero-pos*))
-        (:moving-right (draw-animation 'player-walk time *zero-pos*))
+        (:idle (draw-animation 'player-idle time +zero-pos+))
+        (:moving-right (draw-animation 'player-walk time +zero-pos+))
         (:moving-left (gk:with-pushed-canvas ()
-                        (draw-animation 'player-walk time *zero-pos* :mirror-x t)))))))
+                        (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))))))
 
 
 (defmethod collide ((this player) (that world))

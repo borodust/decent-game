@@ -31,7 +31,7 @@
       (gk:with-pushed-canvas ()
         (gk:translate-canvas (+ 128 (* (sin time) 20))
                              (+ 72 (* (cos time) 20)))
-        (gk:draw-circle *zero-pos* (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint *black*))
+        (gk:draw-circle *zero-pos* (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint +black+))
       (gk:with-pushed-canvas ()
         (gk:translate-canvas 230 6)
         (gk:scale-canvas 0.5 0.5)

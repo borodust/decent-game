@@ -53,4 +53,4 @@
           do (gk:translate-canvas 0 -20)
              (when (= selected i)
                (gk:draw-text ">>" *menu-item-selector-pos* :font selector-font))
-             (gk:draw-text name *zero-pos* :font text-font))))
+             (gk:draw-text name +zero-pos+ :font text-font))))

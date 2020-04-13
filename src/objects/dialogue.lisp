@@ -6,9 +6,9 @@
 (defgeneric dialogue-choices (event))
 (defgeneric dialogue-text (event))
 
-(defgeneric dialogue-chioce-id (event choice))
-(defgeneric dialogue-chioce-test (event choice))
-(defgeneric dialogue-chioce-text (event choice))
+(defgeneric dialogue-choice-id (event choice))
+(defgeneric dialogue-choice-test (event choice))
+(defgeneric dialogue-choice-text (event choice))
 
 
 (defgeneric trigger-dialogue (event-id &key &allow-other-keys))
@@ -113,9 +113,9 @@
   (with-slots (dialogue selected box-font choice-font) this
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 10 94)
-      (gk:draw-rect *zero-pos* 236 40 :stroke-paint *black*)
+      (gk:draw-rect +zero-pos+ 236 40 :stroke-paint +black+)
       (gk:translate-canvas 5 24)
-      (draw-multiline-text (dialogue-text dialogue) *zero-pos*
+      (draw-multiline-text (dialogue-text dialogue) +zero-pos+
                            :font box-font
                            :line-height 16))
     (gk:with-pushed-canvas ()
@@ -127,9 +127,9 @@
               do (when (eq selected i)
                    (gk:with-pushed-canvas ()
                      (gk:translate-canvas -20 0)
-                     (gk:draw-text ">>" *zero-pos* :font box-font)))
+                     (gk:draw-text ">>" +zero-pos+ :font box-font)))
                  (let ((height
-                         (draw-multiline-text text *zero-pos*
+                         (draw-multiline-text text +zero-pos+
                                               :font choice-font
                                               :line-height 14)))
                    (gk:translate-canvas 0 height))
