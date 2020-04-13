@@ -49,7 +49,8 @@
 
 (defun observe-universe (universe)
   (with-slots (universe) universe
-    (b.phy:observe-universe universe 0.010)))
+    (loop repeat 4
+          do (b.phy:observe-universe universe 0.01))))
 
 
 ;;;
@@ -82,6 +83,16 @@
 (defun (setf body-linear-velocity) (value body)
   (with-slots (body) body
     (setf (b.phy:body-linear-velocity body) (b:div value *universe-scale*))))
+
+
+(defun body-angular-velocity (body)
+  (with-slots (body) body
+    (b:mult (b.phy:body-linear-velocity body) *universe-scale*)))
+
+
+(defun (setf body-angular-velocity) (value body)
+  (with-slots (body) body
+    (setf (b.phy:body-angular-velocity body) (/ value *universe-scale*))))
 
 
 (defun apply-force (body force)
@@ -133,20 +144,26 @@
    (height :initarg :height)))
 
 
-(defmethod provide-shape ((this box-body) body universe &key width height substance)
-  (b.phy:make-box-shape universe
-                        (/ width *universe-scale*) (/ height *universe-scale*)
-                        :body body
-                        :substance substance
-                        :offset (b:vec2 (/ width 2 *universe-scale*)
-                                        (/ height 2 *universe-scale*))))
+(defmethod provide-shape ((this box-body) body universe &key width height substance mass)
+  (let* ((w (/ width *universe-scale*))
+         (h (/ height *universe-scale*))
+         (shape (b.phy:make-box-shape universe
+                                      w h
+                                      :body body
+                                      :substance substance
+                                      :offset (b:vec2 (/ width 2 *universe-scale*)
+                                                      (/ height 2 *universe-scale*)))))
+    (when mass
+      (b.phy:infuse-box-mass body mass w h))
+    shape))
 
 
-(defun make-box-body (universe width height &key kinematic owner)
+(defun make-box-body (universe width height &key kinematic owner mass)
   (make-instance 'box-body :universe (%universe-of universe)
                            :width width
                            :height height
                            :substance owner
+                           :mass mass
                            :kinematic kinematic
                            :allow-other-keys t))
 
@@ -166,16 +183,21 @@
   ((radius :initarg :radius)))
 
 
-(defmethod provide-shape ((this circle-body) body universe &key radius substance)
-  (b.phy:make-circle-shape universe (/ radius *universe-scale*)
-                           :body body
-                           :substance substance))
+(defmethod provide-shape ((this circle-body) body universe &key radius substance mass)
+  (let* ((r (/ radius *universe-scale*))
+         (shape (b.phy:make-circle-shape universe r
+                                         :body body
+                                         :substance substance)))
+    (when mass
+      (b.phy:infuse-circle-mass body mass r))
+    shape))
 
 
-(defun make-circle-body (universe radius &key owner)
+(defun make-circle-body (universe radius &key owner mass)
   (make-instance 'circle-body :universe (%universe-of universe)
                               :radius radius
                               :substance owner
+                              :mass mass
                               :allow-other-keys t))
 
 

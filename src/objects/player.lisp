@@ -28,7 +28,9 @@
 
 (defmethod initialize-instance :after ((this player) &key world)
   (with-slots (body) this
-    (setf body (make-circle-body (universe-of world) 5 :owner this)
+    (setf body (make-circle-body (universe-of world) 5
+                                 :owner this
+                                 :mass 1)
           (body-position body) (gk:vec2 50 20))))
 
 
@@ -58,8 +60,10 @@
 
 (defun jump-player (player)
   (with-slots (state body) player
-    (setf state :idle)
-    (apply-force body (gk:vec2 0 20000))))
+    (case state
+      (:moving-right (apply-force body (gk:mult (gk:vec2 -0.28734788 0.95782626) 12000)))
+      (:moving-left (apply-force body (gk:mult (gk:vec2 0.28734788 0.95782626) 12000)))
+      (:idle (apply-force body (gk:vec2 0 10000))))))
 
 
 (defmethod render ((this player))
@@ -77,13 +81,22 @@
 
 (defmethod collide ((this player) (that world))
   (with-slots (state) this
-    (setf (collision-friction) 100)
+    (setf (collision-friction) 60)
     (case state
       (:idle (setf (collision-surface-velocity) (gk:vec2 0 0)))
-      (:moving-right (setf (collision-surface-velocity) (gk:vec2 200 0)))
-      (:moving-left (setf (collision-surface-velocity) (gk:vec2 -200 0)))))
+      (:moving-right (setf (collision-surface-velocity) (gk:vec2 100 0)))
+      (:moving-left (setf (collision-surface-velocity) (gk:vec2 -100 0)))))
   t)
 
 
 (defmethod collide ((that world) (this player))
   (collide this that))
+
+
+(defmethod process-collision ((this player) (that world))
+  (with-slots (body) this
+    (setf (body-angular-velocity body) 0)))
+
+
+(defmethod process-collision ((that world) (this player))
+  (process-collision this that))
