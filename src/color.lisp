@@ -2,9 +2,9 @@
 
 (defun random-color ()
   (gk:vec4 (/ (random 100) 100)
-            (/ (random 100) 100)
-            (/ (random 100) 100)
-            1))
+           (/ (random 100) 100)
+           (/ (random 100) 100)
+           1))
 
 (defun hexcolor (hexcode &optional (a 1))
   (let* ((color-string (subseq hexcode 1))
@@ -14,4 +14,4 @@
     (gk:vec4 r g b a)))
 
 
-(defvar *black* (gk:vec4 0 0 0 1))
+(defvar +black+ (gk:vec4 0 0 0 1))
