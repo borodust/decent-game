@@ -34,4 +34,4 @@
 
 (defmethod gk:draw ((this animation-debug-screen))
   (let ((time (bodge-util:real-time-seconds)))
-    (draw-animation 'debug-animation time *zero-pos*)))
+    (draw-animation 'debug-animation time +zero-pos+)))
