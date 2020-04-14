@@ -22,7 +22,7 @@
 
 
 (defclass player (stats movable)
-  ((state :initform (list :idle) :accessor state)
+  ((state :initform (list) :accessor state)
    (body :initform nil)
    (jump-force :initarg :jump-force))
   (:default-initargs
@@ -57,7 +57,8 @@ Returns NIL otherwise."
   "Adds `state' to the players state list."
   (with-slots (state) this
    (if (keywordp s)
-       (push s state)
+       (unless (member s state)
+        (push s state))
        (error "~&state must be a keyword. Got ~A~%" state))))
 
 
@@ -78,7 +79,6 @@ Returns NIL otherwise."
   (unless (moving-right-p player)
       (add-state :moving-right player)))
 
-
 (defun move-player-left (player)
   (unless (moving-left-p player)
     (add-state :moving-left player)))
@@ -86,17 +86,18 @@ Returns NIL otherwise."
 
 (defmethod moving-right-p ((this player))
   (with-slots (state)  this
-    (and (length state)
-         (eq (first state) :moving-right))))
+    (and (member :moving-right state)
+         (not (member :moving-left state)))))
 
 (defmethod moving-left-p ((this player))
   (with-slots (state)  this
-    (and (length state)
-         (eq (first state) :moving-left))))
+    (and (member :moving-left state)
+         (not (member :moving-right state)))))
 
 (defmethod idle-p ((this player))
-  (not (a:xor (member :moving-left (state this))
-              (member :moving-right (state this)))))
+  (or (null (state this))
+      (not (a:xor (member :moving-left (state this))
+                  (member :moving-right (state this))))))
 
 
 (defun stop-player (player)
@@ -109,19 +110,21 @@ Returns NIL otherwise."
   (remove-state :moving-right player))
 
 (defun jump-player (player)
+  (add-state :jumping player)
   (with-slots (state body jump-force) player
-    (cond ((moving-right-p player)
-           (apply-force body (gk:normalize (gk:mult (gk:vec2 -0.28734788 0.95782626)
-                                                    jump-force))))
-          ((moving-left-p player)
-           (apply-force body (gk:normalize (gk:mult (gk:vec2  0.28734788 0.95782626)
-                                                    jump-force))))
+    (cond ((moving-left-p player)
+           (apply-force body (gk:mult (gk:normalize (gk:vec2 -0.28734788 0.95782626))
+                                      jump-force)))
+          ((moving-right-p player)
+           (apply-force body (gk:mult (gk:normalize (gk:vec2  0.28734788 0.95782626))
+                                      jump-force)))
           ((idle-p player)
            (apply-force body (gk:vec2 0 10000))))))
 
 
 (defmethod collide ((this player) (that world))
   (with-slots (state) this
+    (remove-state :jumping this)
     (setf (collision-friction) 60)
     (cond ((moving-left-p this)
            (setf (collision-surface-velocity) (gk:vec2 -100 0)))
