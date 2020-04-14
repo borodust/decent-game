@@ -23,7 +23,10 @@
 
 (defclass player ()
   ((state :initform :idle)
-   (body :initform nil)))
+   (body :initform nil)
+   (jump-force :initarg :jump-force))
+  (:default-initargs
+   :jump-force 1200))
 
 
 (defmethod initialize-instance :after ((this player) &key world)
@@ -59,24 +62,13 @@
 
 
 (defun jump-player (player)
-  (with-slots (state body) player
+  (with-slots (state body jump-force) player
     (case state
-      (:moving-right (apply-force body (gk:mult (gk:vec2 -0.28734788 0.95782626) 12000)))
-      (:moving-left (apply-force body (gk:mult (gk:vec2 0.28734788 0.95782626) 12000)))
+      (:moving-right (apply-force body (gk:normalize (gk:mult (gk:vec2 -0.28734788 0.95782626)
+                                                              jump-force))))
+      (:moving-left  (apply-force body (gk:normalize (gk:mult (gk:vec2  0.28734788 0.95782626)
+                                                              jump-force))))
       (:idle (apply-force body (gk:vec2 0 10000))))))
-
-
-(defmethod render ((this player))
-  (with-slots (state body) this
-    (render body)
-    (let ((position (body-position body)))
-      (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
-    (let ((time (bodge-util:real-time-seconds)))
-      (case state
-        (:idle (draw-animation 'player-idle time +zero-pos+))
-        (:moving-right (draw-animation 'player-walk time +zero-pos+))
-        (:moving-left (gk:with-pushed-canvas ()
-                        (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))))))
 
 
 (defmethod collide ((this player) (that world))
@@ -100,3 +92,16 @@
 
 (defmethod process-collision ((that world) (this player))
   (process-collision this that))
+
+
+(defmethod render ((this player))
+  (with-slots (state body) this
+    (render body)
+    (let ((position (body-position body)))
+      (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
+    (let ((time (bodge-util:real-time-seconds)))
+      (case state
+        (:idle (draw-animation 'player-idle time +zero-pos+))
+        (:moving-right (draw-animation 'player-walk time +zero-pos+))
+        (:moving-left (gk:with-pushed-canvas ()
+                        (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))))))

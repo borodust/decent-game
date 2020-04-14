@@ -66,7 +66,9 @@
 
 
 (defun load-resource-pack (name)
-  (make-instance name))
+  (if (null name)
+      (format t "~&Can't load resource-pack with class-name of ~A.~% IGNORED" name)
+      (make-instance name)))
 
 
 (defun pack-prepared-p (pack)

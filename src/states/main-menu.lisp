@@ -12,11 +12,24 @@
 (defmethod initialize-instance :after ((this main-menu) &key pack)
   (declare (ignore pack))
   (with-slots (menu) this
-    (flet ((%loading-screen ()
-             (gk.fsm:transition-to 'loading-screen :pack nil :next-state 'main-menu))
+    (flet ((%gameplay-debug-screen ()
+             (gk.fsm:transition-to 'gameplay-debug-screen :pack 'gameplay-debug-resources
+                                                          :next-state 'main-menu))
+           (%animation-debug-screen ()
+             (gk.fsm:transition-to 'animation-debug-screen :pack 'animation-debug-resources
+                                                           :next-state 'main-menu))
+           (%dialogue-debug-screen ()
+             (gk.fsm:transition-to 'dialogue-debug-screen :pack 'dialogue-debug-resources
+                                                          :next-state 'main-menu))
+           (%loading-screen ()
+             (gk.fsm:transition-to 'loading-screen :pack nil
+                                                   :next-state 'main-menu))
            (%exit ()
              (gk:stop)))
-      (setf menu (make-instance 'menu :items (list "LOADING SCREEN" #'%loading-screen
+      (setf menu (make-instance 'menu :items (list "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
+                                                   "DEBUG-ANIMATION" #'%animation-debug-screen
+                                                   "DEBUG-DIALOGUE" #'%dialogue-debug-screen
+                                                   "LOADING SCREEN" #'%loading-screen
                                                    "EXIT" #'%exit))))))
 
 
@@ -28,6 +41,7 @@
   (gk:stop-sound :menu-theme))
 
 
+;;; Input Handling
 (defmethod gk.input:button-pressed ((this main-menu) (key (eql :down)))
   (with-slots (menu) this
     (select-next-menu-item menu)))
@@ -58,8 +72,9 @@
     (invoke-menu-item-action menu)))
 
 
+;;; draw
 (defmethod gk:draw ((this main-menu))
   (with-slots (menu) this
     (gk:with-pushed-canvas ()
-      (gk:translate-canvas 80 60)
+      (gk:translate-canvas 60 120)
       (render menu))))

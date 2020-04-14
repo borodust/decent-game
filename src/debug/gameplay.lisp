@@ -51,6 +51,7 @@
     (render player)))
 
 
+;;; input handling
 (defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :d)))
   (with-slots (player) this
     (move-player-right player)))
