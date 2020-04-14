@@ -11,22 +11,22 @@
 ;; First cut-scene giving premise
 (cl:in-package :decent-game)
 (defdialogue (:info-on-start
-                          (:type :cutscene)
-                          ;; in order of complexity - pick one
-                          ;; hero lying down,hero dying, hero lying with burning city behind
-                          (:image :info-on-start))
+              (:type :cutscene)
+              ;; in order of complexity - pick one
+              ;; hero lying down,hero dying, hero lying with burning city behind
+              (:image :info-on-start))
   "The sounds of battle fade. You are dying. Why is something you just can't remeber. Aliens, humanoids with machine parts, or was it the other way around?")
 
 ;; Second screen for early game premise info
 (defdialogue (:info-on-start-1
-                          (:type :cutscene)
-                          ;; graphic - in order of complexity - pick one
-                          ;; cyborg weapon or device to left, alien weapon or bio-container
-                          (:image :info-on-start-1)
-                          (:choices
-                           (:pick-cyborg :test #'picked-cyborg-p ) "Pick the Cyborg gear"
-                           (:pick-alien :test #'picked-alien-p ) "Pick the Alien tech"
-                           (:human :test #'human-p "Go without unknown enhancements")))
+              (:type :cutscene)
+              ;; graphic - in order of complexity - pick one
+              ;; cyborg weapon or device to left, alien weapon or bio-container
+              (:image :info-on-start-1)
+              (:choices
+               (:pick-cyborg :test #'picked-cyborg-p ) "Pick the Cyborg gear"
+               (:pick-alien :test #'picked-alien-p ) "Pick the Alien tech"
+               (:human :test #'human-p) "Go without unknown enhancements"))
   "Perhaps there's some life in You left.
 Close-by, a cybernetic gear pack and an alien container.
 Pick one or go without?")
@@ -50,7 +50,7 @@ Pick one or go without?")
               (:choices
                (:pick-alien :test #'picked-alien-p ) "Using out-of control biotech, You have lost Your humanity for victory."
                (:pick-cyborg :test #'picked-cyborg-p) "By fusing Yourself with machines, You have lost Your humanity for victory"
-               (:human :test #'human-p "Through the battles, You managed to keep Your humanity. Will you give others this chance?"))))
+               (:human :test #'human-p) "Through the battles, You managed to keep Your humanity. Will you give others this chance?")))
 
 ;;Boss taunts
 (defdialogue (:first-enemy-kill ;; TODO cheapest event for boss taunts? Random through game?
