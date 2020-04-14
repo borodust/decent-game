@@ -25,6 +25,8 @@
                              (:file "menu")
                              (:file "world")
                              (:file "player")
+                             (:file "stats")
+                             (:file "movable")
                              (:module "enemies"
                               :components ((:file "enemy")
                                            (:file "alien-stinger")

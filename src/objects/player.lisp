@@ -21,11 +21,14 @@
   'player-ranged)
 
 
-(defclass player ()
-  ((state :initform :idle)
+(defclass player (stats movable)
+  ((state :initform (list :idle))
    (body :initform nil)
    (jump-force :initarg :jump-force))
   (:default-initargs
+   :hp-max 100
+   :strength 5
+   :movement-speed 200
    :jump-force 1200))
 
 
@@ -39,6 +42,12 @@
 
 (defun make-player (world)
   (make-instance 'player :world world))
+
+(defmethod add-state ((this player) state)
+  (with-slots (state) this
+   (if (keywordp state)
+       (pushf state state)
+       (error "~&State must be a keyword. Got ~A~%" state))))
 
 
 (defmethod dispose :after ((this player))

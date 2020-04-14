@@ -1,1 +1,4 @@
-(cl:in-package :decent-game)
+(in-package :decent-game)
+
+
+(defclass enemy (stats) ())
