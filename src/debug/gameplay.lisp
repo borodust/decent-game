@@ -75,3 +75,7 @@
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))
   (with-slots (player) this
     (jump-player player)))
+
+(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :escape)))
+  (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
+                                        :next-state 'main-menu))

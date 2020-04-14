@@ -24,7 +24,7 @@ better. Huehuehue")
 
 (defun debug-transition-to-game (event &key &allow-other-keys)
   (declare (ignore event))
-  (gk.fsm:transition-to 'init-screen))
+  (gk.fsm:transition-to 'init-gameplay-debug-screen))
 
 
 (defclass dialogue-debug-screen (state-input-handler) ())
@@ -36,3 +36,8 @@ better. Huehuehue")
   (subscribe-to-event :debug-start-game 'debug-transition-to-game)
 
   (gk.fsm:transition-to 'dialogue-screen :event :debug-dialogue))
+
+;;; input handling
+(defmethod gk.input:button-released ((this dialogue-debug-screen) (button (eql :escape)))
+  (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
+                                        :next-state 'main-menu))

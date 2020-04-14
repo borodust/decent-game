@@ -13,17 +13,13 @@
   (declare (ignore pack))
   (with-slots (menu) this
     (flet ((%gameplay-debug-screen ()
-             (gk.fsm:transition-to 'gameplay-debug-screen :pack 'gameplay-debug-resources
-                                                          :next-state 'main-menu))
+             (gk.fsm:transition-to 'init-gameplay-debug-screen))
            (%animation-debug-screen ()
-             (gk.fsm:transition-to 'animation-debug-screen :pack 'animation-debug-resources
-                                                           :next-state 'main-menu))
+             (gk.fsm:transition-to 'init-animation-debug-screen))
            (%dialogue-debug-screen ()
-             (gk.fsm:transition-to 'dialogue-debug-screen :pack 'dialogue-debug-resources
-                                                          :next-state 'main-menu))
+             (gk.fsm:transition-to 'dialogue-debug-screen))
            (%loading-screen ()
-             (gk.fsm:transition-to 'loading-screen :pack nil
-                                                   :next-state 'main-menu))
+             (gk.fsm:transition-to 'loading-screen :pack nil :next-state 'main-menu))
            (%exit ()
              (gk:stop)))
       (setf menu (make-instance 'menu :items (list "DEBUG-GAMEPLAY" #'%gameplay-debug-screen

@@ -16,7 +16,8 @@
 
 (defmethod gk:act ((this loading-screen))
   (with-slots (pack next-state prepared-percentage) this
-    (unless (null pack)
+    (if (null pack)
+        (gk.fsm:transition-to next-state :pack pack) ; directly transition if no resource-pack has been specified
       (let ((count (pack-prepared-count pack))
             (total (pack-total-count pack)))
         (setf prepared-percentage (truncate (* (if (> total 0)

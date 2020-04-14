@@ -35,3 +35,9 @@
 (defmethod gk:draw ((this animation-debug-screen))
   (let ((time (bodge-util:real-time-seconds)))
     (draw-animation 'debug-animation time +zero-pos+)))
+
+
+;;; input handling
+(defmethod gk.input:button-released ((this animation-debug-screen) (button (eql :escape)))
+  (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
+                                        :next-state 'main-menu))

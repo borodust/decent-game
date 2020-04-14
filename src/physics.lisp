@@ -173,7 +173,8 @@
     (let ((pos (body-position this)))
       (gk:draw-rect pos width height
                     :fill-paint *body-fill-color*
-                    :stroke-paint *body-stroke-color*))))
+                    ;; :stroke-paint *body-stroke-color*
+                    ))))
 
 
 ;;;
@@ -206,4 +207,5 @@
     (let ((pos (body-position this)))
       (gk:draw-circle pos radius
                       :fill-paint *body-fill-color*
-                      :stroke-paint *body-stroke-color*))))
+                      ;; :stroke-paint *body-stroke-color*
+                      ))))
