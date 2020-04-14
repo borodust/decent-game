@@ -22,7 +22,7 @@
 
 
 (defclass player (stats movable)
-  ((state :initform (list :idle))
+  ((state :initform (list :idle) :accessor state)
    (body :initform nil)
    (jump-force :initarg :jump-force))
   (:default-initargs
@@ -43,11 +43,30 @@
 (defun make-player (world)
   (make-instance 'player :world world))
 
-(defmethod add-state ((this player) state)
+
+(defun get-player ()
+  "Returns player if we're inside a state, which has a player slot.
+Returns NIL otherwise."
+  (let ((curr-state (gk.fsm:current-state)))
+    (if (slot-exists-p curr-state 'player )
+        (player curr-state)
+        nil)))
+
+
+(defmethod add-state (s (this player))
+  "Adds `state' to the players state list."
   (with-slots (state) this
-   (if (keywordp state)
-       (pushf state state)
-       (error "~&State must be a keyword. Got ~A~%" state))))
+   (if (keywordp s)
+       (push s state)
+       (error "~&state must be a keyword. Got ~A~%" state))))
+
+
+(defmethod remove-state (s (this player))
+  "Removes `state' to the players state list."
+  (with-slots (state) this
+    (if (keywordp s)
+        (setf state (delete s state))
+        (error "~&state must be a keyword. Got ~A~%" state))))
 
 
 (defmethod dispose :after ((this player))
@@ -56,37 +75,60 @@
 
 
 (defun move-player-right (player)
-  (with-slots (state body) player
-    (setf state :moving-right)))
+  (unless (moving-right-p player)
+      (add-state :moving-right player)))
 
 
 (defun move-player-left (player)
-  (with-slots (state body) player
-    (setf state :moving-left)))
+  (unless (moving-left-p player)
+    (add-state :moving-left player)))
+
+
+(defmethod moving-right-p ((this player))
+  (with-slots (state)  this
+    (and (length state)
+         (eq (first state) :moving-right))))
+
+(defmethod moving-left-p ((this player))
+  (with-slots (state)  this
+    (and (length state)
+         (eq (first state) :moving-left))))
+
+(defmethod idle-p ((this player))
+  (not (a:xor (member :moving-left (state this))
+              (member :moving-right (state this)))))
 
 
 (defun stop-player (player)
-  (with-slots (state body) player
-    (setf state :idle)))
+  (setf (state player) (list)))
 
+(defun stop-player-moving-left (player)
+  (remove-state :moving-left player))
+
+(defun stop-player-moving-right (player)
+  (remove-state :moving-right player))
 
 (defun jump-player (player)
   (with-slots (state body jump-force) player
-    (case state
-      (:moving-right (apply-force body (gk:normalize (gk:mult (gk:vec2 -0.28734788 0.95782626)
-                                                              jump-force))))
-      (:moving-left  (apply-force body (gk:normalize (gk:mult (gk:vec2  0.28734788 0.95782626)
-                                                              jump-force))))
-      (:idle (apply-force body (gk:vec2 0 10000))))))
+    (cond ((moving-right-p player)
+           (apply-force body (gk:normalize (gk:mult (gk:vec2 -0.28734788 0.95782626)
+                                                    jump-force))))
+          ((moving-left-p player)
+           (apply-force body (gk:normalize (gk:mult (gk:vec2  0.28734788 0.95782626)
+                                                    jump-force))))
+          ((idle-p player)
+           (apply-force body (gk:vec2 0 10000))))))
 
 
 (defmethod collide ((this player) (that world))
   (with-slots (state) this
     (setf (collision-friction) 60)
-    (case state
-      (:idle (setf (collision-surface-velocity) (gk:vec2 0 0)))
-      (:moving-right (setf (collision-surface-velocity) (gk:vec2 100 0)))
-      (:moving-left (setf (collision-surface-velocity) (gk:vec2 -100 0)))))
+    (cond ((moving-left-p this)
+           (setf (collision-surface-velocity) (gk:vec2 -100 0)))
+          ((moving-right-p this)
+           (setf (collision-surface-velocity) (gk:vec2 100 0)))
+          ((idle-p this)
+           (setf (collision-surface-velocity) (gk:vec2 0 0)))))
   t)
 
 
@@ -109,8 +151,10 @@
     (let ((position (body-position body)))
       (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
-      (case state
-        (:idle (draw-animation 'player-idle time +zero-pos+))
-        (:moving-right (draw-animation 'player-walk time +zero-pos+))
-        (:moving-left (gk:with-pushed-canvas ()
-                        (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))))))
+      (cond ((idle-p this)
+             (draw-animation 'player-idle time +zero-pos+))
+            ((moving-left-p this)
+             (gk:with-pushed-canvas ()
+               (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))
+            ((moving-right-p this)
+             (draw-animation 'player-walk time +zero-pos+))))))

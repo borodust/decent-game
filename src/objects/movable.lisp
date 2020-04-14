@@ -1,7 +1,9 @@
 (cl:in-package :decent-game)
 
 (defclass movable ()
-  ((movement-speed :initarg :movement-speed
+  ((direction :initarg :direction
+              :accessor direction)
+   (movement-speed :initarg :movement-speed
                    :accessor movement-speed
                    :documentation "movement speed in pixels per second."))
   (:default-initargs

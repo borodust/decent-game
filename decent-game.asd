@@ -24,9 +24,9 @@
                 :components ((:file "dialogue")
                              (:file "menu")
                              (:file "world")
-                             (:file "player")
                              (:file "stats")
                              (:file "movable")
+                             ddddd(:file "player")
                              (:module "enemies"
                               :components ((:file "enemy")
                                            (:file "alien-stinger")
@@ -44,3 +44,4 @@
                 :components ((:file "animation")
                              (:file "dialogue")
                              (:file "gameplay")))))
+aaaaaaaaa

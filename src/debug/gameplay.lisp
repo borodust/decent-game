@@ -19,10 +19,9 @@
 ;;; SCENE
 ;;;
 (defclass gameplay-debug-screen (state-input-handler)
-  ((player :initform nil)
+  ((player :initform nil :accessor player)
    (world :initform nil)
    (pack :initarg :pack)))
-
 
 (defmethod initialize-instance :after ((this gameplay-debug-screen) &key)
   (with-slots (player world) this
@@ -59,7 +58,7 @@
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :d)))
   (with-slots (player) this
-    (stop-player player)))
+   (stop-player-moving-right player)))
 
 
 (defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :a)))
@@ -69,7 +68,7 @@
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :a)))
   (with-slots (player) this
-    (stop-player player)))
+    (stop-player-moving-left player)))
 
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))
