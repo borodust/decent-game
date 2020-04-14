@@ -20,6 +20,6 @@
     (setf hp (a:clamp amount hp amount))))
 
 (defmethod heal-for (amount (this stats))
-  "Heals the `hp' of `this' for `amount'. `This' heal beyond `hp-max'."
+  "Heals the `hp' of `this' for `amount'. `This' can't heal beyond `hp-max'."
   (with-slots (hp hp-max) this
     (incf hp (a:clamp amount (- hp-max hp) amount))))
