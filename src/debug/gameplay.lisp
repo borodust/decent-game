@@ -1,7 +1,9 @@
 (cl:in-package :decent-game)
 
 
-(define-resource-pack gameplay-debug-resources (player-resources))
+(define-resource-pack gameplay-debug-resources (player-resources
+                                                alien-shooter-0-resources
+                                                alien-stinger-0-resources))
 
 
 ;;;
@@ -20,13 +22,20 @@
 ;;;
 (defclass gameplay-debug-screen (state-input-handler)
   ((player :initform nil :accessor player)
+   (enemies :initform nil :accessor enemies)
    (world :initform nil)
    (pack :initarg :pack)))
 
 (defmethod initialize-instance :after ((this gameplay-debug-screen) &key)
-  (with-slots (player world) this
+  (with-slots (player enemies world) this
     (setf world (make-world)
-          player (make-player world))))
+          player (make-player :world world
+                              :movement-speed 50
+                              :jump-strength  10000)
+          enemies (make-enemies :world world
+                                :enemy-type-list
+                                '(alien-shooter
+                                  alien-stinger)))))
 
 
 (defmethod gk:post-initialize ((this gameplay-debug-screen)))
@@ -45,9 +54,10 @@
 
 
 (defmethod gk:draw ((this gameplay-debug-screen))
-  (with-slots (world player) this
+  (with-slots (world player enemies) this
     (render world)
-    (render player)))
+    (render player)
+    (render-enemies enemies)))
 
 
 ;;; input handling

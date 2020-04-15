@@ -1,4 +1,6 @@
 (cl:in-package :decent-game)
 
 
-(defclass alien (enemy) ())
+(defclass alien (enemy)
+  ()
+  (:documentation "Contains common properties of aliens."))

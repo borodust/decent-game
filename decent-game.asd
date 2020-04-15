@@ -29,8 +29,10 @@
                              (:file "player")
                              (:module "enemies"
                               :components ((:file "enemy")
+                                           (:file "alien")
                                            (:file "alien-stinger")
                                            (:file "alien-shooter")
+                                           (:file "machine")
                                            (:file "machine-stinger")
                                            (:file "machine-shooter")))))
                (:module "states"

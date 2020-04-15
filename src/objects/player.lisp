@@ -24,24 +24,28 @@
 (defclass player (stats movable)
   ((states :initform (list) :accessor states)
    (body :initform nil)
-   (jump-force :initarg :jump-force))
+   (jump-strength :initarg :jump-strength))
   (:default-initargs
    :hp-max 100
    :strength 5
    :movement-speed 200
-   :jump-force 10800))
+   :jump-strength 10000))
 
 
-(defmethod initialize-instance :after ((this player) &key world)
+(defmethod initialize-instance :after ((this player) &key world movement-speed jump-strength)
   (with-slots (body) this
-    (setf body (make-circle-body (universe-of world) 5
-                                 :owner this
-                                 :mass 1)
+    (setf body (make-box-body (universe-of world)
+                              12
+                              28
+                              :owner this
+                              :mass 1)
           (body-position body) (gk:vec2 50 20))))
 
 
-(defun make-player (world)
-  (make-instance 'player :world world))
+(defun make-player (&key world movement-speed jump-strength)
+  (make-instance 'player :world world
+                         :movement-speed movement-speed
+                         :jump-strength jump-strength))
 
 
 (defun get-player ()
@@ -99,6 +103,9 @@ Returns NIL otherwise."
       (not (a:xor (member :moving-left (states this))
                   (member :moving-right (states this))))))
 
+(defmethod jumping-p ((this player))
+  (member :jumping (states this)))
+
 
 (defun stop-player (player)
   (setf (states player) (list)))
@@ -110,26 +117,29 @@ Returns NIL otherwise."
   (remove-state :moving-right player))
 
 (defun jump-player (player)
-  (add-state :jumping player)
-  (with-slots (states body jump-force) player
-    (cond ((moving-left-p player)
-           (apply-force body (gk:mult (gk:normalize (gk:vec2 -0.28734788 0.95782626))
-                                      jump-force)))
-          ((moving-right-p player)
-           (apply-force body (gk:mult (gk:normalize (gk:vec2  0.28734788 0.95782626))
-                                      jump-force)))
-          ((idle-p player)
-           (apply-force body (gk:vec2 0 10000))))))
+  (unless (jumping-p player)
+    (add-state :jumping player)
+    (with-slots (states body jump-strength) player
+      (let ((jx 0.18734788)
+            (jy 0.95782626))
+       (cond ((moving-left-p player)
+              (apply-force body (gk:mult (gk:normalize (gk:vec2 (- jx) jy))
+                                 jump-strength)))
+             ((moving-right-p player)
+              (apply-force body (gk:mult (gk:normalize (gk:vec2 jx jy))
+                                         jump-strength)))
+             ((idle-p player)
+              (apply-force body (gk:vec2 0 10000))))))))
 
 
 (defmethod collide ((this player) (that world))
-  (with-slots (states) this
+  (with-slots (states movement-speed) this
     (remove-state :jumping this)
     (setf (collision-friction) 60)
     (cond ((moving-left-p this)
-           (setf (collision-surface-velocity) (gk:vec2 -100 0)))
+           (setf (collision-surface-velocity) (gk:vec2 (- movement-speed) 0)))
           ((moving-right-p this)
-           (setf (collision-surface-velocity) (gk:vec2 100 0)))
+           (setf (collision-surface-velocity) (gk:vec2 movement-speed 0)))
           ((idle-p this)
            (setf (collision-surface-velocity) (gk:vec2 0 0)))))
   t)
@@ -152,7 +162,9 @@ Returns NIL otherwise."
   (with-slots (states body) this
     (render body)
     (let ((position (body-position body)))
-      (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
+      (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
+                           (gk:y position) ;; (- (gk:y position) 5)
+       ))
     (let ((time (bodge-util:real-time-seconds)))
       (cond ((idle-p this)
              (draw-animation 'player-idle time +zero-pos+))
