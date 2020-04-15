@@ -21,27 +21,31 @@
   'player-ranged)
 
 
-(defclass player (stats movable)
-  ((state :initform (list) :accessor state)
-   (body :initform nil)
-   (jump-force :initarg :jump-force))
+(defclass player (fighter)
+  ((direction :initarg :direction)
+   (movement-speed :initarg :movement-speed)
+   (jump-strength :initarg :jump-strength))
   (:default-initargs
    :hp-max 100
    :strength 5
    :movement-speed 200
-   :jump-force 1200))
+   :jump-strength 10000))
 
 
-(defmethod initialize-instance :after ((this player) &key world)
+(defmethod initialize-instance :after ((this player) &key world movement-speed jump-strength)
   (with-slots (body) this
-    (setf body (make-circle-body (universe-of world) 5
-                                 :owner this
-                                 :mass 1)
+    (setf body (make-box-body (universe-of world)
+                              12
+                              28
+                              :owner this
+                              :mass 1)
           (body-position body) (gk:vec2 50 20))))
 
 
-(defun make-player (world)
-  (make-instance 'player :world world))
+(defun make-player (&key world movement-speed jump-strength)
+  (make-instance 'player :world world
+                         :movement-speed movement-speed
+                         :jump-strength jump-strength))
 
 
 (defun get-player ()
@@ -53,20 +57,20 @@ Returns NIL otherwise."
         nil)))
 
 
-(defmethod add-state (s (this player))
-  "Adds `state' to the players state list."
-  (with-slots (state) this
-   (if (keywordp s)
-       (unless (member s state)
-        (push s state))
+(defmethod add-state (state (this player))
+  "Adds `state' to the players `states' list."
+  (with-slots (states) this
+   (if (keywordp state)
+       (unless (member state states)
+        (push state states))
        (error "~&state must be a keyword. Got ~A~%" state))))
 
 
-(defmethod remove-state (s (this player))
-  "Removes `state' to the players state list."
-  (with-slots (state) this
-    (if (keywordp s)
-        (setf state (delete s state))
+(defmethod remove-state (state (this player))
+  "Removes `state' to the players `states' list."
+  (with-slots (states) this
+    (if (keywordp state)
+        (setf states (delete state states))
         (error "~&state must be a keyword. Got ~A~%" state))))
 
 
@@ -85,23 +89,26 @@ Returns NIL otherwise."
 
 
 (defmethod moving-right-p ((this player))
-  (with-slots (state)  this
-    (and (member :moving-right state)
-         (not (member :moving-left state)))))
+  (with-slots (states)  this
+    (and (member :moving-right states)
+         (not (member :moving-left states)))))
 
 (defmethod moving-left-p ((this player))
-  (with-slots (state)  this
-    (and (member :moving-left state)
-         (not (member :moving-right state)))))
+  (with-slots (states)  this
+    (and (member :moving-left states)
+         (not (member :moving-right states)))))
 
 (defmethod idle-p ((this player))
-  (or (null (state this))
-      (not (a:xor (member :moving-left (state this))
-                  (member :moving-right (state this))))))
+  (or (null (states this))
+      (not (a:xor (member :moving-left (states this))
+                  (member :moving-right (states this))))))
+
+(defmethod jumping-p ((this player))
+  (member :jumping (states this)))
 
 
 (defun stop-player (player)
-  (setf (state player) (list)))
+  (setf (states player) (list)))
 
 (defun stop-player-moving-left (player)
   (remove-state :moving-left player))
@@ -110,24 +117,27 @@ Returns NIL otherwise."
   (remove-state :moving-right player))
 
 (defun jump-player (player)
-  (add-state :jumping player)
-  (with-slots (state body jump-force) player
-    (cond ((moving-left-p player)
-           (apply-force body (gk:mult (gk:normalize (gk:vec2 -0.28734788 0.95782626))
-                                      jump-force)))
-          ((moving-right-p player)
-           (apply-force body (gk:mult (gk:normalize (gk:vec2  0.28734788 0.95782626))
-                                      jump-force)))
-          ((idle-p player)
-           (apply-force body (gk:vec2 0 10000))))))
+  (unless (jumping-p player)
+    (add-state :jumping player)
+    (with-slots (states body jump-strength) player
+      (let ((jx 0.18734788)
+            (jy 0.95782626))
+       (cond ((moving-left-p player)
+              (apply-force body (gk:mult (gk:normalize (gk:vec2 (- jx) jy))
+                                 jump-strength)))
+             ((moving-right-p player)
+              (apply-force body (gk:mult (gk:normalize (gk:vec2 jx jy))
+                                         jump-strength)))
+             ((idle-p player)
+              (apply-force body (gk:vec2 0 10000))))))))
 
 
 (defmethod collide ((this player) (that world))
-  (with-slots (state) this
+  (with-slots (states movement-speed) this
     (remove-state :jumping this)
     (setf (collision-friction) 60)
     (cond ((moving-left-p this)
-           (setf (collision-surface-velocity) (gk:vec2 -100 0)))
+           (setf (collision-surface-velocity) (gk:vec2 (- 100) 0)))
           ((moving-right-p this)
            (setf (collision-surface-velocity) (gk:vec2 100 0)))
           ((idle-p this)
@@ -149,10 +159,12 @@ Returns NIL otherwise."
 
 
 (defmethod render ((this player))
-  (with-slots (state body) this
+  (with-slots (states body) this
     (render body)
     (let ((position (body-position body)))
-      (gk:translate-canvas (- (gk:x position) 8) (- (gk:y position) 5)))
+      (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
+                           (gk:y position) ;; (- (gk:y position) 5)
+       ))
     (let ((time (bodge-util:real-time-seconds)))
       (cond ((idle-p this)
              (draw-animation 'player-idle time +zero-pos+))

@@ -26,14 +26,13 @@
                              (:file "menu")
                              (:file "world")
                              (:file "stats")
-                             (:file "movable")
+                             (:file "fighter")
                              (:file "player")
                              (:module "enemies"
                               :components ((:file "enemy")
+                                           (:file "alien")
                                            (:file "alien-stinger")
-                                           (:file "alien-shooter")
-                                           (:file "machine-stinger")
-                                           (:file "machine-shooter")))))
+                                           (:file "alien-shooter")))))
                (:module "states"
                 :components ((:file "init")
                              (:file "loading")
