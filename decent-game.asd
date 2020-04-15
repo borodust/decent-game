@@ -9,7 +9,8 @@
                #:trivial-gamekit-fistmachine
                #:trivial-gamekit-input-handler
                #:cl-bodge/physics
-               #:cl-bodge/physics/2d)
+               #:cl-bodge/physics/2d
+               #:cl-tiled)
   :pathname "src/"
   :serial t
   :components ((:file "packages")
@@ -45,3 +46,14 @@
                 :components ((:file "animation")
                              (:file "dialogue")
                              (:file "gameplay")))))
+
+
+
+(asdf:defsystem :decent-game/tiled
+  :description "Tiled map converter"
+  :author "Pavel Korolev"
+  :license "MIT"
+  :depends-on (#:bodge-tmx :cffi :cffi-c-ref)
+  :pathname "tiled/"
+  :serial t
+  :components ((:file "exporter")))
