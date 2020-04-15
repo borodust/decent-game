@@ -24,7 +24,6 @@
                 :components ((:file "dialogue")
                              (:file "menu")
                              (:file "world")
-                             (:file "projectile")
                              (:file "stats")
                              (:file "fighter")
                              (:file "player")
