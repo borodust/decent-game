@@ -8,16 +8,22 @@
     (asset-path "img/alien-shooter-0/alien-shooter-0-attack-ranged-0.png")
   :frames 2)
 
+(define-animation alien-shooter-0-attack-projectile-0
+    (asset-path "img/alien-shooter-0/alien-shooter-0-projectile-0.png")
+  :frames 1)
+
 (define-resource-pack alien-shooter-0-resources ()
   'alien-shooter-0-walk-0
-  'alien-shooter-0-attack-shoot-0)
+  'alien-shooter-0-attack-shoot-0
+  'alien-shooter-0-attack-projectile-0)
 
 
-(defclass alien-shooter (alien movable)
+(defclass alien-shooter (alien)
   ()
   (:default-initargs
    :hp-max 15
    :strength 5
+   :attack-speed 12 ; frames between attacks
    :movement-speed 50)
   (:documentation "A small alien enemy, which shoots thorns."))
 
@@ -32,8 +38,34 @@
           (body-position body) (gk:vec2 120 20))))
 
 
+(defmethod shoot ((shooter alien-shooter) (shot fighter))
+  "Make the `shooter' shoot the `shot'."
+  ;; TODO
+  nil)
+
+;;; collision
+(defmethod collide ((this alien-shooter) (that world))
+  (with-slots (movement-speed) this
+    (setf (collision-friction) 60)
+    (setf (collision-surface-velocity) (gk:vec2 0 0)))
+  t)
+
+(defmethod collide ((that world) (this alien-shooter))
+  (collide this that))
+
+
+(defmethod process-collision ((this alien-shooter) (that world))
+  (with-slots (body) this
+    (setf (body-angular-velocity body) 0)))
+
+
+(defmethod process-collision ((that world) (this alien-shooter))
+  (process-collision this that))
+
+
+;;; rendering
 (defmethod render ((this alien-shooter))
-  (with-slots (states body) this
+  (with-slots (body) this
     (render body)
     (let ((position (body-position body)))
       (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)

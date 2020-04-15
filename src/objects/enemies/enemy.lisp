@@ -1,8 +1,7 @@
 (cl:in-package :decent-game)
 
 
-(defclass enemy (stats)
-  ((body :initform nil)))
+(defclass enemy (fighter) ())
 
 
 (defun make-enemies (&key world enemy-type-list)

@@ -21,9 +21,9 @@
   'player-ranged)
 
 
-(defclass player (stats movable)
-  ((states :initform (list) :accessor states)
-   (body :initform nil)
+(defclass player (fighter)
+  ((direction :initarg :direction)
+   (movement-speed :initarg :movement-speed)
    (jump-strength :initarg :jump-strength))
   (:default-initargs
    :hp-max 100
@@ -137,9 +137,9 @@ Returns NIL otherwise."
     (remove-state :jumping this)
     (setf (collision-friction) 60)
     (cond ((moving-left-p this)
-           (setf (collision-surface-velocity) (gk:vec2 (- movement-speed) 0)))
+           (setf (collision-surface-velocity) (gk:vec2 (- 100) 0)))
           ((moving-right-p this)
-           (setf (collision-surface-velocity) (gk:vec2 movement-speed 0)))
+           (setf (collision-surface-velocity) (gk:vec2 100 0)))
           ((idle-p this)
            (setf (collision-surface-velocity) (gk:vec2 0 0)))))
   t)

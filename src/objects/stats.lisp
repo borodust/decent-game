@@ -5,21 +5,18 @@
    (hp-max :initarg :hp-max
            :accessor hp-max)
    (strength :initarg :strength
-             :accessor strength))
+             :accessor strength)
+   (attack-speed :initarg :attack-speed
+                 :accessor attack-speed)
+   (movement-speed :initarg :movement-speed
+                   :accessor movement-speed
+                   :documentation "Movement speed in pixels per second."))
   (:default-initargs
    :hp-max 10
-   :strength 1)
+   :strength 1
+   :attack-speed 24
+   :movement-speed 50)
   (:documentation "This class holds all of the characters stats."))
 
 (defmethod initialize-instance :after ((this stats) &key)
   (setf (hp this) (hp-max this)))
-
-(defmethod damage-for (amount (this stats))
-  "Damages the `hp' of `this' for `amount'. `This' can't fall below 0 hp."
-  (with-slots (hp) this
-    (setf hp (a:clamp amount hp amount))))
-
-(defmethod heal-for (amount (this stats))
-  "Heals the `hp' of `this' for `amount'. `This' can't heal beyond `hp-max'."
-  (with-slots (hp hp-max) this
-    (incf hp (a:clamp amount (- hp-max hp) amount))))

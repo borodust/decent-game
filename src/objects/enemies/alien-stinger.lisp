@@ -13,7 +13,7 @@
   'alien-stinger-0-attack-sting-0)
 
 
-(defclass alien-stinger (alien movable)
+(defclass alien-stinger (alien)
   ()
   (:default-initargs
    :hp-max 25
@@ -29,11 +29,33 @@
                               32
                               :owner this
                               :mass 1)
-          (body-position body) (gk:vec2 100 20))))
+          (body-position body) (gk:vec2 100 100))))
 
 
+;;; collision handling
+(defmethod collide ((this alien-stinger) (that world))
+  (with-slots (movement-speed) this
+    (setf (collision-friction) 60)
+    (setf (collision-surface-velocity) (gk:vec2 0 0)))
+  t)
+
+
+(defmethod collide ((that world) (this alien-stinger))
+  (collide this that))
+
+
+(defmethod process-collision ((this alien-stinger) (that world))
+  (with-slots (body) this
+    (setf (body-angular-velocity body) 0)))
+
+
+(defmethod process-collision ((that world) (this alien-stinger))
+  (process-collision this that))
+
+
+;;; rendering
 (defmethod render ((this alien-stinger))
-    (with-slots (states body) this
+    (with-slots (body) this
     (render body)
     (let ((position (body-position body)))
       (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
