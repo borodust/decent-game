@@ -38,6 +38,7 @@
                              (:file "loading")
                              (:file "main-menu")
                              (:file "dialogue")))
+               (:file "text")
                (:file "main")
 
                (:module "debug"

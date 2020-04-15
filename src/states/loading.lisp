@@ -11,21 +11,21 @@
 
 (defmethod gk:post-initialize ((this loading-screen))
   (with-slots (pack-name pack) this
+    (unless pack-name
+      (error ":pack-name must not be nil"))
     (setf pack (load-resource-pack pack-name))))
 
 
 (defmethod gk:act ((this loading-screen))
   (with-slots (pack next-state prepared-percentage) this
-    (if (null pack)
-        (gk.fsm:transition-to next-state :pack pack) ; directly transition if no resource-pack has been specified
-      (let ((count (pack-prepared-count pack))
-            (total (pack-total-count pack)))
-        (setf prepared-percentage (truncate (* (if (> total 0)
-                                                   (/ count total)
-                                                   1)
-                                               100)))
-        (when (= count total)
-          (gk.fsm:transition-to next-state :pack pack))))))
+    (let ((count (pack-prepared-count pack))
+          (total (pack-total-count pack)))
+      (setf prepared-percentage (truncate (* (if (> total 0)
+                                                 (/ count total)
+                                                 1)
+                                             100)))
+      (when (= count total)
+        (gk.fsm:transition-to next-state :pack pack)))))
 
 
 (defmethod gk:draw ((this loading-screen))

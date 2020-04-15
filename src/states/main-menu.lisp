@@ -19,7 +19,7 @@
            (%dialogue-debug-screen ()
              (gk.fsm:transition-to 'dialogue-debug-screen))
            (%loading-screen ()
-             (gk.fsm:transition-to 'loading-screen :pack nil :next-state 'main-menu))
+             (gk.fsm:transition-to 'init-screen))
            (%exit ()
              (gk:stop)))
       (setf menu (make-instance 'menu :items (list "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
