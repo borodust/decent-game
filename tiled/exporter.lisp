@@ -152,6 +152,10 @@
                               until (null-pointer-p item)
                               collect (c-val ((item %tmx:tileset-list))
                                         (parse-tileset (item :tileset) (item :firstgid)))))
+            :width (tmx :width)
+            :height (tmx :height)
+            :tile-width (tmx :tile-width)
+            :tile-height (tmx :tile-height)
             :properties (parse-properties (tmx :properties))))))
 
 

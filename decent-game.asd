@@ -32,7 +32,8 @@
                               :components ((:file "enemy")
                                            (:file "alien")
                                            (:file "alien-stinger")
-                                           (:file "alien-shooter")))))
+                                           (:file "alien-shooter")))
+                             (:file "level")))
                (:module "states"
                 :components ((:file "init")
                              (:file "loading")
@@ -44,7 +45,8 @@
                (:module "debug"
                 :components ((:file "animation")
                              (:file "dialogue")
-                             (:file "gameplay")))))
+                             (:file "gameplay")
+                             (:file "level")))))
 
 
 
