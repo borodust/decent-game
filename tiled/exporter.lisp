@@ -29,9 +29,10 @@
 
 (defun parse-properties (properties)
   (let (*properties*)
-    (%tmx:property-foreach properties
-                           (callback parse-property)
-                           (null-pointer))
+    (unless (null-pointer-p properties)
+      (%tmx:property-foreach properties
+                             (callback parse-property)
+                             (null-pointer)))
     *properties*))
 
 
@@ -55,16 +56,7 @@
 (defun parse-polyline (content)
   (declare (ignore content)))
 
-(defun parse-ellipse (content)
-  (declare (ignore content)))
-
-(defun parse-tile (content)
-  (declare (ignore content)))
-
 (defun parse-text (content)
-  (declare (ignore content)))
-
-(defun parse-point (content)
   (declare (ignore content)))
 
 
@@ -77,8 +69,7 @@
                            :kind kind
                            :name (object :name)
                            :type (object :type)
-                           :x (object :x)
-                           :y (object :y)
+                           :position (list (object :x) (object :y))
                            :width (object :width)
                            :height (object :height)
                            :rotation (object :rotation)
@@ -107,12 +98,60 @@
                (:objgr (parse-object-group-content (layer :content))))))))
 
 
+(defun parse-image (image)
+  (unless (null-pointer-p image)
+    (c-val ((image %tmx:image))
+      (list :source (image :source)
+            :width (image :width)
+            :height (image :height)))))
+
+
+(defun parse-tile (tile)
+  (unless (null-pointer-p tile)
+    (c-val ((tile %tmx:tile))
+      (list :id (tile :id)
+            :type (tile :type)
+            :position (list (tile :ul-x) (tile :ul-y))
+            :image (parse-image (tile :image))
+            :properties (parse-properties (tile :properties))))))
+
+
+(defun parse-tiles (tiles count)
+  (unless (or (null-pointer-p tiles) (= count 0))
+    (c-val ((tiles (:pointer %tmx:tile)))
+      (loop for i from 0 below count
+            unless (null-pointer-p (tiles i))
+              collect (parse-tile (tiles i))))))
+
+
+(defun parse-tileset (tileset gid-offset)
+  (c-val ((tileset %tmx:tileset))
+    (list :name (tileset :name)
+          :tile-width (tileset :tile-width)
+          :tile-height (tileset :tile-height)
+          :offset (list (tileset :x-offset) (tileset :y-offset))
+          :spacing (tileset :spacing)
+          :margin (tileset :margin)
+          :image (parse-image (tileset :image))
+          :tiles (loop for i from 0 below (tileset :tilecount)
+                       unless (null-pointer-p (tileset :tiles * i))
+                         collect (list (+ i gid-offset)
+                                       (parse-tile (tileset :tiles * i))))
+          :properties (parse-properties (tileset :properties)))))
+
+
 (defun parse-map (tmx)
   (c-val ((tmx %tmx:map))
     (let ((*map* (tmx &)))
-      (list :layers (loop for layer = (tmx :ly-head) then (c-ref layer %tmx:layer :next)
-                          until (null-pointer-p layer)
-                          collect (parse-layer layer))
+      (list :layers (unless (null-pointer-p (tmx :ly-head))
+                      (loop for layer = (tmx :ly-head) then (c-ref layer %tmx:layer :next)
+                            until (null-pointer-p layer)
+                            collect (parse-layer layer)))
+            :tilesets (unless (null-pointer-p (tmx :ts-head))
+                        (loop for item = (tmx :ts-head) then (c-ref item %tmx:tileset-list :next)
+                              until (null-pointer-p item)
+                              collect (c-val ((item %tmx:tileset-list))
+                                        (parse-tileset (item :tileset) (item :firstgid)))))
             :properties (parse-properties (tmx :properties))))))
 
 
