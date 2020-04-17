@@ -1,24 +1,48 @@
 (cl:in-package :decent-game)
 
 
-(define-animation player-idle (asset-path "img/player/player-idle-0.png")
-  :frames 2)
-
-(define-animation player-walk (asset-path "img/player/player-walk-0.png")
-  :frames 3)
-
-(define-animation player-melee (asset-path "img/player/player-attack-melee-0.png")
-  :frames 3)
-
-(define-animation player-ranged (asset-path "img/player/player-attack-ranged-0.png")
-  :frames 2)
-
+(define-animation player-idle-right (asset-path "img/player/player-idle-right.png") :frames 2)
+(define-animation player-idle-left (asset-path "img/player/player-idle-left.png") :frames 2)
+(define-animation player-run-right (asset-path "img/player/player-run-right.png") :frames 4)
+(define-animation player-run-left (asset-path "img/player/player-run-left.png") :frames 4)
+(define-animation player-slash-right (asset-path "img/player/player-slash-right.png") :frames 2)
+(define-animation player-slash-left (asset-path "img/player/player-slash-left.png") :frames 2)
+(define-animation player-shoot-right (asset-path "img/player/player-shoot-right.png") :frames 2)
+(define-animation player-shoot-left (asset-path "img/player/player-shoot-left.png") :frames 2)
+(define-animation player-hurt-right (asset-path "img/player/player-hurt-right.png") :frames 1)
+(define-animation player-hurt-left (asset-path "img/player/player-hurt-left.png") :frames 1)
+(define-animation player-jump-right (asset-path "img/player/player-jump-right.png") :frames 2)
+(define-animation player-jump-left (asset-path "img/player/player-jump-left.png") :frames 2)
+(define-animation player-jumping-right (asset-path "img/player/player-jumping-right.png") :frames 1)
+(define-animation player-jumping-left (asset-path "img/player/player-jumping-left.png") :frames 1)
+(define-animation player-falling-right (asset-path "img/player/player-falling-right.png") :frames 1)
+(define-animation player-falling-left (asset-path "img/player/player-falling-left.png") :frames 1)
+(define-animation player-dying-right (asset-path "img/player/player-dying-right.png") :frames 3)
+(define-animation player-dying-left (asset-path "img/player/player-dying-left.png") :frames 3)
+(define-animation player-projectile-0-right (asset-path "img/player/player-projectile-0-right.png") :frames 2)
+(define-animation player-projectile-0-left (asset-path "img/player/player-projectile-0-left.png") :frames 2)
 
 (define-resource-pack player-resources ()
-  'player-idle
-  'player-walk
-  'player-melee
-  'player-ranged)
+  'player-idle-right
+  'player-idle-left
+  'player-run-right
+  'player-run-left
+  'player-slash-right
+  'player-slash-left
+  'player-shoot-right
+  'player-shoot-left
+  'player-hurt-right
+  'player-hurt-left
+  'player-jump-right
+  'player-jump-left
+  'player-jumping-right
+  'player-jumping-left
+  'player-falling-right
+  'player-falling-left
+  'player-dying-right
+  'player-dying-left
+  'player-projectile-0-right
+  'player-projectile-0-left)
 
 
 (defclass player (fighter)
@@ -167,9 +191,9 @@ Returns NIL otherwise."
        ))
     (let ((time (bodge-util:real-time-seconds)))
       (cond ((idle-p this)
-             (draw-animation 'player-idle time +zero-pos+))
+             (draw-animation 'player-idle-right time +zero-pos+))
             ((moving-left-p this)
              (gk:with-pushed-canvas ()
-               (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))
+               (draw-animation 'player-run-left time +zero-pos+)))
             ((moving-right-p this)
-             (draw-animation 'player-walk time +zero-pos+))))))
+             (draw-animation 'player-run-right time +zero-pos+))))))
