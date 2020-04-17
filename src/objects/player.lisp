@@ -91,8 +91,7 @@ Returns NIL otherwise."
 With the exception of :left and :right. Those are added to `facing'."
   (with-slots (states facing) this
     (if (keywordp state)
-        (unless (member state states)
-          (push state states))
+        (pushnew state states)
         (error "~&state must be a keyword. Got ~A~%" state))))
 
 (defmethod remove-state (state (this player))
@@ -131,7 +130,13 @@ With the exception of :left and :right. Those are added to `facing'."
 (defmethod move-right ((this player))
   nil)
 
+(defmethod stop-move-right ((this player))
+  nil)
+
 (defmethod move-left ((this player))
+  nil)
+
+(defmethod stop-move-left ((this player))
   nil)
 
 
