@@ -46,11 +46,10 @@
 
 
 (defclass player (fighter)
-  ((facing :initarg :facing :accessor facing :initform :right
-           :documentation "either :left or :right")
-   (movement-speed :initarg :movement-speed)
+  ((movement-speed :initarg :movement-speed)
    (jump-strength :initarg :jump-strength))
   (:default-initargs
+   :direction 1
    :hp-max 100
    :strength 5
    :movement-speed 200
@@ -88,12 +87,13 @@ Returns NIL otherwise."
 
 
 (defmethod add-state (state (this player))
-  "Adds `state' to the players `states' list."
-  (with-slots (states) this
-   (if (keywordp state)
-       (unless (member state states)
-        (push state states))
-       (error "~&state must be a keyword. Got ~A~%" state))))
+  "Adds `state' to the players `states' list.
+With the exception of :left and :right. Those are added to `facing'."
+  (with-slots (states facing) this
+    (if (keywordp state)
+        (unless (member state states)
+          (push state states))
+        (error "~&state must be a keyword. Got ~A~%" state))))
 
 (defmethod remove-state (state (this player))
   "Removes `state' to the players `states' list."
@@ -104,10 +104,10 @@ Returns NIL otherwise."
 
 
 (defmethod facing-right-p ((this player))
-  (eq (facing this) :right))
+  (plusp (direction this)))
 
 (defmethod facing-left-p ((this player))
-  (eq (facing this) :left))
+  (minusp (direction this)))
 
 
 (defmethod running-p ((this player))
@@ -117,7 +117,8 @@ Returns NIL otherwise."
 
 (defmethod idle-p ((this player))
   (or (null (states this))
-      (not (running-p this))))
+      (and (facing-left-p this)
+           (facing-right-p this))))
 
 
 (defmethod jumping-p ((this player))
@@ -128,14 +129,10 @@ Returns NIL otherwise."
 
 
 (defmethod move-right ((this player))
-  (unless (running-p this)
-    (setf (facing this) :right)
-    (add-state :running this)))
+  nil)
 
 (defmethod move-left ((this player))
-  (unless (running-p this)
-    (setf (facing this) :left)
-    (add-state :running this)))
+  nil)
 
 
 (defmethod stop-running ((this player))

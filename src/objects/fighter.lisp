@@ -2,6 +2,10 @@
 
 (defclass fighter (stats)
   ((states :initform (list) :accessor states)
+   (direction :initarg :direction
+              :accessor direction
+              :initform (error "The fighter needs a direction he's facing.")
+              :documentation "-1 for left, 0 for both, +1 for right")
    (body :initform nil))
   (:documentation "Something that can fight,has a body and stats."))
 
