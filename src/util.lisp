@@ -6,7 +6,12 @@
 
 (defvar +zero-pos+ (gk:vec2 0 0))
 
+
 (defun now () (bodge-util:real-time-seconds))
+
+
+(defun current-game-state () (gk.fsm:current-state))
+
 
 (defmethod gk:post-initialize :around ((this state-input-handler))
   (gk.input:activate-input-handler this)
