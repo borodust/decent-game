@@ -3,8 +3,8 @@
 
 (defclass world ()
   ((universe :initform nil :reader universe-of)
-   (ground :initform nil)
-   (obstacles :initform nil)))
+   (level :initform nil :reader level-of)
+   (player :initform nil :reader player-of)))
 
 
 (defun make-obstacle (world origin width height)
@@ -13,26 +13,22 @@
     o))
 
 
-(defmethod initialize-instance :after ((this world) &key)
-  (with-slots (universe ground obstacles) this
+(defmethod initialize-instance :after ((this world) &key level-name)
+  (with-slots (universe level player) this
     (setf universe (make-universe (gk:vec2 0 -100))
-          ground (make-box-body universe 10000 10
-                                :kinematic t
-                                :owner this)
-          (body-position ground) (gk:vec2 -1000 0)
-          obstacles (list (make-obstacle this (gk:vec2 120 40) 100 10)))))
+          level (make-level level-name universe)
+          player (make-player this :position (player-spawn-position-of level)))))
 
 
-(defun make-world ()
-  (make-instance 'world))
+(defun make-world (level-name)
+  (make-instance 'world :level-name level-name))
 
 
-(defmethod dispose :after ((this universe))
-  (with-slots (universe ground obstacles) this
-    (dispose ground)
-    (dispose universe)
-    (loop for obstacle in obstacles
-          do (dispose obstacle))))
+(defmethod dispose :after ((this world))
+  (with-slots (universe level player) this
+    (dispose player)
+    (dispose level)
+    (dispose universe)))
 
 
 (defun observe-world (world)
@@ -41,11 +37,6 @@
 
 
 (defmethod render ((this world))
-  (with-slots (ground obstacles) this
-    (render ground)
-    (loop for obstacle in obstacles
-          do (render obstacle))))
-
-
-(defmethod collide ((this world) (that world))
-  nil)
+  (with-slots (level player) this
+    (render level)
+    (render player)))

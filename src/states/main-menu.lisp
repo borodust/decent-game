@@ -18,8 +18,6 @@
              (gk.fsm:transition-to 'init-animation-debug-screen))
            (%dialogue-debug-screen ()
              (gk.fsm:transition-to 'dialogue-debug-screen))
-           (%level-debug-screen ()
-             (gk.fsm:transition-to 'init-level-debug-screen))
            (%loading-screen ()
              (gk.fsm:transition-to 'init-screen))
            (%exit ()
@@ -27,7 +25,6 @@
       (setf menu (make-instance 'menu :items (list "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
                                                    "DEBUG-ANIMATION" #'%animation-debug-screen
                                                    "DEBUG-DIALOGUE" #'%dialogue-debug-screen
-                                                   "DEBUG-LEVEL" #'%level-debug-screen
                                                    "LOADING SCREEN" #'%loading-screen
                                                    "EXIT" #'%exit))))))
 

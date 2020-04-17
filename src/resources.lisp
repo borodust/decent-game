@@ -117,7 +117,7 @@
                               parent-classes
                               (list 'resource-pack)))
          ())
-       (let ((,resource-list (list ,@resources)))
+       (let ((,resource-list (a:flatten (list ,@resources))))
          (defmethod resource-pack-resources append ((,this ,name))
            (declare (ignore ,this))
            ,resource-list)))))

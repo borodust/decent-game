@@ -72,7 +72,8 @@
 (defun make-player (world &key position)
   (make-instance 'player :world world
                          :movement-speed *player-movement-speed*
-                         :jump-strength *player-jump-strength*))
+                         :jump-strength *player-jump-strength*
+                         :position position))
 
 
 (defmethod dispose :after ((this player))
@@ -168,7 +169,7 @@ With the exception of :left and :right. Those are added to `facing'."
                  (apply-force body (gk:vec2 0 10000))))))))
 
 
-(defmethod collide ((this player) (that world))
+(defmethod collide ((this player) (that obstacle))
   (with-slots (states movement-speed) this
     (setf (collision-friction) 60)
     (if (facing-right-p this)
@@ -183,7 +184,7 @@ With the exception of :left and :right. Those are added to `facing'."
   t)
 
 
-(defmethod collide ((that world) (this player))
+(defmethod collide ((that obstacle) (this player))
   (collide this that))
 
 

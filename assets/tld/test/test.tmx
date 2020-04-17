@@ -56,7 +56,7 @@
     <property name="kind" value="platform"/>
    </properties>
   </object>
-  <object id="6" x="46" y="102">
+  <object id="6" x="46" y="95">
    <properties>
     <property name="kind" value="player-spawn"/>
    </properties>

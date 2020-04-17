@@ -7,7 +7,37 @@
                   *tile-width*
                   *tile-height*
                   *tile-map*
-                  *image-map*))
+                  *image-map*
+                  *level-universe*))
+
+
+(defgeneric level-image-map (level))
+(defgeneric level-resources (level))
+
+
+(defmacro define-level (name path &body images)
+  (a:with-gensyms (image-map-var level-resources)
+    (let (image-defines image-map image-resources)
+      (loop for image-decl in images
+            do (destructuring-bind (image-name image-path image-id)
+                   image-decl
+                 (push image-name image-resources)
+                 (push `(gk:define-image ,image-name ,image-path
+                          :use-nearest-interpolation t)
+                       image-defines)
+                 (push `(,image-id ',image-name) image-map)))
+      `(progn
+         (gk:define-text ,name ,path)
+         ,@image-defines
+         (let ((,image-map-var (a:plist-hash-table
+                                (list ,@(reduce #'append image-map))
+                                :test 'equal)))
+           (defmethod level-image-map ((this (eql ',name)))
+             (declare (ignore this))
+             ,image-map-var))
+         (let ((,level-resources '(,name ,@image-resources)))
+           (defmethod level-resources ((this (eql ',name)))
+             ,level-resources))))))
 
 
 ;;;
@@ -34,7 +64,24 @@
 ;;;
 ;;;
 ;;;
-(defclass obstacle () ())
+(defclass obstacle ()
+  ((body :initform nil)))
+
+
+(defmethod dispose :after ((this obstacle))
+  (with-slots (body) this
+    (dispose body)))
+
+
+(defmethod render ((this obstacle))
+  (with-slots (body) this
+    (render body)))
+
+
+(defmethod collide ((this obstacle) (that obstacle))
+  nil)
+
+
 (defclass sensor () ())
 
 
@@ -47,20 +94,15 @@
    (height :initarg :height)))
 
 
+(defmethod initialize-instance :after ((this rectangle-platform) &key)
+  (with-slots (body width height position) this
+    (setf body (make-box-body *level-universe* width height :kinematic t :owner this)
+          (body-position body) position)))
+
+
 (defclass polygon-platform (platform)
   ((point-offsets :initarg :offsets)))
 
-
-(defun make-platform (&key kind position width height points &allow-other-keys)
-  (let ((position (apply #'gk:vec2 position))
-        (offsets (loop for point in points
-                       collect (apply #'gk:vec2 point))))
-    (ecase kind
-      (:square (make-instance 'rectangle-platform :position position
-                                                  :width width
-                                                  :height height))
-      (:polygon (make-instance 'polygon-platform :position position
-                                                 :point-offsets offsets)))))
 
 ;;;
 ;;; CONTROL-PLANE
@@ -70,6 +112,17 @@
   ((spawn :initarg :spawn :reader player-spawn-position-of)
    (platforms :initarg :platforms)))
 
+
+(defmethod dispose :after ((this control-plane))
+  (with-slots (platforms) this
+    (loop for platform in platforms
+          do (dispose platform))))
+
+
+(defmethod render ((this control-plane))
+  (with-slots (platforms) this
+    (loop for platform in platforms
+          do (render platform))))
 
 ;;;
 ;;; SCENERY
@@ -100,6 +153,11 @@
    (control-plane :initform nil)))
 
 
+(defmethod dispose :after ((this level))
+  (with-slots (control-plane) this
+    (dispose control-plane)))
+
+
 (defmethod player-spawn-position-of ((this level))
   (with-slots (control-plane) this
     (player-spawn-position-of control-plane)))
@@ -120,40 +178,50 @@
 
 
 (defmethod render ((this level))
-  (with-slots (sceneries tile-map tile-width tile-height) this
+  (with-slots (sceneries tile-map tile-width tile-height control-plane) this
     (let ((*tile-map* tile-map)
           (*tile-width* tile-width)
           (*tile-height* tile-height))
       (loop for scenery in sceneries
-            do (render scenery)))))
+            do (render scenery))
+      (render control-plane))))
 
 
 
 ;;;
 ;;; PARSING
 ;;;
-(defun parse-object (&key kind id name
-                       position width height rotation
-                       points gid properties
-                     &allow-other-keys)
-  (format t "~&~A" (list id name kind position width height rotation points gid properties))
-  (finish-output))
+(defun invert-absolute-y (y &optional height)
+  (- (* *level-height* *tile-height*) y (or height 0)))
+
+
+(defun parse-platform (&key kind position width height points &allow-other-keys)
+
+  (let ((position (destructuring-bind (x y) position
+                    (gk:vec2 x (invert-absolute-y y height))))
+        (offsets (loop for point in points
+                       collect (apply #'gk:vec2 point))))
+    (ecase kind
+      (:square (make-instance 'rectangle-platform :position position
+                                                  :width width
+                                                  :height height))
+      (:polygon (make-instance 'polygon-platform :position position
+                                                 :point-offsets offsets)))))
 
 
 (defun parse-control-plane (&key objects &allow-other-keys)
   (multiple-value-bind (spawn platforms)
       (loop with spawn and platforms
             for object in objects
-            do (destructuring-bind (&rest args &key kind id name
-                                                 position width height rotation
-                                                 points gid properties
+            do (destructuring-bind (&rest args &key position properties
                                     &allow-other-keys)
                    object
                  (let* ((prop-table (a:alist-hash-table properties :test 'equal))
                         (type (first (gethash "kind" prop-table))))
                    (a:switch (type :test #'equal)
-                     ("player-spawn" (setf spawn (apply #'gk:vec2 position)))
-                     ("platform" (push (apply #'make-platform args) platforms)))))
+                     ("player-spawn" (setf spawn (gk:vec2 (first position)
+                                                          (invert-absolute-y (second position)))))
+                     ("platform" (push (apply #'parse-platform args) platforms)))))
             finally (return (values spawn platforms)))
     (make-instance 'control-plane :spawn spawn :platforms platforms)))
 
@@ -201,7 +269,9 @@
 
 (defun parse-level (&key layers tilesets width height tile-width tile-height &allow-other-keys)
   (let ((*level-width* width)
-        (*level-height* height))
+        (*level-height* height)
+        (*tile-width* tile-width)
+        (*tile-height* tile-height))
     (make-instance 'level :layers (loop for layer in layers
                                         for parsed = (apply #'parse-layer layer)
                                         when parsed
@@ -212,6 +282,8 @@
                           :tile-height tile-height)))
 
 
-(defun make-level (descriptor image-map)
-  (let ((*image-map* (a:plist-hash-table image-map :test #'equal)))
-    (apply #'parse-level :image-map image-map descriptor)))
+(defun make-level (name universe)
+  (let ((*image-map* (level-image-map name))
+        (*level-universe* universe))
+    (with-input-from-string (in (gk:get-text name))
+      (apply #'parse-level (uiop:with-safe-io-syntax () (read in))))))
