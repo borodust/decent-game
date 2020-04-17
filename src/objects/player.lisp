@@ -46,7 +46,8 @@
 
 
 (defclass player (fighter)
-  ((direction :initarg :direction)
+  ((facing :initarg :facing :accessor facing :initform :right
+           :documentation "either :left or :right")
    (movement-speed :initarg :movement-speed)
    (jump-strength :initarg :jump-strength))
   (:default-initargs
@@ -72,6 +73,11 @@
                          :jump-strength jump-strength))
 
 
+(defmethod dispose :after ((this player))
+  (with-slots (body) this
+    (dispose body)))
+
+
 (defun get-player ()
   "Returns player if we're inside a state, which has a player slot.
 Returns NIL otherwise."
@@ -89,7 +95,6 @@ Returns NIL otherwise."
         (push state states))
        (error "~&state must be a keyword. Got ~A~%" state))))
 
-
 (defmethod remove-state (state (this player))
   "Removes `state' to the players `states' list."
   (with-slots (states) this
@@ -98,74 +103,78 @@ Returns NIL otherwise."
         (error "~&state must be a keyword. Got ~A~%" state))))
 
 
-(defmethod dispose :after ((this player))
-  (with-slots (body) this
-   (dispose body)))
+(defmethod facing-right-p ((this player))
+  (eq (facing this) :right))
+
+(defmethod facing-left-p ((this player))
+  (eq (facing this) :left))
 
 
-(defun move-player-right (player)
-  (unless (moving-right-p player)
-      (add-state :moving-right player)))
+(defmethod running-p ((this player))
+  (with-slots (states) this
+    (member :running states)))
 
-(defun move-player-left (player)
-  (unless (moving-left-p player)
-    (add-state :moving-left player)))
-
-
-(defmethod moving-right-p ((this player))
-  (with-slots (states)  this
-    (and (member :moving-right states)
-         (not (member :moving-left states)))))
-
-(defmethod moving-left-p ((this player))
-  (with-slots (states)  this
-    (and (member :moving-left states)
-         (not (member :moving-right states)))))
 
 (defmethod idle-p ((this player))
   (or (null (states this))
-      (not (a:xor (member :moving-left (states this))
-                  (member :moving-right (states this))))))
+      (not (running-p this))))
+
 
 (defmethod jumping-p ((this player))
   (member :jumping (states this)))
 
+(defmethod falling-p ((this player))
+  (member :falling (states this)))
+
+
+(defmethod move-right ((this player))
+  (unless (running-p this)
+    (setf (facing this) :right)
+    (add-state :running this)))
+
+(defmethod move-left ((this player))
+  (unless (running-p this)
+    (setf (facing this) :left)
+    (add-state :running this)))
+
+
+(defmethod stop-running ((this player))
+  (remove-state :running this))
 
 (defun stop-player (player)
   (setf (states player) (list)))
 
-(defun stop-player-moving-left (player)
-  (remove-state :moving-left player))
-
-(defun stop-player-moving-right (player)
-  (remove-state :moving-right player))
 
 (defun jump-player (player)
-  (unless (jumping-p player)
-    (add-state :jumping player)
-    (with-slots (states body jump-strength) player
-      (let ((jx 0.18734788)
-            (jy 0.95782626))
-       (cond ((moving-left-p player)
-              (apply-force body (gk:mult (gk:normalize (gk:vec2 (- jx) jy))
-                                 jump-strength)))
-             ((moving-right-p player)
-              (apply-force body (gk:mult (gk:normalize (gk:vec2 jx jy))
-                                         jump-strength)))
-             ((idle-p player)
-              (apply-force body (gk:vec2 0 10000))))))))
+  (with-slots (states body jump-strength) player
+    (let ((jx 0.18734788)
+          (jy 0.95782626))
+      (if (facing-right-p player)
+          (cond ((running-p player)
+                 (apply-force body (gk:mult (gk:normalize (gk:vec2 jx jy))
+                                            jump-strength)))
+                ((idle-p player)
+                 (apply-force body (gk:vec2 0 10000))))
+          ;; else (player is facing left)
+          (cond ((running-p player)
+                 (apply-force body (gk:mult (gk:normalize (gk:vec2 (- jx) jy))
+                                            jump-strength)))
+                ((idle-p player)
+                 (apply-force body (gk:vec2 0 10000))))))))
 
 
 (defmethod collide ((this player) (that world))
   (with-slots (states movement-speed) this
-    (remove-state :jumping this)
     (setf (collision-friction) 60)
-    (cond ((moving-left-p this)
-           (setf (collision-surface-velocity) (gk:vec2 (- 100) 0)))
-          ((moving-right-p this)
-           (setf (collision-surface-velocity) (gk:vec2 100 0)))
-          ((idle-p this)
-           (setf (collision-surface-velocity) (gk:vec2 0 0)))))
+    (if (facing-right-p this)
+        (cond ((running-p this)
+               (setf (collision-surface-velocity) (gk:vec2 100 0)))
+              ((idle-p this)
+               (setf (collision-surface-velocity) (gk:vec2 0 0))))
+        (cond ((running-p this)
+               (setf (collision-surface-velocity) (gk:vec2 (- 100) 0)))
+              ((idle-p this)
+               (setf (collision-surface-velocity) (gk:vec2 0 0))))))
   t)
 
 
@@ -186,14 +195,15 @@ Returns NIL otherwise."
   (with-slots (states body) this
     (render body)
     (let ((position (body-position body)))
-      (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
-                           (gk:y position) ;; (- (gk:y position) 5)
-       ))
+      (gk:translate-canvas (- (gk:x position) 6)
+                           (gk:y position)))
     (let ((time (bodge-util:real-time-seconds)))
-      (cond ((idle-p this)
-             (draw-animation 'player-idle-right time +zero-pos+))
-            ((moving-left-p this)
-             (gk:with-pushed-canvas ()
-               (draw-animation 'player-run-left time +zero-pos+)))
-            ((moving-right-p this)
-             (draw-animation 'player-run-right time +zero-pos+))))))
+      (if (facing-right-p this)
+          (cond ((idle-p this)
+                 (draw-animation 'player-idle-right time +zero-pos+))
+                ((running-p this)
+                 (draw-animation 'player-run-right time +zero-pos+)))
+          (cond ((idle-p this)
+                 (draw-animation 'player-idle-left time +zero-pos+))
+                ((running-p this)
+                 (draw-animation 'player-run-left time +zero-pos+)))))))

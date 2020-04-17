@@ -63,22 +63,22 @@
 ;;; input handling
 (defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :d)))
   (with-slots (player) this
-    (move-player-right player)))
+    (move-right player)))
 
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :d)))
   (with-slots (player) this
-   (stop-player-moving-right player)))
+   (stop-running player)))
 
 
 (defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :a)))
   (with-slots (player) this
-    (move-player-left player)))
+    (move-left player)))
 
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :a)))
   (with-slots (player) this
-    (stop-player-moving-left player)))
+    (stop-running player)))
 
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))
