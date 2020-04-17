@@ -7,7 +7,7 @@
   :use-nearest-interpolation t)
 
 
-(define-resource-pack level-debug-resources ()
+(define-resource-pack level-debug-resources (player-resources)
   'test-level
   'test-level-tilesheet)
 
@@ -28,25 +28,33 @@
 ;;;
 (defclass level-debug-screen (state-input-handler)
   ((pack :initarg :pack)
-   (level :initform nil)))
+   (level :initform nil)
+   (player :initform nil)
+   (world :initform nil)))
 
 
 (defmethod gk:post-initialize ((this level-debug-screen))
-  (with-slots (level) this
+  (with-slots (level player world) this
     (with-input-from-string (in (gk:get-text 'test-level))
       (setf level (make-level (uiop:with-safe-io-syntax ()
                                 (read in))
-                              (list "tiles.png" 'test-level-tilesheet))))))
+                              (list "tiles.png" 'test-level-tilesheet))
+            world (make-world)
+            player (make-player world :position (player-spawn-position-of level))))))
 
 
 (defmethod gk:pre-destroy ((this level-debug-screen))
-  (with-slots (pack) this
+  (with-slots (pack player world) this
+    (dispose player)
+    (dispose world)
     (dispose-resource-pack pack)))
 
 
 (defmethod gk:draw ((this level-debug-screen))
-  (with-slots (level) this
-    (render level)))
+  (with-slots (level player world) this
+    (render level)
+    (render player)
+    (render world)))
 
 
 ;;; input handling

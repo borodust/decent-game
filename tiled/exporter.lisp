@@ -15,15 +15,15 @@
   (declare (ignore data))
   (c-val ((property %tmx:property))
     (let ((type (property :type)))
-      (push (list :name (property :name)
-                  :value (c-let ((value %tmx:property-value :from (property :value)))
-                           (case type
-                             (:int (value :integer))
-                             (:bool (unless (= (value :boolean) 0) t))
-                             (:float (value :decimal))
-                             (:color (value :color))
-                             (:string (value :string))
-                             (:file (value :file)))))
+      (push (list (property :name)
+                  (c-let ((value %tmx:property-value :from (property :value)))
+                    (case type
+                      (:int (value :integer))
+                      (:bool (unless (= (value :boolean) 0) t))
+                      (:float (value :decimal))
+                      (:color (value :color))
+                      (:string (value :string))
+                      (:file (value :file)))))
             *properties*))))
 
 
@@ -50,12 +50,6 @@
                         collect (list (content :points * i * 0)
                                       (content :points * i * 1))))))
 
-(defun parse-polygon (content)
-  (declare (ignore content)))
-
-(defun parse-polyline (content)
-  (declare (ignore content)))
-
 (defun parse-text (content)
   (declare (ignore content)))
 
@@ -77,7 +71,7 @@
                            (case kind
                              (:polygon (parse-poly-shape (object :content :shape)))
                              (:polyline (parse-poly-shape (object :content :shape)))
-                             (:tile (object :content :gid))
+                             (:tile (list :gid (object :content :gid)))
                              (:text (parse-text (object :content :text)))))))))
 
 

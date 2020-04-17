@@ -30,10 +30,46 @@
 (defun find-tile (gid)
   (gethash gid *tile-map*))
 
+
 ;;;
-;;; CONTROL-PANE
 ;;;
-(defclass control-pane () ())
+;;;
+(defclass obstacle () ())
+(defclass sensor () ())
+
+
+(defclass platform (obstacle)
+  ((position :initarg :position)))
+
+
+(defclass rectangle-platform (platform)
+  ((width :initarg :width)
+   (height :initarg :height)))
+
+
+(defclass polygon-platform (platform)
+  ((point-offsets :initarg :offsets)))
+
+
+(defun make-platform (&key kind position width height points &allow-other-keys)
+  (let ((position (apply #'gk:vec2 position))
+        (offsets (loop for point in points
+                       collect (apply #'gk:vec2 point))))
+    (ecase kind
+      (:square (make-instance 'rectangle-platform :position position
+                                                  :width width
+                                                  :height height))
+      (:polygon (make-instance 'polygon-platform :position position
+                                                 :point-offsets offsets)))))
+
+;;;
+;;; CONTROL-PLANE
+;;;
+(defgeneric player-spawn-position-of (object))
+(defclass control-plane ()
+  ((spawn :initarg :spawn :reader player-spawn-position-of)
+   (platforms :initarg :platforms)))
+
 
 ;;;
 ;;; SCENERY
@@ -61,18 +97,23 @@
    (tile-map :initform (make-hash-table :test #'equal))
    (tile-width :initarg :tile-width)
    (tile-height :initarg :tile-height)
-   (control-pane :initform nil)))
+   (control-plane :initform nil)))
+
+
+(defmethod player-spawn-position-of ((this level))
+  (with-slots (control-plane) this
+    (player-spawn-position-of control-plane)))
 
 
 (defmethod initialize-instance :after ((this level) &key layers tiles)
-  (with-slots (sceneries tile-map control-pane) this
+  (with-slots (sceneries tile-map control-plane) this
     (flet ((%copy-to-map (key value)
              (setf (gethash key tile-map) value)))
       (loop for map in tiles
             do (maphash #'%copy-to-map map)))
     (loop for layer in layers
-          when (typep layer 'control-pane)
-            do (setf control-pane layer)
+          when (typep layer 'control-plane)
+            do (setf control-plane layer)
           when (typep layer 'scenery)
             do (push layer sceneries))
     (a:nreversef sceneries)))
@@ -91,8 +132,30 @@
 ;;;
 ;;; PARSING
 ;;;
+(defun parse-object (&key kind id name
+                       position width height rotation
+                       points gid properties
+                     &allow-other-keys)
+  (format t "~&~A" (list id name kind position width height rotation points gid properties))
+  (finish-output))
 
-(defun parse-control-pane (&key objects &allow-other-keys))
+
+(defun parse-control-plane (&key objects &allow-other-keys)
+  (multiple-value-bind (spawn platforms)
+      (loop with spawn and platforms
+            for object in objects
+            do (destructuring-bind (&rest args &key kind id name
+                                                 position width height rotation
+                                                 points gid properties
+                                    &allow-other-keys)
+                   object
+                 (let* ((prop-table (a:alist-hash-table properties :test 'equal))
+                        (type (first (gethash "kind" prop-table))))
+                   (a:switch (type :test #'equal)
+                     ("player-spawn" (setf spawn (apply #'gk:vec2 position)))
+                     ("platform" (push (apply #'make-platform args) platforms)))))
+            finally (return (values spawn platforms)))
+    (make-instance 'control-plane :spawn spawn :platforms platforms)))
 
 
 (defun parse-scenery (&key gids &allow-other-keys)
@@ -112,7 +175,7 @@
      (apply #'parse-scenery args))
     ((and (eq type :objgr)
           (equal "control" name))
-     (apply #'parse-control-pane args))))
+     (apply #'parse-control-plane args))))
 
 
 (defun parse-tile (&key image position &allow-other-keys)

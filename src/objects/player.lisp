@@ -1,5 +1,8 @@
 (cl:in-package :decent-game)
 
+(defparameter *player-movement-speed* 50)
+(defparameter *player-jump-strength* 10000)
+
 
 (define-animation player-idle-right (asset-path "img/player/player-idle-right.png") :frames 2)
 (define-animation player-idle-left (asset-path "img/player/player-idle-left.png") :frames 2)
@@ -56,20 +59,20 @@
    :jump-strength 10000))
 
 
-(defmethod initialize-instance :after ((this player) &key world movement-speed jump-strength)
+(defmethod initialize-instance :after ((this player) &key world movement-speed position)
   (with-slots (body) this
     (setf body (make-box-body (universe-of world)
                               12
                               28
                               :owner this
                               :mass 1)
-          (body-position body) (gk:vec2 50 20))))
+          (body-position body) (or position (gk:vec2 50 20)))))
 
 
-(defun make-player (&key world movement-speed jump-strength)
+(defun make-player (world &key position)
   (make-instance 'player :world world
-                         :movement-speed movement-speed
-                         :jump-strength jump-strength))
+                         :movement-speed *player-movement-speed*
+                         :jump-strength *player-jump-strength*))
 
 
 (defmethod dispose :after ((this player))

@@ -140,14 +140,12 @@
      ((-0.6875d0 0.28125d0) (15.25d0 0.25d0) (13.2188d0 -2.75d0)
       (1.28125d0 -2.84375d0)))
     (:ID 6 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (46.0d0 102.0d0) :WIDTH
-     0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     ((:NAME "kind" :VALUE "player_spawn")))
+     0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES (("kind" "player-spawn")))
     (:ID 4 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (208.0d0 80.0d0) :WIDTH
-     96.0d0 :HEIGHT 8.0d0 :ROTATION 0.0d0 :PROPERTIES
-     ((:NAME "kind" :VALUE "platform")))
+     96.0d0 :HEIGHT 8.0d0 :ROTATION 0.0d0 :PROPERTIES (("kind" "platform")))
     (:ID 2 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (16.0d0 104.0d0) :WIDTH
      368.0d0 :HEIGHT 8.0d0 :ROTATION 0.0d0 :PROPERTIES
-     ((:NAME "kind" :VALUE "platform"))))))
+     (("kind" "platform"))))))
  :TILESETS
  ((:NAME "tiles" :TILE-WIDTH 8 :TILE-HEIGHT 8 :OFFSET (0 0) :SPACING 0 :MARGIN
    0 :IMAGE (:SOURCE "tiles.png" :WIDTH 256 :HEIGHT 144) :TILES

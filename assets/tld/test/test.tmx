@@ -58,7 +58,7 @@
   </object>
   <object id="6" x="46" y="102">
    <properties>
-    <property name="kind" value="player_spawn"/>
+    <property name="kind" value="player-spawn"/>
    </properties>
    <point/>
   </object>

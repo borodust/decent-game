@@ -29,9 +29,7 @@
 (defmethod initialize-instance :after ((this gameplay-debug-screen) &key)
   (with-slots (player enemies world) this
     (setf world (make-world)
-          player (make-player :world world
-                              :movement-speed 50
-                              :jump-strength  10000)
+          player (make-player world)
           enemies (make-enemies :world world
                                 :enemy-type-list
                                 '(alien-shooter
