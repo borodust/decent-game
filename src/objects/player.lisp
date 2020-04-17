@@ -49,10 +49,14 @@
 
 
 (defclass player (fighter)
-  ((movement-speed :initarg :movement-speed)
+  ((last-direction :initarg :last-direction
+                   :accessor last-direction
+                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left")
+   (movement-speed :initarg :movement-speed)
    (jump-strength :initarg :jump-strength))
   (:default-initargs
    :direction 1
+   :last-direction 1
    :hp-max 100
    :strength 5
    :movement-speed 200
@@ -107,41 +111,58 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defmethod facing-right-p ((this player))
-  (plusp (direction this)))
+  (or (plusp (direction this))
+      (and (zerop (direction this))
+           (plusp (last-direction this)))))
 
 (defmethod facing-left-p ((this player))
-  (minusp (direction this)))
-
-
-(defmethod running-p ((this player))
-  (with-slots (states) this
-    (member :running states)))
+  (or (minusp (direction this))
+      (and (zerop (direction this))
+           (minusp (last-direction this)))))
 
 
 (defmethod idle-p ((this player))
-  (or (null (states this))
-      (and (facing-left-p this)
-           (facing-right-p this))))
+  (null (states this)))
+
+
+(defmethod running-p ((this player))
+  (member :running (states this)))
 
 
 (defmethod jumping-p ((this player))
   (member :jumping (states this)))
+
 
 (defmethod falling-p ((this player))
   (member :falling (states this)))
 
 
 (defmethod move-right ((this player))
-  nil)
+  (if (running-p this)
+      (if (facing-left-p this)
+          (stop-move-left this))
+      (progn
+        (add-state :running this)
+        (setf (direction this) 1))))
 
 (defmethod stop-move-right ((this player))
-  nil)
+  (remove-state :running this)
+  (when (zerop (direction this))
+    (decf (direction this))))
+
 
 (defmethod move-left ((this player))
-  nil)
+  (if (running-p this)
+      (if (facing-right-p this)
+          (stop-move-right this))
+      (progn
+        (add-state :running this)
+        (setf (direction this) -1))))
 
 (defmethod stop-move-left ((this player))
-  nil)
+  (remove-state :running this)
+  (when (zerop (direction this))
+    (incf (direction this))))
 
 
 (defmethod stop-running ((this player))
@@ -155,18 +176,10 @@ With the exception of :left and :right. Those are added to `facing'."
   (with-slots (states body jump-strength) player
     (let ((jx 0.18734788)
           (jy 0.95782626))
-      (if (facing-right-p player)
-          (cond ((running-p player)
-                 (apply-force body (gk:mult (gk:normalize (gk:vec2 jx jy))
-                                            jump-strength)))
-                ((idle-p player)
-                 (apply-force body (gk:vec2 0 10000))))
-          ;; else (player is facing left)
-          (cond ((running-p player)
-                 (apply-force body (gk:mult (gk:normalize (gk:vec2 (- jx) jy))
-                                            jump-strength)))
-                ((idle-p player)
-                 (apply-force body (gk:vec2 0 10000))))))))
+      (cond ((idle-p player)
+             (apply-force body (gk:vec2 0 10000)))
+            (t (apply-force body (gk:mult (gk:normalize (gk:vec2 (* jx (direction player)) jy))
+                                          jump-strength)))))))
 
 
 (defmethod collide ((this player) (that obstacle))
@@ -204,12 +217,12 @@ With the exception of :left and :right. Those are added to `facing'."
       (gk:translate-canvas (- (gk:x position) 6)
                            (gk:y position)))
     (let ((time (bodge-util:real-time-seconds)))
-      (if (facing-right-p this)
-          (cond ((idle-p this)
-                 (draw-animation 'player-idle-right time +zero-pos+))
-                ((running-p this)
-                 (draw-animation 'player-run-right time +zero-pos+)))
-          (cond ((idle-p this)
-                 (draw-animation 'player-idle-left time +zero-pos+))
-                ((running-p this)
-                 (draw-animation 'player-run-left time +zero-pos+)))))))
+      (cond ((facing-right-p this)
+             (if (running-p this)
+                 (draw-animation 'player-run-right time +zero-pos+)
+                 (draw-animation 'player-idle-right time +zero-pos+)))
+            ((facing-left-p this)
+             (if (running-p this)
+                 (draw-animation 'player-run-left time +zero-pos+)
+                 (draw-animation 'player-idle-left time +zero-pos+)))
+            (t (error "Play should only be able to either face left or right."))))))
