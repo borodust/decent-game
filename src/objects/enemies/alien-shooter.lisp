@@ -28,14 +28,14 @@
   (:documentation "A small alien enemy, which shoots thorns."))
 
 
-(defmethod initialize-instance :after ((this alien-shooter) &key world)
-  (with-slots (body) this
-    (setf body (make-box-body (universe-of world)
-                              28
-                              14
-                              :owner this
-                              :mass 1)
-          (body-position body) (gk:vec2 120 20))))
+(defmethod make-fighter-body ((this alien-shooter) &key world position)
+  (let ((body (make-box-body (universe-of world)
+                             28
+                             14
+                             :owner this
+                             :mass 1)))
+    (setf (body-position body) (or position (gk:vec2 120 20)))
+    body))
 
 
 (defmethod shoot ((shooter alien-shooter) (shot fighter))
@@ -66,7 +66,6 @@
 ;;; rendering
 (defmethod render ((this alien-shooter) &key)
   (with-slots (body) this
-    (render body)
     (let ((position (body-position body)))
       (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
                            (gk:y position) ;; (- (gk:y position) 5)

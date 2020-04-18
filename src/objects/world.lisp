@@ -4,13 +4,8 @@
 (defclass world ()
   ((universe :initform nil :reader universe-of)
    (level :initform nil :reader level-of)
-   (player :initform nil :reader player-of)))
-
-
-(defun make-obstacle (world origin width height)
-  (let ((o (make-box-body (universe-of world) width height :kinematic t :owner world)))
-    (setf (body-position o) origin)
-    o))
+   (player :initform nil :reader player-of)
+   (enemies :initform nil)))
 
 
 (defmethod initialize-instance :after ((this world) &key level-name)
@@ -37,11 +32,19 @@
 
 
 (defmethod render ((this world) &key)
-  (with-slots (level player) this
+  (with-slots (level player enemies) this
     (render level :kind :background)
     (with-slots (body) player
       (gk:translate-canvas (truncate (+ (- (gk:x (body-position body))) 100)) 0))
     (render level :kind :foreground)
     (when *debug-rendering*
       (render level :kind :control-plane))
+    (loop for enemy in enemies
+          do (render enemy))
     (render player)))
+
+
+(defun spawn-enemy (world type spawn-name)
+  (with-slots (level enemies) world
+    (a:when-let ((pos (find-enemy-spawn (level-of world) spawn-name)))
+      (push (make-enemy type world :position pos) enemies))))

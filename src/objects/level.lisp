@@ -1,6 +1,8 @@
 (cl:in-package :decent-game)
 
 
+(defparameter *sensor-color* (gk:vec4 0 0 0.8 0.5))
+
 (declaim (special *level-width*
                   *level-height*
                   *image*
@@ -76,7 +78,9 @@
 (defclass sensor (control)
   ((body :initform nil)
    (fired :initform nil)
-   (event :initarg :event)))
+   (event :initarg :event)
+   (width :initarg :width)
+   (height :initarg :height)))
 
 
 (defmethod initialize-instance :after ((this sensor) &key position width height)
@@ -108,6 +112,11 @@
 (defmethod dispose :after ((this sensor))
   (with-slots (body) this
     (dispose body)))
+
+
+(defmethod render ((this sensor) &key)
+  (with-slots (body width height) this
+    (render body :color *sensor-color*)))
 
 
 ;;;
@@ -172,9 +181,11 @@
 
 
 (defmethod render ((this control-plane) &key)
-  (with-slots (platforms) this
+  (with-slots (platforms sensors) this
     (loop for platform in platforms
-          do (render platform))))
+          do (render platform))
+    (loop for sensor in sensors
+          do (render sensor))))
 
 
 (defmethod find-enemy-spawn ((this control-plane) name)

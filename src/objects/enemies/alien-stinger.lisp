@@ -22,15 +22,14 @@
   (:documentation "A medium sized alien enemy, which stings downwards."))
 
 
-(defmethod initialize-instance :after ((this alien-stinger) &key world)
-  (with-slots (body) this
-    (setf body (make-box-body (universe-of world)
-                              32
-                              32
-                              :owner this
-                              :mass 1)
-          (body-position body) (gk:vec2 100 100))))
-
+(defmethod make-fighter-body ((this alien-stinger) &key world position)
+  (let ((body (make-box-body (universe-of world)
+                             32
+                             32
+                             :owner this
+                             :mass 1)))
+    (setf (body-position body) position)
+    body))
 
 ;;; collision handling
 (defmethod collide ((this alien-stinger) (that world))
@@ -55,8 +54,7 @@
 
 ;;; rendering
 (defmethod render ((this alien-stinger) &key)
-    (with-slots (body) this
-    (render body)
+  (with-slots (body) this
     (let ((position (body-position body)))
       (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
                            (gk:y position) ;; (- (gk:y position) 5)
