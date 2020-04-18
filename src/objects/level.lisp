@@ -154,9 +154,11 @@
 ;;; CONTROL-PLANE
 ;;;
 (defgeneric player-spawn-position-of (object))
+(defgeneric find-enemy-spawn (object name))
 
 (defclass control-plane ()
-  ((spawn :initarg :spawn :reader player-spawn-position-of)
+  ((player-spawn :initarg :player-spawn :reader player-spawn-position-of)
+   (enemy-spawn-table :initarg :enemy-spawn-table)
    (platforms :initarg :platforms)
    (sensors :initarg :sensors)))
 
@@ -173,6 +175,12 @@
   (with-slots (platforms) this
     (loop for platform in platforms
           do (render platform))))
+
+
+(defmethod find-enemy-spawn ((this control-plane) name)
+  (with-slots (enemy-spawn-table) this
+    (gethash name enemy-spawn-table)))
+
 
 ;;;
 ;;; SCENERY
@@ -240,6 +248,9 @@
         (render control-plane)))))
 
 
+(defmethod find-enemy-spawn ((this level) name)
+  (with-slots (control-plane) this
+    (find-enemy-spawn control-plane name)))
 
 ;;;
 ;;; PARSING
@@ -283,21 +294,25 @@
 
 
 (defun parse-control-plane (&key objects &allow-other-keys)
-  (multiple-value-bind (spawn platforms sensors)
-      (loop with spawn and platforms and sensors
-            for object in objects
-            do (destructuring-bind (&rest args &key position properties
-                                    &allow-other-keys)
-                   object
-                 (let* ((props (parse-level-properties properties))
-                        (type (get-level-property props "kind")))
-                   (a:switch (type :test #'equal)
-                     ("player-spawn" (setf spawn (gk:vec2 (first position)
-                                                          (invert-absolute-y (second position)))))
-                     ("platform" (push (apply #'parse-platform args) platforms))
-                     ("sensor" (push (apply #'parse-sensor args) sensors)))))
-            finally (return (values spawn platforms sensors)))
-    (make-instance 'control-plane :spawn spawn
+  (let ((enemy-spawn-table (make-hash-table :test 'equal))
+        player-spawn platforms sensors)
+    (loop for object in objects
+          do (destructuring-bind (&rest args &key position properties
+                                  &allow-other-keys)
+                 object
+               (let* ((props (parse-level-properties properties))
+                      (type (get-level-property props "kind"))
+                      (position (gk:vec2 (first position)
+                                         (invert-absolute-y (second position)))))
+                 (a:switch (type :test #'equal)
+                   ("player-spawn" (setf player-spawn position))
+                   ("enemy-spawn" (setf
+                                   (gethash (get-level-property props "enemy") enemy-spawn-table)
+                                   position))
+                   ("platform" (push (apply #'parse-platform args) platforms))
+                   ("sensor" (push (apply #'parse-sensor args) sensors))))))
+    (make-instance 'control-plane :player-spawn player-spawn
+                                  :enemy-spawn-table enemy-spawn-table
                                   :platforms platforms
                                   :sensors sensors)))
 

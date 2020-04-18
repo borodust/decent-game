@@ -31,7 +31,10 @@
 
 
 (defun spawn-flyer (action &key)
-  (shout "Spawning a flyer: ~A" action))
+  (with-slots (world) (gk.fsm:current-state)
+    (shout "Spawning a flyer ~A at ~A"
+           action
+           (find-enemy-spawn (level-of world) "flyer-0"))))
 
 
 (defmethod gk:post-initialize ((this gameplay-debug-screen))
