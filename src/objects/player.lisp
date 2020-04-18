@@ -61,11 +61,10 @@
 
 (defmethod initialize-instance :after ((this player) &key world position)
   (with-slots (body) this
-    (setf body (make-box-body (universe-of world)
-                              12
-                              28
-                              :owner this
-                              :mass 1)
+    (setf body (make-circle-body (universe-of world)
+                                 5
+                                 :owner this
+                                 :mass 1)
           (body-position body) (or position (gk:vec2 50 20)))))
 
 
@@ -176,8 +175,8 @@ With the exception of :left and :right. Those are added to `facing'."
   (with-slots (states direction) this
     (setf (collision-friction) 60
           (collision-surface-velocity) (cond
-                                         ((> direction 0) (gk:vec2 -100 0))
-                                         ((< direction 0) (gk:vec2 100 0))
+                                         ((> direction 0) (gk:vec2 100 0))
+                                         ((< direction 0) (gk:vec2 -100 0))
                                          (t (gk:vec2 0 0)))))
   t)
 
@@ -199,8 +198,8 @@ With the exception of :left and :right. Those are added to `facing'."
   (with-slots (states body) this
     (render body)
     (let ((position (body-position body)))
-      (gk:translate-canvas (- (gk:x position) 6)
-                           (gk:y position)))
+      (gk:translate-canvas (- (gk:x position) 15)
+                           (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
       (cond ((facing-right-p this)
              (if (running-p this)
