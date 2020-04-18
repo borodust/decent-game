@@ -51,19 +51,15 @@
 (defclass player (fighter)
   ((last-direction :initarg :last-direction
                    :accessor last-direction
-                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left")
-   (movement-speed :initarg :movement-speed)
-   (jump-strength :initarg :jump-strength))
+                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left"))
   (:default-initargs
-   :direction 1
+   :direction 0
    :last-direction 1
    :hp-max 100
-   :strength 5
-   :movement-speed 200
-   :jump-strength 10000))
+   :strength 5))
 
 
-(defmethod initialize-instance :after ((this player) &key world movement-speed position)
+(defmethod initialize-instance :after ((this player) &key world position)
   (with-slots (body) this
     (setf body (make-box-body (universe-of world)
                               12
@@ -75,8 +71,6 @@
 
 (defun make-player (world &key position)
   (make-instance 'player :world world
-                         :movement-speed *player-movement-speed*
-                         :jump-strength *player-jump-strength*
                          :position position))
 
 
@@ -106,19 +100,16 @@ With the exception of :left and :right. Those are added to `facing'."
   "Removes `state' to the players `states' list."
   (with-slots (states) this
     (if (keywordp state)
-        (setf states (delete state states))
+        (a:deletef states state)
         (error "~&state must be a keyword. Got ~A~%" state))))
 
 
 (defmethod facing-right-p ((this player))
-  (or (plusp (direction this))
-      (and (zerop (direction this))
-           (plusp (last-direction this)))))
+  (plusp (last-direction this)))
+
 
 (defmethod facing-left-p ((this player))
-  (or (minusp (direction this))
-      (and (zerop (direction this))
-           (minusp (last-direction this)))))
+  (minusp (last-direction this)))
 
 
 (defmethod idle-p ((this player))
@@ -137,63 +128,57 @@ With the exception of :left and :right. Those are added to `facing'."
   (member :falling (states this)))
 
 
+(defun update-player-running-state (this new-direction)
+  (with-slots (direction last-direction) this
+    (incf direction new-direction)
+    (if (= 0 direction)
+        (remove-state :running this)
+        (progn
+          (add-state :running this)
+          (setf last-direction direction)))))
+
+
 (defmethod move-right ((this player))
-  (if (running-p this)
-      (if (facing-left-p this)
-          (stop-move-left this))
-      (progn
-        (add-state :running this)
-        (setf (direction this) 1))))
+  (update-player-running-state this 1))
+
 
 (defmethod stop-move-right ((this player))
-  (remove-state :running this)
-  (when (zerop (direction this))
-    (decf (direction this))))
+  (update-player-running-state this -1))
 
 
 (defmethod move-left ((this player))
-  (if (running-p this)
-      (if (facing-right-p this)
-          (stop-move-right this))
-      (progn
-        (add-state :running this)
-        (setf (direction this) -1))))
+  (update-player-running-state this -1))
+
 
 (defmethod stop-move-left ((this player))
-  (remove-state :running this)
-  (when (zerop (direction this))
-    (incf (direction this))))
+  (update-player-running-state this 1))
 
 
 (defmethod stop-running ((this player))
   (remove-state :running this))
+
 
 (defun stop-player (player)
   (setf (states player) (list)))
 
 
 (defun jump-player (player)
-  (with-slots (states body jump-strength) player
+  (with-slots (states body) player
     (let ((jx 0.18734788)
           (jy 0.95782626))
       (cond ((idle-p player)
              (apply-force body (gk:vec2 0 10000)))
             (t (apply-force body (gk:mult (gk:normalize (gk:vec2 (* jx (direction player)) jy))
-                                          jump-strength)))))))
+                                          *player-jump-strength*)))))))
 
 
 (defmethod collide ((this player) (that obstacle))
-  (with-slots (states movement-speed) this
-    (setf (collision-friction) 60)
-    (if (facing-right-p this)
-        (cond ((running-p this)
-               (setf (collision-surface-velocity) (gk:vec2 100 0)))
-              ((idle-p this)
-               (setf (collision-surface-velocity) (gk:vec2 0 0))))
-        (cond ((running-p this)
-               (setf (collision-surface-velocity) (gk:vec2 (- 100) 0)))
-              ((idle-p this)
-               (setf (collision-surface-velocity) (gk:vec2 0 0))))))
+  (with-slots (states direction) this
+    (setf (collision-friction) 60
+          (collision-surface-velocity) (cond
+                                         ((> direction 0) (gk:vec2 -100 0))
+                                         ((< direction 0) (gk:vec2 100 0))
+                                         (t (gk:vec2 0 0)))))
   t)
 
 
@@ -201,12 +186,12 @@ With the exception of :left and :right. Those are added to `facing'."
   (collide this that))
 
 
-(defmethod process-collision ((this player) (that world))
+(defmethod process-collision ((this player) (that obstacle))
   (with-slots (body) this
     (setf (body-angular-velocity body) 0)))
 
 
-(defmethod process-collision ((that world) (this player))
+(defmethod process-collision ((that obstacle) (this player))
   (process-collision this that))
 
 
