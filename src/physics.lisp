@@ -170,11 +170,10 @@
 
 (defmethod render ((this box-body) &key)
   (with-slots (width height) this
-    (let ((pos (body-position this)))
-      (gk:draw-rect pos width height
-                    :fill-paint *body-fill-color*
-                    ;; :stroke-paint *body-stroke-color*
-                    ))))
+    (when *debug-rendering*
+      (let ((pos (body-position this)))
+        (gk:draw-rect pos width height
+                      :fill-paint *body-fill-color*)))))
 
 
 ;;;
@@ -204,11 +203,12 @@
 
 (defmethod render ((this circle-body) &key)
   (with-slots (radius) this
-    (let ((pos (body-position this)))
-      (gk:draw-circle pos radius
-                      :fill-paint *body-fill-color*
-                      ;; :stroke-paint *body-stroke-color*
-                      ))))
+    (when *debug-rendering*
+      (let ((pos (body-position this)))
+        (gk:draw-circle pos radius
+                        :fill-paint *body-fill-color*
+                        ;; :stroke-paint *body-stroke-color*
+                        )))))
 
 
 

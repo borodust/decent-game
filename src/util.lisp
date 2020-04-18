@@ -1,6 +1,8 @@
 (cl:in-package :decent-game)
 
 
+(defparameter *debug-rendering* nil)
+
 (defclass state-input-handler (gk.input:input-handler) ())
 
 

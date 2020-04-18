@@ -42,4 +42,6 @@
     (with-slots (body) player
       (gk:translate-canvas (truncate (+ (- (gk:x (body-position body))) 100)) 0))
     (render level :kind :foreground)
+    (when *debug-rendering*
+      (render level :kind :control-plane))
     (render player)))
