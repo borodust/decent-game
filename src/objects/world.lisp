@@ -44,7 +44,7 @@
     (render player)))
 
 
-(defun spawn-enemy (world type spawn-name)
+(defun spawn-enemy (world type spawn-name &key offset)
   (with-slots (level enemies) world
     (a:when-let ((pos (find-enemy-spawn (level-of world) spawn-name)))
-      (push (make-enemy type world :position pos) enemies))))
+      (push (make-enemy type world :position (gk:add pos (or offset +zero-pos+))) enemies))))
