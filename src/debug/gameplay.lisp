@@ -30,9 +30,14 @@
    (pack :initarg :pack)))
 
 
+(defun spawn-flyer (action &key)
+  (shout "Spawning a flyer: ~A" action))
+
+
 (defmethod gk:post-initialize ((this gameplay-debug-screen))
   (with-slots (world) this
-    (setf world (make-world 'test-level))))
+    (setf world (make-world 'test-level))
+    (subscribe-to-event :spawn-flyer-0 'spawn-flyer)))
 
 
 (defmethod gk:pre-destroy ((this gameplay-debug-screen))

@@ -134,7 +134,16 @@
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0))
   (:TYPE :OBJGR :NAME "control" :PROPERTIES NIL :OBJECTS
-   ((:ID 8 :KIND :POLYGON :NAME NIL :TYPE NIL :POSITION (65.0d0 76.0d0) :WIDTH
+   ((:ID 13 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (308.5d0 0.0d0) :WIDTH
+     8.0d0 :HEIGHT 118.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "sensor") ("event" "spawn-flyer-0")))
+    (:ID 12 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (362.0d0 40.0d0) :WIDTH
+     0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "flyer-0")))
+    (:ID 9 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (248.0d0 74.0d0) :WIDTH
+     0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "shooter-0")))
+    (:ID 8 :KIND :POLYGON :NAME NIL :TYPE NIL :POSITION (65.0d0 76.0d0) :WIDTH
      0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES NIL :POINTS
      ((-0.6875d0 0.28125d0) (15.25d0 0.25d0) (13.2188d0 -2.75d0)
       (1.28125d0 -2.84375d0)))

@@ -206,43 +206,4 @@
     (when *debug-rendering*
       (let ((pos (body-position this)))
         (gk:draw-circle pos radius
-                        :fill-paint *body-fill-color*
-                        ;; :stroke-paint *body-stroke-color*
-                        )))))
-
-
-
-;; ;;;
-;; ;;; capsule
-;; ;;;
-;; (defclass capsule-body (body)
-;;   ((width :initarg :width)
-;;    (height :initarg :height)
-;;    (roundness :initarg :roundness)))
-
-
-;; (defmethod provide-shape ((this circle-body) body universe &key radius substance mass)
-;;   (let* ((r (/ radius *universe-scale*))
-;;          (shape (b.phy:make-box-shape universe r
-;;                                          :body body
-;;                                          :substance substance)))
-;;     (when mass
-;;       (b.phy:infuse-circle-mass body mass r))
-;;     shape))
-
-
-;; (defun make-circle-body (universe radius &key owner mass)
-;;   (make-instance 'circle-body :universe (%universe-of universe)
-;;                               :radius radius
-;;                               :substance owner
-;;                               :mass mass
-;;                               :allow-other-keys t))
-
-
-;; (defmethod render ((this circle-body))
-;;   (with-slots (radius) this
-;;     (let ((pos (body-position this)))
-;;       (gk:draw-circle pos radius
-;;                       :fill-paint *body-fill-color*
-;;                       ;; :stroke-paint *body-stroke-color*
-;;                       ))))
+                        :fill-paint *body-fill-color*)))))

@@ -11,5 +11,5 @@
 (defun trigger-event (event-id &rest args &key &allow-other-keys)
   (loop for action in (gethash event-id *event-table*)
         do (etypecase action
-             (symbol (apply (symbol-function action) event-id args))
-             (function (apply action event-id args)))))
+             (symbol (apply (symbol-function action) event-id :allow-other-keys t args))
+             (function (apply action event-id :allow-other-keys t args)))))

@@ -60,11 +60,60 @@
 (defun find-tile (gid)
   (gethash gid *tile-map*))
 
+;;;
+;;; CONTROL
+;;;
+(defclass control () ())
+
+
+(defmethod collide :around ((this control) (that control))
+  nil)
+
 
 ;;;
+;;; SENSOR
 ;;;
+(defclass sensor (control)
+  ((body :initform nil)
+   (fired :initform nil)
+   (event :initarg :event)))
+
+
+(defmethod initialize-instance :after ((this sensor) &key position width height)
+  (with-slots (body) this
+    (setf body (make-box-body *level-universe* width height :kinematic t :owner this)
+          (body-position body) position)))
+
+
+(defun trigger-sensor-event (sensor)
+  (with-slots (fired event) sensor
+    (unless fired
+      (setf fired t)
+      (trigger-event event))))
+
+
+(defmethod collide :after ((this sensor) that)
+  (trigger-sensor-event this))
+
+
+(defmethod collide :around ((this sensor) that)
+  (call-next-method)
+  nil)
+
+
+(defmethod collide :around (that (this sensor))
+  (collide this that))
+
+
+(defmethod dispose :after ((this sensor))
+  (with-slots (body) this
+    (dispose body)))
+
+
 ;;;
-(defclass obstacle ()
+;;; OBSTACLE
+;;;
+(defclass obstacle (control)
   ((body :initform nil)))
 
 
@@ -80,9 +129,6 @@
 
 (defmethod collide ((this obstacle) (that obstacle))
   nil)
-
-
-(defclass sensor () ())
 
 
 (defclass platform (obstacle)
@@ -108,15 +154,19 @@
 ;;; CONTROL-PLANE
 ;;;
 (defgeneric player-spawn-position-of (object))
+
 (defclass control-plane ()
   ((spawn :initarg :spawn :reader player-spawn-position-of)
-   (platforms :initarg :platforms)))
+   (platforms :initarg :platforms)
+   (sensors :initarg :sensors)))
 
 
 (defmethod dispose :after ((this control-plane))
-  (with-slots (platforms) this
+  (with-slots (platforms sensors) this
     (loop for platform in platforms
-          do (dispose platform))))
+          do (dispose platform))
+    (loop for object in sensors
+          do (dispose object))))
 
 
 (defmethod render ((this control-plane) &key)
@@ -219,9 +269,22 @@
                                                  :point-offsets offsets)))))
 
 
+(defun parse-sensor (&key kind position width height properties &allow-other-keys)
+  (let ((position (destructuring-bind (x y) position
+                    (gk:vec2 x (invert-absolute-y y height))))
+        (props (parse-level-properties properties)))
+    (ecase kind
+      (:square (make-instance 'sensor :position position
+                                      :width width
+                                      :height height
+                                      :event (a:make-keyword
+                                              (uiop:standard-case-symbol-name
+                                               (get-level-property props "event"))))))))
+
+
 (defun parse-control-plane (&key objects &allow-other-keys)
-  (multiple-value-bind (spawn platforms)
-      (loop with spawn and platforms
+  (multiple-value-bind (spawn platforms sensors)
+      (loop with spawn and platforms and sensors
             for object in objects
             do (destructuring-bind (&rest args &key position properties
                                     &allow-other-keys)
@@ -231,9 +294,12 @@
                    (a:switch (type :test #'equal)
                      ("player-spawn" (setf spawn (gk:vec2 (first position)
                                                           (invert-absolute-y (second position)))))
-                     ("platform" (push (apply #'parse-platform args) platforms)))))
-            finally (return (values spawn platforms)))
-    (make-instance 'control-plane :spawn spawn :platforms platforms)))
+                     ("platform" (push (apply #'parse-platform args) platforms))
+                     ("sensor" (push (apply #'parse-sensor args) sensors)))))
+            finally (return (values spawn platforms sensors)))
+    (make-instance 'control-plane :spawn spawn
+                                  :platforms platforms
+                                  :sensors sensors)))
 
 
 (defun parse-scenery (&key properties gids &allow-other-keys)
