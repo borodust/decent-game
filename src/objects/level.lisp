@@ -96,10 +96,6 @@
       (trigger-event event))))
 
 
-(defmethod collide :after ((this sensor) that)
-  (trigger-sensor-event this))
-
-
 (defmethod collide :around ((this sensor) that)
   (call-next-method)
   nil)

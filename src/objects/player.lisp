@@ -179,6 +179,10 @@ With the exception of :left and :right. Those are added to `facing'."
   t)
 
 
+(defmethod collide :after ((this sensor) (that player))
+  (trigger-sensor-event this))
+
+
 (defmethod collide ((that obstacle) (this player))
   (collide this that))
 

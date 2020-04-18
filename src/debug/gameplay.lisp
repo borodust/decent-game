@@ -38,10 +38,19 @@
           do (spawn-enemy world 'alien-stinger "flyer-0" :offset offset))))
 
 
+(defun spawn-shooter (action &key)
+  (declare (ignore action))
+  (with-slots (world) (gk.fsm:current-state)
+    (loop repeat 10
+          for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
+          do (spawn-enemy world 'alien-shooter "shooter-0" :offset offset))))
+
+
 (defmethod gk:post-initialize ((this gameplay-debug-screen))
   (with-slots (world) this
     (setf world (make-world 'test-level))
-    (subscribe-to-event :spawn-flyer-0 'spawn-flyer)))
+    (subscribe-to-event :spawn-flyer-0 'spawn-flyer)
+    (subscribe-to-event :spawn-shooter-0 'spawn-shooter)))
 
 
 (defmethod gk:pre-destroy ((this gameplay-debug-screen))
