@@ -162,13 +162,11 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defun jump-player (player)
-  (with-slots (states body) player
-    (let ((jx 0.18734788)
-          (jy 0.95782626))
-      (cond ((idle-p player)
-             (apply-force body (gk:vec2 0 10000)))
-            (t (apply-force body (gk:mult (gk:normalize (gk:vec2 (* jx (direction player)) jy))
-                                          *player-jump-strength*)))))))
+  (with-slots (states body direction) player
+    (cond ((idle-p player)
+           (apply-force body (gk:vec2 0 *player-jump-strength*)))
+          (t (let ((reverse-thrust (gk:vec2 (* -0.3713907 direction) 0.92847675))) ;; 0.4 1
+               (apply-force body (gk:mult reverse-thrust *player-jump-strength*)))))))
 
 
 (defmethod collide ((this player) (that obstacle))
