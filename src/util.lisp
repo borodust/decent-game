@@ -4,7 +4,7 @@
 (declaim (special *world*))
 
 
-(defparameter *debug-rendering* t)
+(defparameter *debug-rendering* nil)
 
 (defclass state-input-handler (gk.input:input-handler) ())
 

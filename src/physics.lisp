@@ -7,6 +7,7 @@
 (defparameter *body-fill-color* (gk:vec4 1 0 0 0.5))
 (defparameter *body-stroke-color* (gk:vec4 1 0 0 0.8))
 
+
 ;;;
 ;;; UNIVERSE
 ;;;
@@ -47,10 +48,10 @@
   (make-instance 'universe :gravity gravity))
 
 
-(defun observe-universe (universe)
+(defun observe-universe (universe step &optional (repeats 1))
   (with-slots (universe) universe
-    (loop repeat 4
-          do (b.phy:observe-universe universe 0.01))))
+    (loop repeat repeats
+          do (b.phy:observe-universe universe step))))
 
 
 ;;;

@@ -1,5 +1,7 @@
 (cl:in-package :decent-game)
 
+(defparameter *alien-stinger-movement-speed* 40)
+
 (define-animation alien-stinger-0-fly-0
     (asset-path "img/alien-stinger-0/alien-stinger-0-fly-0.png")
   :frames 2)
@@ -21,14 +23,15 @@
 (defmethod observe ((this alien-stinger))
   (let* ((player-pos (position-of (player-of *world*)))
          (alien-pos (position-of this))
-         (target-vec (b:subt alien-pos player-pos))
-         (len (b:vector-length target-vec))
-         (alien-vel (velocity-of this)))))
+         (target-vec (b:subt player-pos alien-pos))
+         (target-vel (gk:mult (gk:normalize target-vec) *alien-stinger-movement-speed*))
+         (alien-vel (velocity-of this)))
+    (apply-force (body-of this) (gk:div (gk:subt target-vel alien-vel) 0.01 ))))
 
 
 (defmethod make-fighter-body ((this alien-stinger) &key world position)
   (let ((body (make-circle-body (universe-of world)
-                                10
+                                5
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) position)
@@ -38,6 +41,6 @@
 (defmethod render ((this alien-stinger) &key)
   (with-slots (body) this
     (let ((position (body-position body)))
-      (gk:translate-canvas (gk:x position) (gk:y position)))
+      (gk:translate-canvas (- (gk:x position) 15) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
       (draw-animation 'alien-stinger-0-fly-0 time +zero-pos+))))
