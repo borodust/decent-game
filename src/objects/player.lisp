@@ -59,13 +59,13 @@
    :strength 5))
 
 
-(defmethod initialize-instance :after ((this player) &key world position)
-  (with-slots (body) this
-    (setf body (make-circle-body (universe-of world)
-                                 5
-                                 :owner this
-                                 :mass 1)
-          (body-position body) (or position (gk:vec2 50 20)))))
+(defmethod make-fighter-body ((this player) &key world position)
+  (let ((body (make-circle-body (universe-of world)
+                                5
+                                :owner this
+                                :mass 1)))
+    (setf (body-position body) (or position (gk:vec2 50 20)))
+    body))
 
 
 (defun make-player (world &key position)
@@ -179,6 +179,10 @@ With the exception of :left and :right. Those are added to `facing'."
   t)
 
 
+(defmethod collide :after ((this sensor) (that player))
+  (trigger-sensor-event this))
+
+
 (defmethod collide ((that obstacle) (this player))
   (collide this that))
 
@@ -194,7 +198,6 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod render ((this player) &key)
   (with-slots (states body) this
-    (render body)
     (let ((position (body-position body)))
       (gk:translate-canvas (- (gk:x position) 15)
                            (- (gk:y position) 5)))

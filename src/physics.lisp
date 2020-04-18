@@ -168,12 +168,12 @@
                            :allow-other-keys t))
 
 
-(defmethod render ((this box-body) &key)
+(defmethod render ((this box-body) &key color)
   (with-slots (width height) this
     (when *debug-rendering*
       (let ((pos (body-position this)))
         (gk:draw-rect pos width height
-                      :fill-paint *body-fill-color*)))))
+                      :fill-paint (or color *body-fill-color*))))))
 
 
 ;;;
