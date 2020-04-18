@@ -40,6 +40,6 @@
   (with-slots (level player) this
     (render level :kind :background)
     (with-slots (body) player
-      (gk:translate-canvas (+ (- (gk:x (body-position body))) 100) 0))
+      (gk:translate-canvas (truncate (+ (- (gk:x (body-position body))) 100)) 0))
     (render level :kind :foreground)
     (render player)))
