@@ -46,7 +46,7 @@
     (funcall (cdr (aref items selected)))))
 
 
-(defmethod render ((this menu))
+(defmethod render ((this menu) &key)
   (with-slots (selected items text-font selector-font) this
     (loop for (name . action) across items
           for i from 0

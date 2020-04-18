@@ -64,7 +64,7 @@
 
 
 ;;; rendering
-(defmethod render ((this alien-shooter))
+(defmethod render ((this alien-shooter) &key)
   (with-slots (body) this
     (render body)
     (let ((position (body-position body)))

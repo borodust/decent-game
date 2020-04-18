@@ -54,7 +54,7 @@
 
 
 ;;; rendering
-(defmethod render ((this alien-stinger))
+(defmethod render ((this alien-stinger) &key)
     (with-slots (body) this
     (render body)
     (let ((position (body-position body)))

@@ -50,7 +50,7 @@
    (height :initarg :height)))
 
 
-(defmethod render ((this tile))
+(defmethod render ((this tile) &key)
   (with-slots (image origin width height) this
     (gk:draw-image +zero-pos+ image :origin origin
                                     :width width
@@ -73,7 +73,7 @@
     (dispose body)))
 
 
-(defmethod render ((this obstacle))
+(defmethod render ((this obstacle) &key)
   (with-slots (body) this
     (render body)))
 
@@ -119,7 +119,7 @@
           do (dispose platform))))
 
 
-(defmethod render ((this control-plane))
+(defmethod render ((this control-plane) &key)
   (with-slots (platforms) this
     (loop for platform in platforms
           do (render platform))))
@@ -128,11 +128,12 @@
 ;;; SCENERY
 ;;;
 (defclass scenery ()
-  ((grid :initarg :grid)))
+  ((type :initarg :kind :reader kind-of)
+   (grid :initarg :grid)))
 
 
 
-(defmethod render ((this scenery))
+(defmethod render ((this scenery) &key)
   (with-slots (grid) this
     (loop for x from 0 below (array-dimension grid 0)
           do (loop for y from 0 below (array-dimension grid 1)
@@ -177,14 +178,16 @@
     (a:nreversef sceneries)))
 
 
-(defmethod render ((this level))
+(defmethod render ((this level) &key kind)
   (with-slots (sceneries tile-map tile-width tile-height control-plane) this
     (let ((*tile-map* tile-map)
           (*tile-width* tile-width)
           (*tile-height* tile-height))
       (loop for scenery in sceneries
-            do (render scenery))
-      (render control-plane))))
+            when (or (not kind) (eq (kind-of scenery) kind))
+              do (render scenery))
+      (when (eq kind :control-plane)
+        (render control-plane)))))
 
 
 
@@ -195,8 +198,15 @@
   (- (* *level-height* *tile-height*) y (or height 0)))
 
 
-(defun parse-platform (&key kind position width height points &allow-other-keys)
+(defun parse-level-properties (props)
+  (a:alist-hash-table props :test 'equal))
 
+
+(defun get-level-property (props key)
+  (first (gethash key props)))
+
+
+(defun parse-platform (&key kind position width height points &allow-other-keys)
   (let ((position (destructuring-bind (x y) position
                     (gk:vec2 x (invert-absolute-y y height))))
         (offsets (loop for point in points
@@ -216,8 +226,8 @@
             do (destructuring-bind (&rest args &key position properties
                                     &allow-other-keys)
                    object
-                 (let* ((prop-table (a:alist-hash-table properties :test 'equal))
-                        (type (first (gethash "kind" prop-table))))
+                 (let* ((props (parse-level-properties properties))
+                        (type (get-level-property props "kind")))
                    (a:switch (type :test #'equal)
                      ("player-spawn" (setf spawn (gk:vec2 (first position)
                                                           (invert-absolute-y (second position)))))
@@ -226,15 +236,19 @@
     (make-instance 'control-plane :spawn spawn :platforms platforms)))
 
 
-(defun parse-scenery (&key gids &allow-other-keys)
-  (make-instance 'scenery
-                 :grid (loop with grid = (make-array (list *level-width* *level-height*))
-                             for i from 0
-                             for gid in gids
-                             for y = (- *level-height* 1 (if (= i 0) 0 (truncate (/ i *level-width*))))
-                             for x = (mod i *level-width*)
-                             do (setf (aref grid x y) gid)
-                             finally (return grid))))
+(defun parse-scenery (&key properties gids &allow-other-keys)
+  (let ((props (parse-level-properties properties)))
+    (make-instance 'scenery
+                   :kind (a:switch ((get-level-property props "kind") :test #'equal)
+                           ("foreground" :foreground)
+                           ("background" :background))
+                   :grid (loop with grid = (make-array (list *level-width* *level-height*))
+                               for i from 0
+                               for gid in gids
+                               for y = (- *level-height* 1 (if (= i 0) 0 (truncate (/ i *level-width*))))
+                               for x = (mod i *level-width*)
+                               do (setf (aref grid x y) gid)
+                               finally (return grid)))))
 
 
 (defun parse-layer (&rest args &key name type &allow-other-keys)

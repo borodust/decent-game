@@ -192,7 +192,7 @@ With the exception of :left and :right. Those are added to `facing'."
   (process-collision this that))
 
 
-(defmethod render ((this player))
+(defmethod render ((this player) &key)
   (with-slots (states body) this
     (render body)
     (let ((position (body-position body)))

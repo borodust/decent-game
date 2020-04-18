@@ -27,11 +27,11 @@
   (:method (object) (declare (ignore object))))
 
 
-(defgeneric render (object)
-  (:method (object) (declare (ignore object))))
+(defgeneric render (object &key &allow-other-keys)
+  (:method (object &key) (declare (ignore object))))
 
 
-(defmethod render :around (object)
+(defmethod render :around (object &key)
   (gk:with-pushed-canvas ()
     (call-next-method)))
 

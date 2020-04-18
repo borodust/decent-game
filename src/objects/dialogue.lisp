@@ -109,7 +109,7 @@
         (setf selected (mod selected active-choice-count))))))
 
 
-(defmethod render ((this dialogue))
+(defmethod render ((this dialogue) &key)
   (with-slots (dialogue selected box-font choice-font) this
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 10 94)

@@ -36,7 +36,10 @@
     (observe-universe universe)))
 
 
-(defmethod render ((this world))
+(defmethod render ((this world) &key)
   (with-slots (level player) this
-    (render level)
+    (render level :kind :background)
+    (with-slots (body) player
+      (gk:translate-canvas (+ (- (gk:x (body-position body))) 100) 0))
+    (render level :kind :foreground)
     (render player)))

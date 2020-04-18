@@ -168,7 +168,7 @@
                            :allow-other-keys t))
 
 
-(defmethod render ((this box-body))
+(defmethod render ((this box-body) &key)
   (with-slots (width height) this
     (let ((pos (body-position this)))
       (gk:draw-rect pos width height
@@ -202,7 +202,7 @@
                               :allow-other-keys t))
 
 
-(defmethod render ((this circle-body))
+(defmethod render ((this circle-body) &key)
   (with-slots (radius) this
     (let ((pos (body-position this)))
       (gk:draw-circle pos radius
