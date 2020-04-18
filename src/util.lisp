@@ -1,7 +1,10 @@
 (cl:in-package :decent-game)
 
 
-(defparameter *debug-rendering* nil)
+(declaim (special *world*))
+
+
+(defparameter *debug-rendering* t)
 
 (defclass state-input-handler (gk.input:input-handler) ())
 
@@ -26,6 +29,10 @@
 
 
 (defgeneric dispose (object)
+  (:method (object) (declare (ignore object))))
+
+
+(defgeneric observe (object)
   (:method (object) (declare (ignore object))))
 
 

@@ -29,8 +29,12 @@
 
 
 (defun observe-world (world)
-  (with-slots (universe) world
-    (observe-universe universe)))
+  (with-slots (universe player enemies) world
+    (let ((*world* world))
+      (observe-universe universe)
+      (observe player)
+      (loop for enemy in enemies
+            do (observe enemy)))))
 
 
 (defmethod render ((this world) &key)

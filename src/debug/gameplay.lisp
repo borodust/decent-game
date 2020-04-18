@@ -26,14 +26,14 @@
 ;;; SCENE
 ;;;
 (defclass gameplay-debug-screen (state-input-handler)
-  ((world :initform nil)
+  ((world :initform nil :reader world-of)
    (pack :initarg :pack)))
 
 
 (defun spawn-flyer (action &key)
   (declare (ignore action))
   (with-slots (world) (gk.fsm:current-state)
-    (loop repeat 10
+    (loop repeat 1
           for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
           do (spawn-enemy world 'alien-stinger "flyer-0" :offset offset))))
 
@@ -41,7 +41,7 @@
 (defun spawn-shooter (action &key)
   (declare (ignore action))
   (with-slots (world) (gk.fsm:current-state)
-    (loop repeat 10
+    (loop repeat 1
           for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
           do (spawn-enemy world 'alien-shooter "shooter-0" :offset offset))))
 

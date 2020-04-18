@@ -1,6 +1,6 @@
 (cl:in-package :decent-game)
 
-(defparameter *player-movement-speed* 50)
+(defparameter *player-movement-speed* 100)
 (defparameter *player-jump-strength* 10000)
 
 
@@ -49,9 +49,7 @@
 
 
 (defclass player (fighter)
-  ((last-direction :initarg :last-direction
-                   :accessor last-direction
-                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left"))
+  ()
   (:default-initargs
    :direction 0
    :last-direction 1
@@ -78,85 +76,6 @@
     (dispose body)))
 
 
-(defun get-player ()
-  "Returns player if we're inside a state, which has a player slot.
-Returns NIL otherwise."
-  (let ((curr-state (gk.fsm:current-state)))
-    (if (slot-exists-p curr-state 'player )
-        (player curr-state)
-        nil)))
-
-
-(defmethod add-state (state (this player))
-  "Adds `state' to the players `states' list.
-With the exception of :left and :right. Those are added to `facing'."
-  (with-slots (states facing) this
-    (if (keywordp state)
-        (pushnew state states)
-        (error "~&state must be a keyword. Got ~A~%" state))))
-
-(defmethod remove-state (state (this player))
-  "Removes `state' to the players `states' list."
-  (with-slots (states) this
-    (if (keywordp state)
-        (a:deletef states state)
-        (error "~&state must be a keyword. Got ~A~%" state))))
-
-
-(defmethod facing-right-p ((this player))
-  (plusp (last-direction this)))
-
-
-(defmethod facing-left-p ((this player))
-  (minusp (last-direction this)))
-
-
-(defmethod idle-p ((this player))
-  (null (states this)))
-
-
-(defmethod running-p ((this player))
-  (member :running (states this)))
-
-
-(defmethod jumping-p ((this player))
-  (member :jumping (states this)))
-
-
-(defmethod falling-p ((this player))
-  (member :falling (states this)))
-
-
-(defun update-player-running-state (this new-direction)
-  (with-slots (direction last-direction) this
-    (incf direction new-direction)
-    (if (= 0 direction)
-        (remove-state :running this)
-        (progn
-          (add-state :running this)
-          (setf last-direction direction)))))
-
-
-(defmethod move-right ((this player))
-  (update-player-running-state this 1))
-
-
-(defmethod stop-move-right ((this player))
-  (update-player-running-state this -1))
-
-
-(defmethod move-left ((this player))
-  (update-player-running-state this -1))
-
-
-(defmethod stop-move-left ((this player))
-  (update-player-running-state this 1))
-
-
-(defmethod stop-running ((this player))
-  (remove-state :running this))
-
-
 (defun stop-player (player)
   (setf (states player) (list)))
 
@@ -169,31 +88,8 @@ With the exception of :left and :right. Those are added to `facing'."
                (apply-force body (gk:mult reverse-thrust *player-jump-strength*)))))))
 
 
-(defmethod collide ((this player) (that obstacle))
-  (with-slots (states direction) this
-    (setf (collision-friction) 60
-          (collision-surface-velocity) (cond
-                                         ((> direction 0) (gk:vec2 100 0))
-                                         ((< direction 0) (gk:vec2 -100 0))
-                                         (t (gk:vec2 0 0)))))
-  t)
-
-
 (defmethod collide :after ((this sensor) (that player))
   (trigger-sensor-event this))
-
-
-(defmethod collide ((that obstacle) (this player))
-  (collide this that))
-
-
-(defmethod process-collision ((this player) (that obstacle))
-  (with-slots (body) this
-    (setf (body-angular-velocity body) 0)))
-
-
-(defmethod process-collision ((that obstacle) (this player))
-  (process-collision this that))
 
 
 (defmethod render ((this player) &key)
@@ -211,3 +107,7 @@ With the exception of :left and :right. Those are added to `facing'."
                  (draw-animation 'player-run-left time +zero-pos+)
                  (draw-animation 'player-idle-left time +zero-pos+)))
             (t (error "Play should only be able to either face left or right."))))))
+
+
+(defmethod speed-of ((this player))
+  *player-movement-speed*)

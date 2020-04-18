@@ -1,5 +1,12 @@
 (cl:in-package :decent-game)
 
+
+(defparameter *alien-shooter-sense-field-radius* 80)
+(defparameter *alien-shooter-shoot-radius* 60)
+(defparameter *alien-shooter-close-radius* 30)
+(defparameter *alien-shooter-movement-speed* 30)
+
+
 (define-animation alien-shooter-0-walk-0
     (asset-path "img/alien-shooter-0/alien-shooter-0-walk-0.png")
   :frames 3)
@@ -29,11 +36,10 @@
 
 
 (defmethod make-fighter-body ((this alien-shooter) &key world position)
-  (let ((body (make-box-body (universe-of world)
-                             28
-                             14
-                             :owner this
-                             :mass 1)))
+  (let ((body (make-circle-body (universe-of world)
+                                5
+                                :owner this
+                                :mass 1)))
     (setf (body-position body) (or position (gk:vec2 120 20)))
     body))
 
@@ -43,40 +49,34 @@
   ;; TODO
   nil)
 
-;;; collision
-(defmethod collide ((this alien-shooter) (that world))
-  (with-slots (movement-speed) this
-    (setf (collision-friction) 60)
-    (setf (collision-surface-velocity) (gk:vec2 0 0)))
-  t)
 
-(defmethod collide ((that world) (this alien-shooter))
-  (collide this that))
-
-
-(defmethod process-collision ((this alien-shooter) (that world))
-  (with-slots (body) this
-    (setf (body-angular-velocity body) 0)))
-
-
-(defmethod process-collision ((that world) (this alien-shooter))
-  (process-collision this that))
+(defmethod observe ((this alien-shooter))
+  (let* ((player-pos (position-of (player-of *world*)))
+         (alien-pos (position-of this))
+         (target-vec (b:subt alien-pos player-pos))
+         (len (b:vector-length target-vec)))
+    (flet ((follow-player ()
+             (cond
+               ((< len *alien-shooter-close-radius*) (stop-moving this))
+               ((> (gk:x target-vec) 0) (stop-moving this) (move-left this))
+               ((< (gk:x target-vec) 0) (stop-moving this) (move-right this))))
+           (shoot-player ()
+             (stop-moving this))
+           (wander-around ()))
+      (cond
+        ((< len *alien-shooter-shoot-radius*) (shoot-player) (follow-player))
+        ((< len *alien-shooter-sense-field-radius*) (follow-player))
+        (t (wander-around))))))
 
 
 ;;; rendering
 (defmethod render ((this alien-shooter) &key)
   (with-slots (body) this
     (let ((position (body-position body)))
-      (gk:translate-canvas (gk:x position) ;; (- (gk:x position) 8)
-                           (gk:y position) ;; (- (gk:y position) 5)
-                           ))
+      (gk:translate-canvas (- (gk:x position) 14) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
-      (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+)
-      ;; (cond ((idle-p this)
-      ;;        (draw-animation 'player-idle time +zero-pos+))
-      ;;       ((moving-left-p this)
-      ;;        (gk:with-pushed-canvas ()
-      ;;          (draw-animation 'player-walk time +zero-pos+ :mirror-x t)))
-      ;;       ((moving-right-p this)
-      ;;        (draw-animation 'player-walk time +zero-pos+)))
-      )))
+      (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+))))
+
+
+(defmethod speed-of ((this alien-shooter))
+  *alien-shooter-movement-speed*)
