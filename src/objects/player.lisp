@@ -48,7 +48,7 @@
   'player-projectile-0-left)
 
 
-(defclass player (fighter)
+(defclass player (ground-fighter)
   ()
   (:default-initargs
    :direction 0

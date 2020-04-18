@@ -2,20 +2,17 @@
 
 
 (defgeneric position-of (object))
+(defgeneric velocity-of (object))
 (defgeneric speed-of (object)
   (:method (object)
     (declare (ignore object))
     0))
 
+;;;
+;;; GENERIC FIGHTER
+;;;
 (defclass fighter (stats)
   ((states :initform (list) :accessor states)
-   (direction :initarg :direction
-              :accessor direction
-              :initform (error "The fighter needs a direction he's facing.")
-              :documentation "-1 for left, 0 for both, +1 for right")
-   (last-direction :initarg :last-direction
-                   :accessor last-direction
-                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left")
    (body :initform nil :reader body-of))
   (:documentation "Something that can fight,has a body and stats."))
 
@@ -36,38 +33,6 @@
     (incf hp (a:clamp amount (- hp-max hp) amount))))
 
 
-(defmethod render :around ((this fighter) &key)
-  (with-slots (body) this
-    (call-next-method)
-    (when *debug-rendering*
-      (render body))))
-
-
-(defmethod position-of ((this fighter))
-  (with-slots (body) this
-    (body-position body)))
-
-
-
-(defmethod collide :before ((this fighter) (that obstacle))
-  (with-slots (states direction) this
-    (setf (collision-friction) 60
-          (collision-surface-velocity) (cond
-                                         ((> direction 0) (gk:vec2 (speed-of this) 0))
-                                         ((< direction 0) (gk:vec2 (- (speed-of this)) 0))
-                                         (t (gk:vec2 0 0)))))
-  t)
-
-
-(defmethod process-collision ((this fighter) (that obstacle))
-  (with-slots (body) this
-    (setf (body-angular-velocity body) 0)))
-
-
-(defmethod process-collision ((that obstacle) (this fighter))
-  (process-collision this that))
-
-
 (defmethod add-state (state (this fighter))
   "Adds `state' to the players `states' list.
 With the exception of :left and :right. Those are added to `facing'."
@@ -84,27 +49,76 @@ With the exception of :left and :right. Those are added to `facing'."
         (error "~&state must be a keyword. Got ~A~%" state))))
 
 
-(defmethod facing-right-p ((this fighter))
+(defmethod render :around ((this fighter) &key)
+  (with-slots (body) this
+    (call-next-method)
+    (when *debug-rendering*
+      (render body))))
+
+
+(defmethod position-of ((this fighter))
+  (with-slots (body) this
+    (body-position body)))
+
+
+(defmethod velocity-of ((this fighter))
+  (with-slots (body) this
+    (body-linear-velocity body)))
+
+
+;;;
+;;; GROUND FIGHTER
+;;;
+(defclass ground-fighter (fighter)
+  ((direction :initarg :direction
+              :accessor direction
+              :initform (error "The fighter needs a direction he's facing.")
+              :documentation "-1 for left, 0 for both, +1 for right")
+   (last-direction :initarg :last-direction
+                   :accessor last-direction
+                   :documentation "Indicates which direction the player faced last. +1 = right, -1 = left")))
+
+
+(defmethod collide :before ((this ground-fighter) (that obstacle))
+  (with-slots (states direction) this
+    (setf (collision-friction) 60
+          (collision-surface-velocity) (cond
+                                         ((> direction 0) (gk:vec2 (speed-of this) 0))
+                                         ((< direction 0) (gk:vec2 (- (speed-of this)) 0))
+                                         (t (gk:vec2 0 0)))))
+  t)
+
+
+(defmethod process-collision ((this ground-fighter) (that obstacle))
+  (with-slots (body) this
+    (setf (body-angular-velocity body) 0)))
+
+
+(defmethod process-collision ((that obstacle) (this ground-fighter))
+  (process-collision this that))
+
+
+(defmethod facing-right-p ((this ground-fighter))
   (plusp (last-direction this)))
 
 
-(defmethod facing-left-p ((this fighter))
+(defmethod facing-left-p ((this ground-fighter))
   (minusp (last-direction this)))
 
 
-(defmethod idle-p ((this fighter))
+(defmethod idle-p ((this ground-fighter))
   (null (states this)))
 
 
-(defmethod running-p ((this fighter))
+(defmethod running-p ((this ground-fighter))
   (member :running (states this)))
 
 
-(defmethod jumping-p ((this fighter))
+(defmethod jumping-p ((this ground-fighter))
   (member :jumping (states this)))
 
 
-(defmethod falling-p ((this fighter))
+(defmethod falling-p ((this ground-fighter))
   (member :falling (states this)))
 
 
@@ -123,21 +137,21 @@ With the exception of :left and :right. Those are added to `facing'."
     (remove-state :running fighter)
     (setf direction 0)))
 
-(defmethod move-right ((this fighter))
+(defmethod move-right ((this ground-fighter))
   (update-fighter-running-state this 1))
 
 
-(defmethod stop-move-right ((this fighter))
+(defmethod stop-move-right ((this ground-fighter))
   (update-fighter-running-state this -1))
 
 
-(defmethod move-left ((this fighter))
+(defmethod move-left ((this ground-fighter))
   (update-fighter-running-state this -1))
 
 
-(defmethod stop-move-left ((this fighter))
+(defmethod stop-move-left ((this ground-fighter))
   (update-fighter-running-state this 1))
 
 
-(defmethod stop-running ((this fighter))
+(defmethod stop-running ((this ground-fighter))
   (remove-state :running this))

@@ -25,7 +25,7 @@
   'alien-shooter-0-attack-projectile-0)
 
 
-(defclass alien-shooter (alien)
+(defclass alien-shooter (alien ground-fighter)
   ()
   (:default-initargs
    :hp-max 15

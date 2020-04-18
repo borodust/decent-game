@@ -13,13 +13,17 @@
   'alien-stinger-0-attack-sting-0)
 
 
-(defclass alien-stinger (alien)
+(defclass alien-stinger (alien fighter)
   ()
-  (:default-initargs
-   :hp-max 25
-   :strength 10
-   :movement-speed 40)
   (:documentation "A medium sized alien enemy, which stings downwards."))
+
+
+(defmethod observe ((this alien-stinger))
+  (let* ((player-pos (position-of (player-of *world*)))
+         (alien-pos (position-of this))
+         (target-vec (b:subt alien-pos player-pos))
+         (len (b:vector-length target-vec))
+         (alien-vel (velocity-of this)))))
 
 
 (defmethod make-fighter-body ((this alien-stinger) &key world position)

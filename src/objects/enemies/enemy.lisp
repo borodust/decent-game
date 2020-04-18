@@ -1,7 +1,7 @@
 (cl:in-package :decent-game)
 
 
-(defclass enemy (fighter) ())
+(defclass enemy () ())
 
 
 (defun make-enemies (&key world enemy-type-list)
