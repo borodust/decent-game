@@ -20,8 +20,10 @@
 
 
 (defmethod dispose :after ((this world))
-  (with-slots (universe level player) this
+  (with-slots (universe level player enemies) this
     (dispose player)
+    (loop for enemy in enemies
+          do (dispose enemy))
     (dispose level)
     (dispose universe)))
 
