@@ -45,8 +45,6 @@
 (defmethod gk:post-initialize ((this stage-2))
   (spawn-enemy (world-of this) 'boss "boss"))
 
-;; (when (boss-exists-p world)
-;;   (draw-boss-life-bar (get-boss-of world) (gk:vec2 50 50)))
 
 ;;;
 ;;; DESTROY

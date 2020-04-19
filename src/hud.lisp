@@ -50,9 +50,9 @@
     (gk:with-pushed-canvas ()
       (gk:translate-canvas (gk:x position) (gk:y position))
       (gk:draw-image +zero-pos+ 'boss-life-bar-left )
-      (draw-in-row 'boss-life-bar-middle hp-max 4 (gk:vec2 8 0))
-      (gk:draw-image (gk:vec2 (+ (* hp-max 4) 13) 0) 'boss-life-bar-right)
-      (draw-in-row 'boss-life-bar-cell hp 8 (gk:vec2 12 3) :animationp t))))
+      (draw-in-row 'boss-life-bar-middle hp-max 8 (gk:vec2 8 0))
+      (gk:draw-image (gk:vec2 (+ (* hp-max 8) 8) 0) 'boss-life-bar-right)
+      (draw-in-row 'boss-life-bar-cell hp 8 (gk:vec2 8 -6) :animationp t))))
 
 
 (defun draw-in-row (to-draw x x-offset pos &key (animationp nil))
