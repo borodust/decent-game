@@ -50,7 +50,8 @@
     (draw-animation 'alien-shooter-0-attack-shoot-0 time (gk:add +zero-pos+ (gk:vec2 32 120)))
 
     (draw-animation 'alien-stinger-0-fly-0 time (gk:add +zero-pos+ (gk:vec2 0 64)))
-    (draw-animation 'alien-stinger-0-attack-sting-0 time (gk:add +zero-pos+ (gk:vec2 32 64)))))
+    (draw-animation 'alien-stinger-0-attack-sting-0 time (gk:add +zero-pos+ (gk:vec2 32 64)))
+    ))
 
 
 ;;; input handling

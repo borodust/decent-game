@@ -1,6 +1,6 @@
 (cl:in-package :decent-game)
 
-(defparameter *player-movement-speed* 50)
+(defparameter *player-movement-speed* 48)
 (defparameter *player-jump-strength* 10000)
 
 
@@ -81,7 +81,8 @@
    (with-slots (states body direction) player
      (cond ((idle-p player)
             (apply-force body (gk:vec2 0 *player-jump-strength*)))
-           (t (let ((reverse-thrust (gk:normalize (gk:vec2 (* .5 direction) .9)))) ;; -0.3713907 0.92847675
+           (t (let ((reverse-thrust (gk:vec2 0 1) ;;(gk:vec2 (* -.3713907  direction) 0.92847675)
+                      )) ;; -0.3713907 0.92847675
                 (apply-force body (gk:mult reverse-thrust *player-jump-strength*))))))))
 
 

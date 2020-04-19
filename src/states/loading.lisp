@@ -1,10 +1,12 @@
 (cl:in-package :decent-game)
 
 
-(gk:define-image :loading-screen-bar-overlay (asset-path "img/hud/loading-screen-bar-overlay.png"))
+(gk:define-image :loading-screen-bar-overlay (asset-path "img/hud/loading-screen-bar-overlay.png")
+  :use-nearest-interpolation t)
 
 (define-resource-pack loading-screen-resources ()
-  :loading-screen-bar-overlay)
+  :loading-screen-bar-overlay
+  :bold-pixel-operator)
 
 
 (defclass loading-screen (base-loading-screen)
@@ -21,15 +23,15 @@
         (gk:draw-circle +zero-pos+ (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint (hexcolor "#CB0035")))
       (gk:with-pushed-canvas ()
         (draw-loading-bar prepared-percentage (gk:vec2 8 8) :bar-height 16 :bar-width 240)
-        ;; (gk:draw-image +zero-pos+ :loading-screen-bar-overlay)
-        )
+        (gk:draw-image +zero-pos+ :loading-screen-bar-overlay))
 
       (gk:with-pushed-canvas ()
-        (gk:translate-canvas 6 5)
+        (gk:translate-canvas 9 10)
         (gk:scale-canvas 0.5 0.5)
         (gk:draw-text (format nil "~A%" prepared-percentage)
                       +zero-pos+
-                      :fill-color +black+)))))
+                      :fill-color +black+
+                      :font (gk:make-font :bold-pixel-operator 24))))))
 
 
 (defmethod on-load ((this loading-screen))

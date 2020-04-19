@@ -136,13 +136,13 @@ With the exception of :left and :right. Those are added to `facing'."
 (defmethod jumping-p ((this ground-fighter))
   (let ((y-velocity (gk:y (velocity-of this))))
     (and (plusp y-velocity)
-         (> y-velocity .1))))
+         (> y-velocity .5))))
 
 
 (defmethod falling-p ((this ground-fighter))
   (let ((y-velocity (gk:y (velocity-of this))))
     (and (minusp y-velocity)
-         (< y-velocity -.1))))
+         (< y-velocity -.5))))
 
 
 (defmethod shooting-p ((this ground-fighter))
