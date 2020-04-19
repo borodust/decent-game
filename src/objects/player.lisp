@@ -53,7 +53,7 @@
   (:default-initargs
    :direction 0
    :last-direction 1
-   :hp-max 100
+   :hp-max 5
    :strength 5))
 
 

@@ -68,7 +68,7 @@
   (with-slots (world) this
     (render world)
     ;;(draw-boss-life-bar boss)
-    ;;(draw-player-life-bar player)
+    (draw-player-life-bar (player-of world) (gk:vec2 10 125))
     ))
 
 
