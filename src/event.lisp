@@ -8,6 +8,10 @@
   (pushnew action (gethash event-id *event-table*)))
 
 
+(defun unsubscribe-from-event (event-id action)
+  (a:deletef (gethash event-id *event-table*) action))
+
+
 (defun trigger-event (event-id &rest args &key &allow-other-keys)
   (loop for action in (gethash event-id *event-table*)
         do (etypecase action

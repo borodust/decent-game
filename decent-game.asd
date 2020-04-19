@@ -44,6 +44,8 @@
                              (:file "loading")
                              (:file "main-menu")
                              (:file "dialogue")
+                             (:file "replay")
+                             (:file "pause")
                              (:module "stage-0"
                               :components ((:file "stage")))))
                (:file "text")
