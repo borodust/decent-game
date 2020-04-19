@@ -5,7 +5,7 @@
 
 (define-level stage-2 (asset-path "tld/stage-2/stage.sxp")
   (stage-2-tilesheet (asset-path "tld/stage-2/tiles.png") "tiles.png")
-  (boss-stage-2-tilesheet (asset-path "tld/stage-2/boss.png") "tileset-1-with-alpha.png"))
+  (boss-stage-2-tilesheet (asset-path "tld/stage-2/tileset-1-with-alpha.png") "tileset-1-with-alpha.png"))
 
 
 (define-resource-pack stage-2-resources (player-resources
