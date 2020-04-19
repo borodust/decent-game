@@ -58,7 +58,7 @@
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) (or position (gk:vec2 50 20)))
-    (attach-box-shape body 12 26 :sensor (make-instance 'hitbox) :radius 5 :offset (gk:vec2 -6 0))
+    (attach-box-shape body 18 28 :sensor (make-instance 'player-hitbox) :radius 5 :offset (gk:vec2 -9 -3))
     body))
 
 
@@ -96,7 +96,7 @@
                  body-position)
         body
      (let ((position (body-position body)))
-       (gk:translate-canvas (- (gk:x position) 15)
+       (gk:translate-canvas (- (gk:x position) 16)
                             (- (gk:y position) 5)))
      (let ((time (bodge-util:real-time-seconds)))
        (cond ((facing-right-p this)
@@ -128,9 +128,6 @@
   *player-movement-speed*)
 
 
-(defclass player-bullet (bullet) ())
-
-
 (defmethod render-bullet ((this player-bullet))
   (gk:draw-image +zero-pos+ 'player-projectile-0-right))
 
@@ -143,4 +140,19 @@
               (pos (body-position (body-of this))))
           (spawn-bullet 'player-bullet world
                         (gk:add pos (gk:vec2 10 10))
-                        (gk:vec2 (* sign 400) 0)))))))
+                        (gk:vec2 (* sign 500) 0)))))))
+
+
+
+(defun register-player-damage (player)
+  (shout "PLAYER DAMAGED"))
+
+
+(defmethod collide :after ((this player-hitbox) (that enemy-bullet))
+  (register-player-damage this)
+  (destroy-bullet that))
+
+
+(defmethod collide :after ((that enemy-bullet) (this player-hitbox))
+  (register-player-damage this)
+  (destroy-bullet that))
