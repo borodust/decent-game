@@ -109,7 +109,7 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod collide :before ((this ground-fighter) (that obstacle))
   (with-slots (states direction) this
-    (setf (collision-friction) 60
+    (setf (collision-friction) 30
           (collision-surface-velocity) (cond
                                          ((> direction 0) (gk:vec2 (speed-of this) 0))
                                          ((< direction 0) (gk:vec2 (- (speed-of this)) 0))

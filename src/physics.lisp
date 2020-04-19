@@ -55,7 +55,9 @@
 (defun observe-universe (universe step &optional (repeats 1))
   (with-slots (universe) universe
     (loop repeat repeats
-          do (b.phy:observe-universe universe step))))
+          for i from 0
+          do (let ((*observation-repeat* i))
+               (b.phy:observe-universe universe step)))))
 
 
 ;;;

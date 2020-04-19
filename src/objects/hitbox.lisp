@@ -3,7 +3,8 @@
 ;;;
 ;;; HITBOX
 ;;;
-(defclass hitbox () ())
+(defclass hitbox ()
+  ((owner :initarg :owner :initform nil :reader owner-of)))
 
 
 (defmethod collide :around ((this hitbox) anything)
