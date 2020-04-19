@@ -23,3 +23,6 @@
 
 (defun play ()
   (gk:start 'decent-game))
+
+(defmethod gk:act ((this decent-game))
+  (process-timers))
