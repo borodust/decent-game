@@ -5,7 +5,8 @@
   (test-level-tilesheet (asset-path "tld/test/tiles.png") "tiles.png"))
 
 
-(define-resource-pack gameplay-debug-resources (player-resources
+(define-resource-pack gameplay-debug-resources (boss-resources
+                                                player-resources
                                                 alien-shooter-0-resources
                                                 alien-stinger-0-resources)
   (level-resources 'test-level))
@@ -68,7 +69,7 @@
 (defmethod gk:draw ((this gameplay-debug-screen))
   (with-slots (world) this
     (render world)
-    ;;(draw-boss-life-bar boss)
+    (draw-boss-life-bar :filler (gk:vec2 100 80))
     (draw-player-life-bar (player-of world) (gk:vec2 10 125))
     ))
 
