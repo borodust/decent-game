@@ -75,7 +75,14 @@
     (let ((position (body-position body)))
       (gk:translate-canvas (- (gk:x position) 14) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
-      (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+))))
+      (cond ((facing-right-p this)
+             (cond
+               (t (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+ :mirror-x t))))
+            ((facing-left-p this)
+             (cond
+               (t (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+))))
+            (t (error "Alien-shooter should only be able to either face left or right.")))
+      )))
 
 
 (defmethod speed-of ((this alien-shooter))

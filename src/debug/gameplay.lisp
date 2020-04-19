@@ -61,6 +61,7 @@
 
 (defmethod gk:act ((this gameplay-debug-screen))
   (with-slots (world) this
+    ;; (format t "~&player-shooting?: ~A~%" (shooting-p (player-of world)))
     (observe-world world)))
 
 
@@ -91,6 +92,16 @@
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :a)))
   (with-slots (world) this
     (stop-move-left (player-of world))))
+
+
+(defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :j)))
+  (with-slots (world) this
+    (start-shooting (player-of world))))
+
+
+(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :j)))
+  (with-slots (world) this
+    (stop-shooting (player-of world))))
 
 
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))

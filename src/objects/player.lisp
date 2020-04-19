@@ -1,6 +1,6 @@
 (cl:in-package :decent-game)
 
-(defparameter *player-movement-speed* 100)
+(defparameter *player-movement-speed* 50)
 (defparameter *player-jump-strength* 10000)
 
 
@@ -81,11 +81,12 @@
 
 
 (defun jump-player (player)
-  (with-slots (states body direction) player
-    (cond ((idle-p player)
-           (apply-force body (gk:vec2 0 *player-jump-strength*)))
-          (t (let ((reverse-thrust (gk:vec2 (* -0.3713907 direction) 0.92847675))) ;; 0.4 1
-               (apply-force body (gk:mult reverse-thrust *player-jump-strength*)))))))
+  (unless (or (jumping-p player) (falling-p player))
+   (with-slots (states body direction) player
+     (cond ((idle-p player)
+            (apply-force body (gk:vec2 0 *player-jump-strength*)))
+           (t (let ((reverse-thrust (gk:normalize (gk:vec2 (* .5 direction) .9)))) ;; -0.3713907 0.92847675
+                (apply-force body (gk:mult reverse-thrust *player-jump-strength*))))))))
 
 
 (defmethod collide :after ((this sensor) (that player))
@@ -104,6 +105,8 @@
      (let ((time (bodge-util:real-time-seconds)))
        (cond ((facing-right-p this)
               (cond
+                ((shooting-p this)
+                 (draw-animation 'player-shoot-right time +zero-pos+))
                 ((jumping-p this)
                  (draw-animation 'player-jumping-right time +zero-pos+))
                 ((falling-p this)
@@ -113,6 +116,8 @@
                 (t (draw-animation 'player-idle-right time +zero-pos+))))
              ((facing-left-p this)
               (cond
+                ((shooting-p this)
+                 (draw-animation 'player-shoot-left time +zero-pos+))
                 ((jumping-p this)
                  (draw-animation 'player-jumping-left time +zero-pos+))
                 ((falling-p this)
@@ -120,7 +125,7 @@
                 ((running-p this)
                  (draw-animation 'player-run-left time +zero-pos+))
                 (t (draw-animation 'player-idle-left time +zero-pos+))))
-             (t (error "Play should only be able to either face left or right.")))))))
+             (t (error "Player should only be able to either face left or right.")))))))
 
 
 (defmethod speed-of ((this player))

@@ -43,4 +43,6 @@
     (let ((position (body-position body)))
       (gk:translate-canvas (- (gk:x position) 15) (- (gk:y position) 5)))
     (let ((time (bodge-util:real-time-seconds)))
-      (draw-animation 'alien-stinger-0-fly-0 time +zero-pos+))))
+      (if (moving-right-p this)
+          (draw-animation 'alien-stinger-0-fly-0 time +zero-pos+ :mirror-x t)
+          (draw-animation 'alien-stinger-0-fly-0 time +zero-pos+)))))

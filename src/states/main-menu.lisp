@@ -48,12 +48,21 @@
     (select-next-menu-item menu)))
 
 
+(defmethod gk.input:button-pressed ((this main-menu) (key (eql :j)))
+  (with-slots (menu) this
+    (select-next-menu-item menu)))
+
+
 (defmethod gk.input:button-pressed ((this main-menu) (key (eql :up)))
   (with-slots (menu) this
     (select-prev-menu-item menu)))
 
 
 (defmethod gk.input:dpad-changed ((this main-menu) (key (eql :up)))
+  (with-slots (menu) this
+    (select-prev-menu-item menu)))
+
+(defmethod gk.input:button-pressed ((this main-menu) (key (eql :k)))
   (with-slots (menu) this
     (select-prev-menu-item menu)))
 

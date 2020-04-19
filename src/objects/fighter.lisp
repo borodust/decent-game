@@ -69,6 +69,16 @@ With the exception of :left and :right. Those are added to `facing'."
   (with-slots (body) this
     (body-linear-velocity body)))
 
+(defmethod moving-right-p ((this fighter))
+  (let ((x-vel (gk:x (velocity-of this))))
+    (and (plusp x-vel)
+         (> x-vel .1))))
+
+(defmethod moving-left-p ((this fighter))
+  (let ((x-vel (gk:x (velocity-of this))))
+    (and (minusp x-vel)
+         (< x-vel -.1))))
+
 
 ;;;
 ;;; GROUND FIGHTER
@@ -120,17 +130,19 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defmethod jumping-p ((this ground-fighter))
-  (with-slots (body) this
-    (plusp (gk:y (body-linear-velocity body))))
-  ;; (member :jumping (states this))
-  )
+  (let ((y-velocity (gk:y (velocity-of this))))
+    (and (plusp y-velocity)
+         (> y-velocity .1))))
 
 
 (defmethod falling-p ((this ground-fighter))
-  (with-slots (body) this
-    (minusp (gk:y (body-linear-velocity body))))
-  ;;(member :falling (states this))
-  )
+  (let ((y-velocity (gk:y (velocity-of this))))
+    (and (minusp y-velocity)
+         (< y-velocity -.1))))
+
+
+(defmethod shooting-p ((this ground-fighter))
+  (member :shooting (states this)))
 
 
 (defun update-fighter-running-state (this new-direction)
@@ -166,3 +178,10 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod stop-running ((this ground-fighter))
   (remove-state :running this))
+
+
+(defmethod start-shooting ((this ground-fighter))
+  (add-state :shooting this))
+
+(defmethod stop-shooting ((this ground-fighter))
+  (remove-state :shooting this))
