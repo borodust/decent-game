@@ -35,7 +35,7 @@
   (gk:play-sound 'boss-tune :looped-p t))
 
 ;;;
-;;; STAGE 0
+;;; STAGE 2
 ;;;
 (defclass stage-2 (stage)
   ()
@@ -45,6 +45,8 @@
 (defmethod gk:post-initialize ((this stage-2))
   (spawn-enemy (world-of this) 'boss "boss"))
 
+;; (when (boss-exists-p world)
+;;   (draw-boss-life-bar (get-boss-of world) (gk:vec2 50 50)))
 
 ;;;
 ;;; DESTROY

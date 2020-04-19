@@ -11,7 +11,7 @@
   ((universe :initform nil :reader universe-of)
    (level :initform nil :reader level-of)
    (player :initform nil :reader player-of)
-   (enemies :initform nil)
+   (enemies :initform nil :accessor enemies-of)
    (bullets :initform nil)))
 
 
@@ -83,3 +83,10 @@
 (defmacro with-world ((world) &body body)
   `(let ((,world (world-of (gk.fsm:current-state))))
      ,@body))
+
+(defmethod boss-exists-p ((this world))
+  (find-if (lambda (x) (eq (type-of x) 'boss)) (enemies-of this)))
+
+
+(defmethod get-boss-of ((this world))
+  (find-if (lambda (x) (eq (type-of x) 'boss)) (enemies-of this)))

@@ -69,7 +69,6 @@
 (defmethod gk:draw ((this gameplay-debug-screen))
   (with-slots (world) this
     (render world)
-    (draw-boss-life-bar :filler (gk:vec2 100 80))
     (draw-player-life-bar (player-of world) (gk:vec2 10 125))
     ))
 
