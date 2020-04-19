@@ -1,6 +1,9 @@
 (cl:in-package :decent-game)
 
 
+(defparameter *observation-step* 0.01)
+(defparameter *observation-repeats* 4)
+
 (defclass world ()
   ((universe :initform nil :reader universe-of)
    (level :initform nil :reader level-of)
@@ -29,8 +32,12 @@
 
 
 (defun observe-world (world)
-  (with-slots (universe) world
-    (observe-universe universe)))
+  (with-slots (universe player enemies) world
+    (let ((*world* world))
+      (observe-universe universe *observation-step* *observation-repeats*)
+      (observe player)
+      (loop for enemy in enemies
+            do (observe enemy)))))
 
 
 (defmethod render ((this world) &key)
