@@ -23,13 +23,42 @@
 
 (defmethod gk:post-initialize ((this init-stage-0))
   (gk.fsm:transition-to 'loading-screen :pack 'stage-0-resources
-                                        :next-state 'stage-0))
+                                        :next-state 'prepare-stage-0))
+
+
+;;;
+;;; PREPARE
+;;;
+(defclass prepare-stage-0 ()
+  ((pack :initarg :pack)))
+
+
+(defmethod gk:post-initialize ((this prepare-stage-0))
+  (with-slots (pack) this
+    (gk.fsm:transition-to 'stage-0 :world (make-world 'stage-0) :pack pack)))
+
+
+;;;
+;;; DESTROY
+;;;
+(defclass destroy-stage-0 ()
+  ((world :initarg :world :initform (error ":world missing"))
+   (pack :initarg :pack :initform (error ":pack missing"))))
+
+
+(defmethod gk:post-initialize ((this destroy-stage-0))
+  (with-slots (world pack) this
+    (gk:stop-sound 'gameplay-tune)
+    (dispose world)
+    (dispose-resource-pack pack)
+    (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
+                                          :next-state 'main-menu)))
 
 ;;;
 ;;; STAGE 0
 ;;;
 (defclass stage-0 (state-input-handler)
-  ((world :initform nil :reader world-of)
+  ((world :initarg :world :reader world-of)
    (pack :initarg :pack)))
 
 
@@ -49,17 +78,21 @@
           do (spawn-enemy world 'alien-shooter "shooter-0" :offset offset))))
 
 
+(defun kill-player (action &key)
+  (declare (ignore action))
+  (with-slots (world pack) (gk.fsm:current-state)
+    (gk.fsm:transition-to 'init-stage-0)))
+
+
 (defmethod gk:post-initialize ((this stage-0))
   (with-slots (world) this
-    (setf world (make-world 'stage-0))
-    (gk:play-sound 'gameplay-tune :looped-p t)))
+    (gk:play-sound 'gameplay-tune :looped-p t)
+    (subscribe-to-event :player-death 'kill-player)))
 
 
 (defmethod gk:pre-destroy ((this stage-0))
   (with-slots (world pack) this
-    (gk:stop-sound 'gameplay-tune)
-    (dispose world)
-    (dispose-resource-pack pack)))
+    (unsubscribe-from-event :player-death 'kill-player)))
 
 
 (defmethod gk:act ((this stage-0))
@@ -76,8 +109,9 @@
 ;;; input handling
 ;;;
 (defmethod gk.input:button-released ((this stage-0) (button (eql :escape)))
-  (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
-                                        :next-state 'main-menu))
+  (with-slots (world pack) this
+    (gk.fsm:transition-to 'pause-screen :world world
+                                        :pack pack)))
 
 (defmethod gk.input:button-pressed ((this stage-0) (button (eql :d)))
   (with-slots (world) this
