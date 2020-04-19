@@ -193,7 +193,7 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod make-untouchable-for (time (this fighter))
   (with-slots (next-dmg-time) this
-    (incf next-dmg-time (* time internal-time-units-per-second))))
+    (setf next-dmg-time (+ (bodge-util:real-time-seconds) time))))
 
 (defmethod untouchable-p ((this fighter))
   (< (now) (next-dmg-time this)))

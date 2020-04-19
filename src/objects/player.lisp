@@ -146,7 +146,7 @@
 
 
 (defun register-player-damage (player)
-  (with-slots (body next-dmg-time) player
+  (with-slots (body) player
     (unless (untouchable-p player)
       (apply-force body (gk:mult (gk:normalize (gk:vec2 -1 0.3)) 1000))
       (damage-for 1 player)
