@@ -1,9 +1,12 @@
 (cl:in-package :decent-game)
 
+(gk:define-font bold-pixel-operator (asset-path "fnt/pixel-operator/PixelOperatorMono8-Bold.ttf"))
+(gk:define-font pixel-operator (asset-path "fnt/pixel-operator/PixelOperatorMono8.ttf"))
+
 
 (define-resource-pack font-resources ()
-  :pixel-operator
-  :bold-pixel-operator)
+  'pixel-operator
+  'bold-pixel-operator)
 
 
 
@@ -13,8 +16,8 @@
 (defclass menu ()
   ((items :initform nil)
    (selected :initform nil)
-   (text-font :initform (gk:make-font :pixel-operator 8))
-   (selector-font :initform (gk:make-font :bold-pixel-operator 8))))
+   (text-font :initform (gk:make-font 'pixel-operator 8))
+   (selector-font :initform (gk:make-font 'bold-pixel-operator 8))))
 
 
 (defmethod initialize-instance :after ((this menu) &key items)
