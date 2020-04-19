@@ -2,17 +2,11 @@
 
 
 (defclass init-screen (base-loading-screen) ()
-  (:default-initargs
-   :pack-name nil))
+  (:default-initargs :pack 'loading-screen-resources))
 
 
-(defmethod gk:post-initialize ((this init-screen))
-  (with-slots (pack-name pack) this
-    (setf pack (load-resource-pack pack-name))
-    ;; (unless pack-name
-    ;;   (error ":pack-name must not be nil"))
-    )
 
+(defmethod on-load ((this init-screen))
   (gk.fsm:transition-to 'loading-screen
                         :pack 'main-menu-resources
                         :next-state 'main-menu))

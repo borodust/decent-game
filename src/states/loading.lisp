@@ -8,26 +8,7 @@
 
 
 (defclass loading-screen (base-loading-screen)
-  ())
-
-
-(defmethod gk:post-initialize ((this loading-screen))
-  (with-slots (pack-name pack) this
-    (unless pack-name
-      (error ":pack-name must not be nil"))
-    (setf pack (load-resource-pack pack-name))))
-
-
-(defmethod gk:act ((this loading-screen))
-  (with-slots (pack next-state prepared-percentage) this
-    (let ((count (pack-prepared-count pack))
-          (total (pack-total-count pack)))
-      (setf prepared-percentage (truncate (* (if (> total 0)
-                                                 (/ count total)
-                                                 1)
-                                             100)))
-      (when (= count total)
-        (gk.fsm:transition-to next-state :pack pack)))))
+  ((next-state :initform (error ":next-state missing") :initarg :next-state)))
 
 
 (defmethod gk:draw ((this loading-screen))
@@ -49,3 +30,8 @@
         (gk:draw-text (format nil "~A%" prepared-percentage)
                       +zero-pos+
                       :fill-color +black+)))))
+
+
+(defmethod on-load ((this loading-screen))
+  (with-slots (next-state) this
+    (gk.fsm:transition-to next-state :pack (pack-of this))))
