@@ -39,7 +39,8 @@
                                            (:file "alien-stinger")
                                            (:file "alien-shooter")))))
                (:module "states"
-                :components ((:file "init")
+                :components ((:file "base-loading-screen")
+                             (:file "init")
                              (:file "loading")
                              (:file "main-menu")
                              (:file "dialogue")))
