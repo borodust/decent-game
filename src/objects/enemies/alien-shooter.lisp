@@ -5,6 +5,7 @@
 (defparameter *alien-shooter-shoot-radius* 60)
 (defparameter *alien-shooter-close-radius* 30)
 (defparameter *alien-shooter-movement-speed* 30)
+(defparameter *alien-shooter-shooting-delay* 0.8)
 
 
 (define-animation alien-shooter-0-walk-0
@@ -26,13 +27,17 @@
 
 
 (defclass alien-shooter (alien ground-fighter)
-  ()
+  ((last-shot :initform nil))
   (:default-initargs
    :hp-max 15
    :strength 5
-   :attack-speed 12 ; frames between attacks
+   :attack-speed 12                     ; frames between attacks
    :movement-speed 50)
   (:documentation "A small alien enemy, which shoots thorns."))
+
+
+(defmethod render-bullet ((this enemy-bullet))
+  (gk:draw-image +zero-pos+ 'alien-shooter-0-attack-projectile-0))
 
 
 (defmethod provide-fighter-body ((this alien-shooter) &key world position)
@@ -47,23 +52,53 @@
     body))
 
 
+(defmethod shoot ((this alien-shooter))
+  (with-slots (last-direction last-shot) this
+    (with-world (world)
+      (unless (zerop last-direction)
+        (let ((sign (/ last-direction (abs last-direction)))
+              (pos (body-position (body-of this))))
+          (spawn-bullet 'enemy-bullet world
+                        (gk:add pos (gk:vec2 10 10))
+                        (gk:vec2 (* sign 500) 0))
+          (setf last-shot (bodge-util:real-time-seconds)))))))
+
+
+(defun start-alien-shooting (shooter)
+  (with-slots (last-shot) shooter
+    (unless last-shot
+      (setf last-shot 0))))
+
+
+(defun stop-alien-shooting (shooter)
+  (with-slots (last-shot) shooter
+    (setf last-shot nil)))
+
+
 (defmethod observe ((this alien-shooter))
-  (let* ((player-pos (position-of (player-of *world*)))
-         (alien-pos (position-of this))
-         (target-vec (b:subt alien-pos player-pos))
-         (len (b:vector-length target-vec)))
-    (flet ((follow-player ()
-             (cond
-               ((< len *alien-shooter-close-radius*) (stop-moving this))
-               ((> (gk:x target-vec) 0) (stop-moving this) (move-left this))
-               ((< (gk:x target-vec) 0) (stop-moving this) (move-right this))))
-           (shoot-player ()
-             (stop-moving this))
-           (wander-around ()))
-      (cond
-        ((< len *alien-shooter-shoot-radius*) (shoot-player) (follow-player))
-        ((< len *alien-shooter-sense-field-radius*) (follow-player))
-        (t (wander-around))))))
+  (with-slots (last-shot) this
+    (let* ((player-pos (position-of (player-of *world*)))
+           (alien-pos (position-of this))
+           (target-vec (b:subt alien-pos player-pos))
+           (len (b:vector-length target-vec)))
+      (flet ((follow-player ()
+               (cond
+                 ((< len *alien-shooter-close-radius*) (stop-moving this))
+                 ((> (gk:x target-vec) 0) (stop-moving this) (move-left this))
+                 ((< (gk:x target-vec) 0) (stop-moving this) (move-right this))))
+             (shoot-player ()
+               (stop-moving this)
+               (start-alien-shooting this))
+             (wander-around ()
+               (stop-alien-shooting this)
+               (stop-moving this)))
+        (cond
+          ((< len *alien-shooter-shoot-radius*) (shoot-player) (follow-player))
+          ((< len *alien-shooter-sense-field-radius*) (shoot-player))
+          (t (wander-around)))))
+    (when (and last-shot (> (- (bodge-util:real-time-seconds) last-shot)
+                            *alien-shooter-shooting-delay*))
+      (shoot this))))
 
 
 ;;; rendering
