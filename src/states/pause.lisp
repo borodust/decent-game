@@ -65,5 +65,11 @@
   (with-slots (menu world) this
     (render world)
     (gk:with-pushed-canvas ()
-      (gk:translate-canvas 60 140)
-      (render menu))))
+      (gk:translate-canvas 60 24)
+      (gk:draw-rect +zero-pos+ 140 100
+                    :fill-paint (alphacolor .8 +black+)
+                    :stroke-paint (alphacolor .5 +color-alien-dark+)
+                    :thickness 4)
+      (gk:with-pushed-canvas ()
+        (gk:translate-canvas 26 100)
+        (render menu)))))

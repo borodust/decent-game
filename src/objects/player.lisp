@@ -150,6 +150,9 @@
     (unless (untouchable-p player)
       (apply-force body (gk:mult (gk:normalize (gk:vec2 -1 0.3)) 1000))
       (damage-for 1 player)
+      (when (dead-p player)
+        (add-timer (+ (now) .495) ; because animation is .5 seconds long (3 frames)
+                   (lambda () (trigger-event :player-death))))
       (make-untouchable-for 1 player))))
 
 

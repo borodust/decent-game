@@ -20,6 +20,7 @@
 
 
 (defun register-enemy-damage (enemy)
+  (damage-for (strength (get-player)) enemy)
   (shout "ENEMY DAMAGED"))
 
 

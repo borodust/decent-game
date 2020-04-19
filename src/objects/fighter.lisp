@@ -118,6 +118,10 @@ With the exception of :left and :right. Those are added to `facing'."
   t)
 
 
+(defmethod dead-p ((this fighter))
+  (>= 0 (hp this)))
+
+
 (defmethod facing-right-p ((this ground-fighter))
   (plusp (last-direction this)))
 

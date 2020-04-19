@@ -16,6 +16,7 @@
   :components ((:file "packages")
                (:file "color")
                (:file "util")
+               (:file "timer-util")
                (:file "resources")
                (:file "physics")
                (:file "event")

@@ -10,8 +10,7 @@
 (defun alphacolor (alpha color)
   "Returns a gamekit:vec4 color with an alpha value of alpha,
 without modifying the original argument."
-  (let ((new-color color))
-    (setf (gk:w new-color) alpha)))
+  (gk:vec4 (gk:x color) (gk:y color) (gk:z color) alpha))
 
 
 (defun hexcolor (hexcode &optional (a 1))
