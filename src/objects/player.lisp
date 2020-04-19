@@ -156,3 +156,11 @@
 (defmethod collide :after ((that enemy-bullet) (this player-hitbox))
   (register-player-damage this)
   (destroy-bullet that))
+
+
+(defmethod collide :after ((this player-hitbox) (that enemy-hitbox))
+  (register-player-damage this))
+
+
+(defmethod collide :after ((that enemy-hitbox) (this player-hitbox))
+  (register-player-damage this))
