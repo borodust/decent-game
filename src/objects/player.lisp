@@ -94,19 +94,33 @@
 
 (defmethod render ((this player) &key)
   (with-slots (states body) this
-    (let ((position (body-position body)))
-      (gk:translate-canvas (- (gk:x position) 15)
-                           (- (gk:y position) 5)))
-    (let ((time (bodge-util:real-time-seconds)))
-      (cond ((facing-right-p this)
-             (cond ((running-p this)
-                    (draw-animation 'player-run-right time +zero-pos+))
-                   (t (draw-animation 'player-idle-right time +zero-pos+))))
-            ((facing-left-p this)
-             (cond ((running-p this)
-                    (draw-animation 'player-run-left time +zero-pos+))
-                   (t (draw-animation 'player-idle-left time +zero-pos+))))
-            (t (error "Play should only be able to either face left or right."))))))
+    (with-slots (body-angular-velocity
+                 body-linear-velocity
+                 body-position)
+        body
+     (let ((position (body-position body)))
+       (gk:translate-canvas (- (gk:x position) 15)
+                            (- (gk:y position) 5)))
+     (let ((time (bodge-util:real-time-seconds)))
+       (cond ((facing-right-p this)
+              (cond
+                ((jumping-p this)
+                 (draw-animation 'player-jumping-right time +zero-pos+))
+                ((falling-p this)
+                 (draw-animation 'player-falling-right time +zero-pos+))
+                ((running-p this)
+                 (draw-animation 'player-run-right time +zero-pos+))
+                (t (draw-animation 'player-idle-right time +zero-pos+))))
+             ((facing-left-p this)
+              (cond
+                ((jumping-p this)
+                 (draw-animation 'player-jumping-left time +zero-pos+))
+                ((falling-p this)
+                 (draw-animation 'player-falling-left time +zero-pos+))
+                ((running-p this)
+                 (draw-animation 'player-run-left time +zero-pos+))
+                (t (draw-animation 'player-idle-left time +zero-pos+))))
+             (t (error "Play should only be able to either face left or right.")))))))
 
 
 (defmethod speed-of ((this player))

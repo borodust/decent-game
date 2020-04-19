@@ -32,6 +32,10 @@
   (with-slots (hp hp-max) this
     (incf hp (a:clamp amount amount (- hp-max hp)))))
 
+(defmethod increase-max-hp-by (x (this fighter))
+  (with-slots (hp-max) this
+   (incf hp-max x)))
+
 
 (defmethod add-state (state (this fighter))
   "Adds `state' to the players `states' list.
@@ -116,11 +120,17 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defmethod jumping-p ((this ground-fighter))
-  (member :jumping (states this)))
+  (with-slots (body) this
+    (plusp (gk:y (body-linear-velocity body))))
+  ;; (member :jumping (states this))
+  )
 
 
 (defmethod falling-p ((this ground-fighter))
-  (member :falling (states this)))
+  (with-slots (body) this
+    (minusp (gk:y (body-linear-velocity body))))
+  ;;(member :falling (states this))
+  )
 
 
 (defun update-fighter-running-state (this new-direction)
