@@ -14,20 +14,20 @@
 (defmethod initialize-instance :after ((this main-menu) &key pack)
   (declare (ignore pack))
   (with-slots (menu) this
-    (flet ((%gameplay-debug-screen ()
+    (flet ((%start-game ()
+             (gk.fsm:transition-to 'init-stage-0))
+           (%gameplay-debug-screen ()
              (gk.fsm:transition-to 'init-gameplay-debug-screen))
            (%animation-debug-screen ()
              (gk.fsm:transition-to 'init-animation-debug-screen))
            (%dialogue-debug-screen ()
              (gk.fsm:transition-to 'dialogue-debug-screen))
-           (%loading-screen ()
-             (gk.fsm:transition-to 'init-screen))
            (%exit ()
              (gk:stop)))
-      (setf menu (make-instance 'menu :items (list "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
+      (setf menu (make-instance 'menu :items (list "START GAME" #'%start-game
+                                                   "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
                                                    "DEBUG-ANIMATION" #'%animation-debug-screen
                                                    "DEBUG-DIALOGUE" #'%dialogue-debug-screen
-                                                   "LOADING SCREEN" #'%loading-screen
                                                    "EXIT" #'%exit))))))
 
 
