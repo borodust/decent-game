@@ -43,7 +43,9 @@
                              (:file "init")
                              (:file "loading")
                              (:file "main-menu")
-                             (:file "dialogue")))
+                             (:file "dialogue")
+                             (:module "stage-0"
+                              :components ((:file "stage")))))
                (:file "text")
                (:file "main")
 
