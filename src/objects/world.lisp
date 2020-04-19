@@ -69,8 +69,9 @@
 
 (defun spawn-enemy (world type spawn-name &key offset)
   (with-slots (level enemies) world
-    (a:when-let ((pos (find-enemy-spawn (level-of world) spawn-name)))
-      (push (make-enemy type world :position (gk:add pos (or offset +zero-pos+))) enemies))))
+    (a:if-let ((pos (find-enemy-spawn (level-of world) spawn-name)))
+      (push (make-enemy type world :position (gk:add pos (or offset +zero-pos+))) enemies)
+      (warn "Failed to find enemy spawn ~A" spawn-name))))
 
 
 (defun spawn-bullet (bullet-class world position velocity)

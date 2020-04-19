@@ -60,7 +60,7 @@
      (("kind" "platform")))
     (:ID 28 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (155.667d0 89.3333d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "enemy-spawn") ("enemy" "boss-0")))
+     (("kind" "enemy-spawn") ("enemy" "boss")))
     (:ID 6 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (39.7083d0 90.875d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
      (("kind" "player-spawn"))))))

@@ -61,7 +61,7 @@
   </object>
   <object id="28" x="155.667" y="89.3333">
    <properties>
-    <property name="enemy" value="boss-0"/>
+    <property name="enemy" value="boss"/>
     <property name="kind" value="enemy-spawn"/>
    </properties>
    <point/>

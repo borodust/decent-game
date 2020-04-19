@@ -12,19 +12,22 @@
   'boss-hurt
   'boss-dying)
 
-(defclass boss (enemy)
+(defclass boss (enemy ground-fighter)
   ()
   (:default-initargs
    :hp-max 10
    :direction -1)
   (:documentation "The final boss."))
 
-(defmethod make-fighter-body ((this boss) &key world position)
+(defmethod provide-fighter-body ((this boss) &key world position)
   (let ((body (make-circle-body (universe-of world)
-                                10
+                                5
                                 :owner this
-                                :mass 2)))
-    (setf (body-position body) (or position (gk:vec2 200 30)))
+                                :mass 1)))
+    (setf (body-position body) (or position (gk:vec2 120 20)))
+    (attach-box-shape body 24 22 :sensor (make-instance 'enemy-hitbox :owner this)
+                                 :radius 5
+                                 :offset (gk:vec2 -12 -3))
     body))
 
 (defun make-boss ()
