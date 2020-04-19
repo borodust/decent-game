@@ -147,8 +147,11 @@
 
 
 (defun register-player-damage (player)
-  (with-slots (body) player
-    (apply-force body (gk:mult (gk:normalize (gk:vec2 -1 0.3)) 3000))))
+  (with-slots (body next-dmg-time) player
+    (unless (untouchable-p player)
+      (apply-force body (gk:mult (gk:normalize (gk:vec2 -1 0.3)) 1000))
+      (damage-for 1 player)
+      (make-untouchable-for 1 player))))
 
 
 (defmethod collide :after ((this player-hitbox) (that enemy-bullet))

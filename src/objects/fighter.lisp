@@ -15,7 +15,8 @@
 ;;;
 (defclass fighter (stats)
   ((states :initform (list) :accessor states)
-   (body :initform nil :reader body-of))
+   (body :initform nil :reader body-of)
+   (next-dmg-time :initform -1 :accessor next-dmg-time))
   (:documentation "Something that can fight, has a body and stats."))
 
 (defgeneric provide-fighter-body (fighter &key &allow-other-keys))
@@ -189,3 +190,10 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod stop-shooting ((this ground-fighter))
   (remove-state :shooting this))
+
+(defmethod make-untouchable-for (time (this fighter))
+  (with-slots (next-dmg-time) this
+    (setf next-dmg-time (+ next-dmg-time (* time internal-time-units-per-second)))))
+
+(defmethod untouchable-p ((this fighter))
+  (< (now) (next-dmg-time this)))

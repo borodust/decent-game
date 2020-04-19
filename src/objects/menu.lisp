@@ -46,11 +46,11 @@
     (funcall (cdr (aref items selected)))))
 
 
-(defmethod render ((this menu) &key)
+(defmethod render ((this menu) &key (fill-color +color-alien-dark+))
   (with-slots (selected items text-font selector-font) this
     (loop for (name . action) across items
           for i from 0
           do (gk:translate-canvas 0 -20)
              (when (= selected i)
-               (gk:draw-text ">>" *menu-item-selector-pos* :font selector-font))
-             (gk:draw-text name +zero-pos+ :font text-font))))
+               (gk:draw-text ">>" *menu-item-selector-pos* :font selector-font :fill-color fill-color))
+             (gk:draw-text name +zero-pos+ :font text-font :fill-color fill-color))))

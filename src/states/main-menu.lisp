@@ -80,6 +80,7 @@
 ;;; draw
 (defmethod gk:draw ((this main-menu))
   (with-slots (menu) this
+    (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 60 140)
       (render menu))))
