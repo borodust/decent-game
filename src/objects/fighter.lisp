@@ -11,18 +11,6 @@
 (defgeneric shoot (object))
 
 ;;;
-;;; HITBOX
-;;;
-(defclass hitbox () ())
-
-
-(defmethod collide :around ((this hitbox) anything)
-  nil)
-
-(defmethod collide :around (anything (this hitbox))
-  nil)
-
-;;;
 ;;; GENERIC FIGHTER
 ;;;
 (defclass fighter (stats)

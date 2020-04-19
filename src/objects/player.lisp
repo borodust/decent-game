@@ -143,4 +143,4 @@
               (pos (body-position (body-of this))))
           (spawn-bullet 'player-bullet world
                         (gk:add pos (gk:vec2 10 10))
-                        (gk:vec2 (* sign 500) 0)))))))
+                        (gk:vec2 (* sign 400) 0)))))))
