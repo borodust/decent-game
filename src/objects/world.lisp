@@ -4,6 +4,7 @@
 (defparameter *observation-step* 0.01)
 (defparameter *observation-repeats* 4)
 
+
 (defgeneric world-of (state))
 
 (defclass world ()

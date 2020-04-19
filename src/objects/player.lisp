@@ -58,7 +58,8 @@
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) (or position (gk:vec2 50 20)))
-    (attach-box-shape body 18 28 :sensor (make-instance 'player-hitbox) :radius 5 :offset (gk:vec2 -9 -3))
+    (attach-box-shape body 18 28 :sensor (make-instance 'player-hitbox :owner this)
+                                 :radius 5 :offset (gk:vec2 -9 -3))
     body))
 
 
@@ -145,22 +146,27 @@
 
 
 (defun register-player-damage (player)
-  (shout "PLAYER DAMAGED"))
+  (with-slots (body) player
+    (apply-force body (gk:mult (gk:normalize (gk:vec2 -1 0.3)) 3000))))
 
 
 (defmethod collide :after ((this player-hitbox) (that enemy-bullet))
-  (register-player-damage this)
-  (destroy-bullet that))
+  (when-initial-observation
+    (register-player-damage (owner-of this))
+    (destroy-bullet that)))
 
 
 (defmethod collide :after ((that enemy-bullet) (this player-hitbox))
-  (register-player-damage this)
-  (destroy-bullet that))
+  (when-initial-observation
+    (register-player-damage (owner-of this))
+    (destroy-bullet that)))
 
 
 (defmethod collide :after ((this player-hitbox) (that enemy-hitbox))
-  (register-player-damage this))
+  (when-initial-observation
+    (register-player-damage (owner-of this))))
 
 
 (defmethod collide :after ((that enemy-hitbox) (this player-hitbox))
-  (register-player-damage this))
+  (when-initial-observation
+    (register-player-damage (owner-of this))))

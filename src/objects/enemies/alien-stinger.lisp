@@ -35,7 +35,9 @@
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) position)
-    (attach-box-shape body 16 32 :sensor (make-instance 'enemy-hitbox) :radius 5 :offset (gk:vec2 -8 -5))
+    (attach-box-shape body 16 32 :sensor (make-instance 'enemy-hitbox :owner this)
+                                 :radius 5
+                                 :offset (gk:vec2 -8 -5))
     body))
 
 ;;; rendering

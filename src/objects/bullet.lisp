@@ -72,7 +72,7 @@
     (gk:with-pushed-canvas ()
       (unless (bullet-destroyed-p this)
         (let ((pos (body-position body)))
-          (gk:translate-canvas (gk:x pos) (gk:y pos)))
+          (gk:translate-canvas (- (gk:x pos) 10) (- (gk:y pos) 4)))
         (render-bullet this)))
     (when *debug-rendering*
       (render body))))

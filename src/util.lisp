@@ -10,6 +10,7 @@
 
 
 (defvar +zero-pos+ (gk:vec2 0 0))
+(defvar *observation-repeat* 0)
 
 
 (defun now () (bodge-util:real-time-seconds))
@@ -60,6 +61,11 @@
         (gk:translate-canvas 0 line-height)
         (incf total-height line-height)))
     total-height))
+
+
+(defmacro when-initial-observation (&body body)
+  `(when (zerop *observation-repeat*)
+     ,@body))
 
 
 (defun draw-loading-bar (percentage pos &key
