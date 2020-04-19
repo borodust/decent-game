@@ -25,12 +25,12 @@
 (defmethod damage-for (amount (this fighter))
   "Damages the `hp' of `this' for `amount'. `This' can't fall below 0 hp."
   (with-slots (hp) this
-    (setf hp (a:clamp amount hp amount))))
+    (setf hp (a:clamp amount amount hp))))
 
 (defmethod heal-for (amount (this fighter))
   "Heals the `hp' of `this' for `amount'. `This' can't heal beyond `hp-max'."
   (with-slots (hp hp-max) this
-    (incf hp (a:clamp amount (- hp-max hp) amount))))
+    (incf hp (a:clamp amount amount (- hp-max hp)))))
 
 
 (defmethod add-state (state (this fighter))
