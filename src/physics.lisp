@@ -8,6 +8,10 @@
 (defparameter *body-stroke-color* (gk:vec4 1 0 0 0.8))
 
 
+(defvar +zero-rot+ (b:mat2 1 0
+                           0 1))
+
+
 ;;;
 ;;; UNIVERSE
 ;;;
@@ -72,35 +76,41 @@
 
 (defclass box-shape (shape)
   ((width :initarg :width)
-   (height :initarg :height)))
+   (height :initarg :height)
+   (radius :initarg :radius)))
 
 
 (defun make-box-shape (universe body width height substance offset radius)
   (let* ((w (/ width *universe-scale*))
          (h (/ height *universe-scale*))
+         (radius (or radius 0))
          (offset (or offset +zero-pos+))
          (handle (b.phy:make-box-shape universe
                                        w h
                                        :body body
                                        :substance substance
-                                       :radius radius
-                                       :offset (b:vec2
-                                                (/ (+ (/ width 2) (gk:x offset)) *universe-scale*)
-                                                (/ (+ (/ height 2) (gk:y offset)) *universe-scale*)))))
+                                       :radius (/ (or radius) *universe-scale*)
+                                       :offset (b:add
+                                                (b:div offset *universe-scale*)
+                                                (b:vec2 (/ w 2) (/ h 2))))))
     (make-instance 'box-shape
                    :handle handle
                    :width width
                    :height height
-                   :offset offset)))
+                   :offset offset
+                   :radius radius)))
 
 
-(defmethod render ((this box-shape) &key position color)
-  (with-slots (offset width height) this
-    (let ((pos (or position +zero-pos+)))
+(defmethod render ((this box-shape) &key position rotation color)
+  (with-slots (offset width height radius) this
+    (let ((pos (or position +zero-pos+))
+          (rot (or rotation 0)))
       (gk:translate-canvas (+ (gk:x offset) (gk:x pos))
                            (+ (gk:y offset) (gk:y pos)))
+      (gk:rotate-canvas rot)
       (gk:draw-rect +zero-pos+ width height
-                    :fill-paint (or color *body-fill-color*)))))
+                    :fill-paint (or color *body-fill-color*)
+                    :rounding radius))))
 
 
 (defclass circle-shape (shape)
@@ -144,6 +154,18 @@
 (defun body-position (body)
   (with-slots (body) body
     (b:mult (b.phy:body-position body) *universe-scale*)))
+
+
+(defun body-rotation (body)
+  (with-slots (body) body
+    (b.phy:body-rotation body)))
+
+
+(defun (setf body-rotation) (value body)
+  (with-slots (body) body
+    (setf (b.phy:body-rotation body) (if (zerop value)
+                                         +zero-rot+
+                                         (b:euler-angle->mat2 value)))))
 
 
 (defun (setf body-position) (value body)
@@ -240,9 +262,10 @@
 (defmethod render ((this body) &key color)
   (with-slots (shapes) this
     (when *debug-rendering*
-      (let ((pos (body-position this)))
+      (let ((pos (body-position this))
+            (rot (b:mat2->euler-angle (body-rotation this))))
         (loop for shape in (rest shapes)
-              do (render shape :position pos :color color))))))
+              do (render shape :position pos :rotation rot :color color))))))
 
 ;;;
 ;;; BOX
