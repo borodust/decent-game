@@ -2,7 +2,7 @@
 
 
 (define-animation boss-idle (asset-path "img/boss/boss-idle.png") :frames 2)
-(define-animation boss-attack (asset-path "img/boss/boss-attack.png") :frames 4)
+(define-animation boss-attack (asset-path "img/boss/boss-attack.png") :frames 5)
 (define-animation boss-hurt (asset-path "img/boss/boss-hurt.png") :frames 1)
 (define-animation boss-dying (asset-path "img/boss/boss-dying.png") :frames 3)
 
