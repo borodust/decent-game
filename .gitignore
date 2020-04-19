@@ -9,4 +9,7 @@ local/
 # macOS crap
 **/.DS_Store
 
+# Krita crap
+*.png~
+
 build/

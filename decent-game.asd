@@ -21,6 +21,7 @@
                (:file "event")
                (:file "spritesheet")
                (:file "animation")
+               (:file "hud")
                (:module "objects"
                 :components ((:file "dialogue")
                              (:file "menu")
@@ -31,6 +32,7 @@
                              (:file "player")
                              (:module "enemies"
                               :components ((:file "enemy")
+                                           (:file "boss")
                                            (:file "alien")
                                            (:file "alien-stinger")
                                            (:file "alien-shooter")))))
