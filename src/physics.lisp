@@ -55,6 +55,80 @@
 
 
 ;;;
+;;; SHAPE
+;;;
+(defclass shape (b:disposable)
+  ((handle :initarg :handle :reader handle-of)
+   (offset :initarg :offset)))
+
+
+(b:define-destructor shape (handle)
+  (b:dispose handle))
+
+
+(defmethod dispose :after ((this shape))
+  (b:dispose this))
+
+
+(defclass box-shape (shape)
+  ((width :initarg :width)
+   (height :initarg :height)))
+
+
+(defun make-box-shape (universe body width height substance offset radius)
+  (let* ((w (/ width *universe-scale*))
+         (h (/ height *universe-scale*))
+         (offset (or offset +zero-pos+))
+         (handle (b.phy:make-box-shape universe
+                                       w h
+                                       :body body
+                                       :substance substance
+                                       :radius radius
+                                       :offset (b:vec2
+                                                (/ (+ (/ width 2) (gk:x offset)) *universe-scale*)
+                                                (/ (+ (/ height 2) (gk:y offset)) *universe-scale*)))))
+    (make-instance 'box-shape
+                   :handle handle
+                   :width width
+                   :height height
+                   :offset offset)))
+
+
+(defmethod render ((this box-shape) &key position color)
+  (with-slots (offset width height) this
+    (let ((pos (or position +zero-pos+)))
+      (gk:translate-canvas (+ (gk:x offset) (gk:x pos))
+                           (+ (gk:y offset) (gk:y pos)))
+      (gk:draw-rect +zero-pos+ width height
+                    :fill-paint (or color *body-fill-color*)))))
+
+
+(defclass circle-shape (shape)
+  ((radius :initarg :radius)))
+
+
+(defun make-circle-shape (universe body radius substance offset)
+  (let* ((r (/ radius *universe-scale*))
+         (offset (or offset +zero-pos+))
+         (handle (b.phy:make-circle-shape universe r
+                                          :offset (b:div offset *universe-scale*)
+                                          :body body
+                                          :substance substance)))
+    (make-instance 'circle-shape
+                   :handle handle
+                   :radius radius
+                   :offset offset)))
+
+
+(defmethod render ((this circle-shape) &key position color)
+  (with-slots (offset radius) this
+    (let ((pos (or position +zero-pos+)))
+      (gk:translate-canvas (+ (gk:x offset) (gk:x pos))
+                           (+ (gk:y offset) (gk:y pos)))
+      (gk:draw-circle +zero-pos+ radius
+                      :fill-paint (or color *body-fill-color*)))))
+
+;;;
 ;;; BODY
 ;;;
 (defclass body (b:disposable)
@@ -115,19 +189,6 @@
   (setf (b.phy:collision-friction) (/ value *universe-scale*)))
 
 
-(defun make-box-shape (universe body width height substance offset radius)
-  (let* ((w (/ width *universe-scale*))
-         (h (/ height *universe-scale*))
-         (offset (or offset +zero-pos+)))
-    (b.phy:make-box-shape universe
-                          w h
-                          :body body
-                          :substance substance
-                          :radius radius
-                          :offset (b:vec2 (/ (+ (/ width 2) (gk:x offset)) *universe-scale*)
-                                          (/ (+ (/ height 2) (gk:y offset)) *universe-scale*)))))
-
-
 (defun attach-box-shape (body width height &key offset sensor radius)
   (with-slots ((this-body body) shapes universe) body
     (let ((shape (make-box-shape universe this-body
@@ -137,15 +198,6 @@
                                  radius)))
       (push shape (cdr shapes))
       shape)))
-
-
-(defun make-circle-shape (universe body radius substance offset)
-  (let* ((r (/ radius *universe-scale*))
-         (offset (or offset +zero-pos+)))
-    (b.phy:make-circle-shape universe r
-                             :offset (b:div offset *universe-scale*)
-                             :body body
-                             :substance substance)))
 
 
 (defun attach-circle-shape (body radius &key offset sensor)
@@ -158,7 +210,7 @@
 (defun detach-shape (body shape)
   (with-slots (shapes) body
     (a:deletef (cdr shapes) shape)
-    (b:dispose shape)))
+    (dispose shape)))
 
 
 (defmethod provide-body ((this body) universe &key kinematic)
@@ -177,7 +229,7 @@
 
 (b:define-destructor body (body shapes)
   (loop for shape in (rest shapes)
-        do (b:dispose shape))
+        do (dispose shape))
   (b:dispose body))
 
 
@@ -185,12 +237,17 @@
   (b:dispose this))
 
 
+(defmethod render ((this body) &key color)
+  (with-slots (shapes) this
+    (when *debug-rendering*
+      (let ((pos (body-position this)))
+        (loop for shape in (rest shapes)
+              do (render shape :position pos :color color))))))
+
 ;;;
 ;;; BOX
 ;;;
-(defclass box-body (body)
-  ((width :initarg :width)
-   (height :initarg :height)))
+(defclass box-body (body) ())
 
 
 (defmethod provide-shape ((this box-body) body universe &key width height substance mass offset radius)
@@ -215,19 +272,10 @@
                            :allow-other-keys t))
 
 
-(defmethod render ((this box-body) &key color)
-  (with-slots (width height) this
-    (when *debug-rendering*
-      (let ((pos (body-position this)))
-        (gk:draw-rect pos width height
-                      :fill-paint (or color *body-fill-color*))))))
-
-
 ;;;
 ;;; CIRCLE
 ;;;
-(defclass circle-body (body)
-  ((radius :initarg :radius)))
+(defclass circle-body (body) ())
 
 
 (defmethod provide-shape ((this circle-body) body universe &key radius substance mass offset)
@@ -245,11 +293,3 @@
                               :mass mass
                               :offset offset
                               :allow-other-keys t))
-
-
-(defmethod render ((this circle-body) &key)
-  (with-slots (radius) this
-    (when *debug-rendering*
-      (let ((pos (body-position this)))
-        (gk:draw-circle pos radius
-                        :fill-paint *body-fill-color*)))))
