@@ -8,13 +8,27 @@
     (declare (ignore object))
     0))
 
+(defgeneric shoot (object))
+
+;;;
+;;; HITBOX
+;;;
+(defclass hitbox () ())
+
+
+(defmethod collide :around ((this hitbox) anything)
+  nil)
+
+(defmethod collide :around (anything (this hitbox))
+  nil)
+
 ;;;
 ;;; GENERIC FIGHTER
 ;;;
 (defclass fighter (stats)
   ((states :initform (list) :accessor states)
    (body :initform nil :reader body-of))
-  (:documentation "Something that can fight,has a body and stats."))
+  (:documentation "Something that can fight, has a body and stats."))
 
 (defgeneric provide-fighter-body (fighter &key &allow-other-keys))
 
@@ -44,6 +58,7 @@ With the exception of :left and :right. Those are added to `facing'."
     (if (keywordp state)
         (pushnew state states)
         (error "~&state must be a keyword. Got ~A~%" state))))
+
 
 (defmethod remove-state (state (this fighter))
   "Removes `state' to the players `states' list."
@@ -76,10 +91,11 @@ With the exception of :left and :right. Those are added to `facing'."
 (defclass ground-fighter (fighter)
   ((direction :initarg :direction
               :accessor direction
-              :initform (error "The fighter needs a direction he's facing.")
+              :initform 0
               :documentation "-1 for left, 0 for both, +1 for right")
    (last-direction :initarg :last-direction
                    :accessor last-direction
+                   :initform 1
                    :documentation "Indicates which direction the player faced last. +1 = right, -1 = left")))
 
 

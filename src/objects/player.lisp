@@ -49,12 +49,7 @@
 
 
 (defclass player (ground-fighter)
-  ()
-  (:default-initargs
-   :direction 0
-   :last-direction 1
-   :hp-max 5
-   :strength 5))
+  ())
 
 
 (defmethod provide-fighter-body ((this player) &key world position)
@@ -63,6 +58,7 @@
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) (or position (gk:vec2 50 20)))
+    (attach-box-shape body 12 26 :sensor (make-instance 'hitbox) :radius 5 :offset (gk:vec2 -6 0))
     body))
 
 
@@ -125,3 +121,21 @@
 
 (defmethod speed-of ((this player))
   *player-movement-speed*)
+
+
+(defclass player-bullet (bullet) ())
+
+
+(defmethod render-bullet ((this player-bullet))
+  (gk:draw-image +zero-pos+ 'player-projectile-0-right))
+
+
+(defmethod shoot ((this player))
+  (with-slots (last-direction) this
+    (with-world (world)
+      (unless (zerop last-direction)
+        (let ((sign (/ last-direction (abs last-direction)))
+              (pos (body-position (body-of this))))
+          (spawn-bullet 'player-bullet world
+                        (gk:add pos (gk:vec2 10 10))
+                        (gk:vec2 (* sign 500) 0)))))))

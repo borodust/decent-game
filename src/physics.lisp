@@ -215,7 +215,7 @@
   (with-slots ((this-body body) shapes universe) body
     (let ((shape (make-box-shape universe this-body
                                  width height
-                                 (or sensor body)
+                                 sensor
                                  offset
                                  radius)))
       (push shape (cdr shapes))
@@ -224,7 +224,7 @@
 
 (defun attach-circle-shape (body radius &key offset sensor)
   (with-slots ((this-body body) shapes universe) body
-    (let ((shape (make-circle-shape universe this-body radius (or sensor body) offset)))
+    (let ((shape (make-circle-shape universe this-body radius sensor offset)))
       (push shape (cdr shapes))
       shape)))
 
