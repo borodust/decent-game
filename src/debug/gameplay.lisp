@@ -94,16 +94,6 @@
     (stop-move-left (player-of world))))
 
 
-(defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :j)))
-  (with-slots (world) this
-    (start-shooting (player-of world))))
-
-
-(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :j)))
-  (with-slots (world) this
-    (stop-shooting (player-of world))))
-
-
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :space)))
   (with-slots (world) this
     (jump-player (player-of world))))
@@ -116,4 +106,21 @@
 
 (defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :enter)))
   (with-slots (world) this
+    (start-shooting (player-of world))
     (shoot (player-of world))))
+
+
+(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :enter)))
+  (with-slots (world) this
+    (stop-shooting (player-of world))))
+
+
+(defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :j)))
+  (with-slots (world) this
+    (start-shooting (player-of world))
+    (shoot (player-of world))))
+
+
+(defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :j)))
+  (with-slots (world) this
+    (stop-shooting (player-of world))))
