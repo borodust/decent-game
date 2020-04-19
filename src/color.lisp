@@ -26,3 +26,5 @@ You can also pass an optional opacity value as a second argument"
 
 
 (defvar +black+ (gk:vec4 0 0 0 1))
+(defvar +color-alien-light+ (hexcolor "#F4004C"))
+(defvar +color-alien-dark+ (hexcolor "#CB0035"))

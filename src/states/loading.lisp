@@ -1,12 +1,14 @@
 (cl:in-package :decent-game)
 
 
-(defclass loading-screen (state-input-handler)
-  ((pack-name :initarg :pack :initform (error ":pack missing"))
-   (pack :initform nil)
-   (next-state :initform (error ":next-state missing") :initarg :next-state)
-   (prepared-percentage :initform 100 ; 100 is the default, because if no resources are specified, there's nothing to load
-                        :documentation "Indicated what percentage of the resources has already benn loaded.")))
+(gk:define-image :loading-screen-bar-overlay (asset-path "img/hud/loading-screen-bar-overlay.png"))
+
+(define-resource-pack loading-screen-resources ()
+  :loading-screen-bar-overlay)
+
+
+(defclass loading-screen (base-loading-screen)
+  ())
 
 
 (defmethod gk:post-initialize ((this loading-screen))
@@ -31,11 +33,19 @@
 (defmethod gk:draw ((this loading-screen))
   (with-slots (prepared-percentage) this
     (let ((time (bodge-util:real-time-seconds)))
+      (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
       (gk:with-pushed-canvas ()
         (gk:translate-canvas (+ 128 (* (sin time) 20))
                              (+ 72 (* (cos time) 20)))
-        (gk:draw-circle +zero-pos+ (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint +black+))
+        (gk:draw-circle +zero-pos+ (+ 5 (* (abs (* (sin time) (cos time))) 6)) :fill-paint (hexcolor "#CB0035")))
       (gk:with-pushed-canvas ()
-        (gk:translate-canvas 230 6)
+        (draw-loading-bar prepared-percentage (gk:vec2 8 8) :bar-height 16 :bar-width 240)
+        ;; (gk:draw-image +zero-pos+ :loading-screen-bar-overlay)
+        )
+
+      (gk:with-pushed-canvas ()
+        (gk:translate-canvas 6 5)
         (gk:scale-canvas 0.5 0.5)
-        (gk:draw-text (format nil "~A %" prepared-percentage) +zero-pos+)))))
+        (gk:draw-text (format nil "~A%" prepared-percentage)
+                      +zero-pos+
+                      :fill-color +black+)))))

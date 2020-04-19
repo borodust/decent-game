@@ -60,3 +60,24 @@
         (gk:translate-canvas 0 line-height)
         (incf total-height line-height)))
     total-height))
+
+
+(defun draw-loading-bar (percentage pos &key
+                                          (light-color +color-alien-light+)
+                                          (dark-color +color-alien-dark+)
+                                          (bar-width 128)
+                                          (bar-height 16))
+  (let ((ratio (/ percentage 100))
+        (backdrop-scale-factor (/ bar-width 100))
+        (bar-scale-factor (if (zerop percentage) 0 (/ bar-width percentage))))
+    (gk:draw-rect pos
+                  (* 100  backdrop-scale-factor)
+                  bar-height
+                  :fill-paint dark-color)
+    (gk:draw-rect pos
+                  (* (* percentage bar-scale-factor) ratio)
+                  bar-height
+                  :fill-paint light-color)
+    ;; (draw-image (gamekit:subt pos (gk:vec2 21 7.5))
+    ;;             :bar-overlay)
+    ))
