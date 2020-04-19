@@ -28,6 +28,7 @@
                              (:file "level")
                              (:file "world")
                              (:file "stats")
+                             (:file "bullet")
                              (:file "fighter")
                              (:file "player")
                              (:module "enemies"

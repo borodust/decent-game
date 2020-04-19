@@ -112,3 +112,8 @@
 (defmethod gk.input:button-released ((this gameplay-debug-screen) (button (eql :escape)))
   (gk.fsm:transition-to 'loading-screen :pack 'main-menu-resources
                                         :next-state 'main-menu))
+
+
+(defmethod gk.input:button-pressed ((this gameplay-debug-screen) (button (eql :enter)))
+  (with-slots (world) this
+    (shoot (player-of world))))

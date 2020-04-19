@@ -44,12 +44,6 @@
     body))
 
 
-(defmethod shoot ((shooter alien-shooter) (shot fighter))
-  "Make the `shooter' shoot the `shot'."
-  ;; TODO
-  nil)
-
-
 (defmethod observe ((this alien-shooter))
   (let* ((player-pos (position-of (player-of *world*)))
          (alien-pos (position-of this))
