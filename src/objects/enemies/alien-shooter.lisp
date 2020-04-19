@@ -35,7 +35,7 @@
   (:documentation "A small alien enemy, which shoots thorns."))
 
 
-(defmethod make-fighter-body ((this alien-shooter) &key world position)
+(defmethod provide-fighter-body ((this alien-shooter) &key world position)
   (let ((body (make-circle-body (universe-of world)
                                 5
                                 :owner this

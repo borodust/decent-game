@@ -58,8 +58,9 @@
 ;;; BODY
 ;;;
 (defclass body (b:disposable)
-  ((body :initform nil)
-   (shape :initform nil)))
+  ((universe :initarg :universe)
+   (body :initform nil)
+   (shapes :initform (list nil))))
 
 
 (defgeneric provide-body (object universe &key &allow-other-keys))
@@ -114,6 +115,52 @@
   (setf (b.phy:collision-friction) (/ value *universe-scale*)))
 
 
+(defun make-box-shape (universe body width height substance offset radius)
+  (let* ((w (/ width *universe-scale*))
+         (h (/ height *universe-scale*))
+         (offset (or offset +zero-pos+)))
+    (b.phy:make-box-shape universe
+                          w h
+                          :body body
+                          :substance substance
+                          :radius radius
+                          :offset (b:vec2 (/ (+ (/ width 2) (gk:x offset)) *universe-scale*)
+                                          (/ (+ (/ height 2) (gk:y offset)) *universe-scale*)))))
+
+
+(defun attach-box-shape (body width height &key offset sensor radius)
+  (with-slots ((this-body body) shapes universe) body
+    (let ((shape (make-box-shape universe this-body
+                                 width height
+                                 (or sensor body)
+                                 offset
+                                 radius)))
+      (push shape (cdr shapes))
+      shape)))
+
+
+(defun make-circle-shape (universe body radius substance offset)
+  (let* ((r (/ radius *universe-scale*))
+         (offset (or offset +zero-pos+)))
+    (b.phy:make-circle-shape universe r
+                             :offset (b:div offset *universe-scale*)
+                             :body body
+                             :substance substance)))
+
+
+(defun attach-circle-shape (body radius &key offset sensor)
+  (with-slots ((this-body body) shapes universe) body
+    (let ((shape (make-circle-shape universe this-body radius (or sensor body) offset)))
+      (push shape (cdr shapes))
+      shape)))
+
+
+(defun detach-shape (body shape)
+  (with-slots (shapes) body
+    (a:deletef (cdr shapes) shape)
+    (b:dispose shape)))
+
+
 (defmethod provide-body ((this body) universe &key kinematic)
   (if kinematic
       (b.phy:make-kinematic-body universe)
@@ -123,13 +170,14 @@
 (defmethod initialize-instance :after ((this body) &rest args &key universe)
   (unless universe
     (error ":universe missing"))
-  (with-slots (body shape) this
-    (setf body (apply #'provide-body this universe args)
-          shape (apply #'provide-shape this body universe args))))
+  (with-slots (body shapes) this
+    (setf body (apply #'provide-body this universe args))
+    (push (apply #'provide-shape this body universe args) (cdr shapes))))
 
 
-(b:define-destructor body (body shape)
-  (b:dispose shape)
+(b:define-destructor body (body shapes)
+  (loop for shape in (rest shapes)
+        do (b:dispose shape))
   (b:dispose body))
 
 
@@ -145,17 +193,15 @@
    (height :initarg :height)))
 
 
-(defmethod provide-shape ((this box-body) body universe &key width height substance mass)
-  (let* ((w (/ width *universe-scale*))
-         (h (/ height *universe-scale*))
-         (shape (b.phy:make-box-shape universe
-                                      w h
-                                      :body body
-                                      :substance substance
-                                      :offset (b:vec2 (/ width 2 *universe-scale*)
-                                                      (/ height 2 *universe-scale*)))))
+(defmethod provide-shape ((this box-body) body universe &key width height substance mass offset radius)
+  (let ((shape (make-box-shape universe
+                               body
+                               width height
+                               substance
+                               offset
+                               radius)))
     (when mass
-      (b.phy:infuse-box-mass body mass w h))
+      (b.phy:infuse-box-mass body mass (/ width *universe-scale*) (/ height *universe-scale*)))
     shape))
 
 
@@ -184,21 +230,20 @@
   ((radius :initarg :radius)))
 
 
-(defmethod provide-shape ((this circle-body) body universe &key radius substance mass)
+(defmethod provide-shape ((this circle-body) body universe &key radius substance mass offset)
   (let* ((r (/ radius *universe-scale*))
-         (shape (b.phy:make-circle-shape universe r
-                                         :body body
-                                         :substance substance)))
+         (shape (make-circle-shape universe body radius (or substance this) offset)))
     (when mass
       (b.phy:infuse-circle-mass body mass r))
     shape))
 
 
-(defun make-circle-body (universe radius &key owner mass)
+(defun make-circle-body (universe radius &key owner mass offset)
   (make-instance 'circle-body :universe (%universe-of universe)
                               :radius radius
                               :substance owner
                               :mass mass
+                              :offset offset
                               :allow-other-keys t))
 
 

@@ -57,7 +57,7 @@
    :strength 5))
 
 
-(defmethod make-fighter-body ((this player) &key world position)
+(defmethod provide-fighter-body ((this player) &key world position)
   (let ((body (make-circle-body (universe-of world)
                                 5
                                 :owner this

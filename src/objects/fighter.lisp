@@ -16,11 +16,11 @@
    (body :initform nil :reader body-of))
   (:documentation "Something that can fight,has a body and stats."))
 
-(defgeneric make-fighter-body (fighter &key &allow-other-keys))
+(defgeneric provide-fighter-body (fighter &key &allow-other-keys))
 
 (defmethod initialize-instance :after ((this fighter) &rest args &key &allow-other-keys)
   (with-slots (body) this
-    (setf body (apply #'make-fighter-body this args))))
+    (setf body (apply #'provide-fighter-body this args))))
 
 (defmethod damage-for (amount (this fighter))
   "Damages the `hp' of `this' for `amount'. `This' can't fall below 0 hp."

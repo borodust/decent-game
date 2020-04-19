@@ -29,7 +29,7 @@
     (apply-force (body-of this) (gk:div (gk:subt target-vel alien-vel) 0.01 ))))
 
 
-(defmethod make-fighter-body ((this alien-stinger) &key world position)
+(defmethod provide-fighter-body ((this alien-stinger) &key world position)
   (let ((body (make-circle-body (universe-of world)
                                 5
                                 :owner this
