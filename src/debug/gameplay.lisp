@@ -66,7 +66,10 @@
 
 (defmethod gk:draw ((this gameplay-debug-screen))
   (with-slots (world) this
-    (render world)))
+    (render world)
+    ;;(draw-boss-life-bar boss)
+    ;;(draw-player-life-bar player)
+    ))
 
 
 ;;; input handling
