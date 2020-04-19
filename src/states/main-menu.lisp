@@ -1,8 +1,10 @@
 (cl:in-package :decent-game)
 
+(gk:define-sound menu-theme (asset-path "snd/music/intro.wav"))
+
 
 (define-resource-pack main-menu-resources (font-resources)
-  :menu-theme)
+  'menu-theme)
 
 
 (defclass main-menu (state-input-handler)
@@ -30,11 +32,11 @@
 
 
 (defmethod gk:post-initialize ((this main-menu))
-  (gk:play-sound :menu-theme :looped-p t))
+  (gk:play-sound 'menu-theme :looped-p t))
 
 
 (defmethod gk:pre-destroy ((this main-menu))
-  (gk:stop-sound :menu-theme))
+  (gk:stop-sound 'menu-theme))
 
 
 ;;; Input Handling

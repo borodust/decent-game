@@ -63,8 +63,8 @@
 (defclass dialogue ()
   ((dialogue :initform nil)
    (selected :initform 0)
-   (box-font :initform (gk:make-font :bold-pixel-operator 8))
-   (choice-font :initform (gk:make-font :pixel-operator 8))))
+   (box-font :initform (gk:make-font 'bold-pixel-operator 8))
+   (choice-font :initform (gk:make-font 'pixel-operator 8))))
 
 
 (defmethod initialize-instance :after ((this dialogue) &key event)
