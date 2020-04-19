@@ -89,13 +89,14 @@ With the exception of :left and :right. Those are added to `facing'."
   t)
 
 
-(defmethod process-collision ((this ground-fighter) (that obstacle))
-  (with-slots (body) this
-    (setf (body-angular-velocity body) 0)))
+(defun maintain-upright-stance (ground-fighter)
+  (with-slots (body) ground-fighter
+    (setf (body-angular-velocity body) 0
+          (body-rotation body) 0)))
 
 
-(defmethod process-collision ((that obstacle) (this ground-fighter))
-  (process-collision this that))
+(defmethod observe :before ((this ground-fighter))
+  (maintain-upright-stance this))
 
 
 (defmethod facing-right-p ((this ground-fighter))
