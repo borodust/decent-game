@@ -17,3 +17,17 @@
 
 (defun make-enemy (type world &key position)
   (make-instance type :world world :position position))
+
+
+(defun register-enemy-damage (enemy)
+  (shout "ENEMY DAMAGED"))
+
+
+(defmethod collide :after ((this enemy-hitbox) (that player-bullet))
+  (register-enemy-damage this)
+  (destroy-bullet that))
+
+
+(defmethod collide :after ((that player-bullet) (this enemy-hitbox))
+  (register-enemy-damage this)
+  (destroy-bullet that))

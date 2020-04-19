@@ -26,7 +26,7 @@
          (target-vec (b:subt player-pos alien-pos))
          (target-vel (gk:mult (gk:normalize target-vec) *alien-stinger-movement-speed*))
          (alien-vel (velocity-of this)))
-    (apply-force (body-of this) (gk:div (gk:subt target-vel alien-vel) 0.01 ))))
+    (apply-force (body-of this) (gk:div (gk:subt target-vel alien-vel) *observation-step*))))
 
 
 (defmethod provide-fighter-body ((this alien-stinger) &key world position)
@@ -35,6 +35,7 @@
                                 :owner this
                                 :mass 1)))
     (setf (body-position body) position)
+    (attach-box-shape body 16 32 :sensor (make-instance 'enemy-hitbox) :radius 5 :offset (gk:vec2 -8 -5))
     body))
 
 ;;; rendering

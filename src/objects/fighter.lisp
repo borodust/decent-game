@@ -11,18 +11,6 @@
 (defgeneric shoot (object))
 
 ;;;
-;;; HITBOX
-;;;
-(defclass hitbox () ())
-
-
-(defmethod collide :around ((this hitbox) anything)
-  nil)
-
-(defmethod collide :around (anything (this hitbox))
-  nil)
-
-;;;
 ;;; GENERIC FIGHTER
 ;;;
 (defclass fighter (stats)
@@ -95,6 +83,16 @@ With the exception of :left and :right. Those are added to `facing'."
          (< x-vel -.1))))
 
 
+(defun maintain-upright-stance (fighter)
+  (with-slots (body) fighter
+    (setf (body-angular-velocity body) 0
+          (body-rotation body) 0)))
+
+
+(defmethod observe :before ((this fighter))
+  (maintain-upright-stance this))
+
+
 ;;;
 ;;; GROUND FIGHTER
 ;;;
@@ -117,16 +115,6 @@ With the exception of :left and :right. Those are added to `facing'."
                                          ((< direction 0) (gk:vec2 (- (speed-of this)) 0))
                                          (t (gk:vec2 0 0)))))
   t)
-
-
-(defun maintain-upright-stance (ground-fighter)
-  (with-slots (body) ground-fighter
-    (setf (body-angular-velocity body) 0
-          (body-rotation body) 0)))
-
-
-(defmethod observe :before ((this ground-fighter))
-  (maintain-upright-stance this))
 
 
 (defmethod facing-right-p ((this ground-fighter))

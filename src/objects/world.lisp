@@ -30,7 +30,7 @@
     (dispose player)
     (loop for enemy in enemies
           do (dispose enemy))
-    (loop for (nil . bullet) in bullets
+    (loop for bullet in bullets
           do (dispose bullet))
     (dispose level)
     (dispose universe)))
@@ -43,12 +43,10 @@
       (observe player)
       (loop for enemy in enemies
             do (observe enemy))
-      (loop with current-time = (bodge-util:real-time-seconds)
-            for bullet-data in bullets
-            for (spawn-time . bullet) = bullet-data
-            do (if (> (- current-time spawn-time) (ttl-of bullet))
+      (loop for bullet in bullets
+            do (if (bullet-destroyed-p bullet)
                    (progn
-                     (a:deletef bullets bullet-data)
+                     (a:deletef bullets bullet)
                      (dispose bullet))
                    (observe bullet))))))
 
@@ -63,7 +61,7 @@
       (render level :kind :control-plane))
     (loop for enemy in enemies
           do (render enemy))
-    (loop for (nil . bullet) in bullets
+    (loop for bullet in bullets
           do (render bullet))
     (render player)))
 
@@ -76,8 +74,7 @@
 
 (defun spawn-bullet (bullet-class world position velocity)
   (with-slots (bullets) world
-    (push (cons (bodge-util:real-time-seconds) (make-bullet bullet-class world position velocity))
-          bullets))
+    (push (make-bullet bullet-class world position velocity) bullets))
   (values))
 
 
