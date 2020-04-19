@@ -14,6 +14,7 @@
 
 (defun now () (bodge-util:real-time-seconds))
 
+(defun get-player () (player-of (world-of (current-game-state))))
 
 (defun current-game-state () (gk.fsm:current-state))
 

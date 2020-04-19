@@ -25,7 +25,7 @@
 (define-animation player-projectile-0-right (asset-path "img/player/player-projectile-0-right.png") :frames 2)
 (define-animation player-projectile-0-left (asset-path "img/player/player-projectile-0-left.png") :frames 2)
 
-(define-resource-pack player-resources ()
+(define-resource-pack player-resources (player-life-bar-resources)
   'player-idle-right
   'player-idle-left
   'player-run-right
