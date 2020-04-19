@@ -83,7 +83,4 @@
     (gk:draw-rect pos
                   (* (* percentage bar-scale-factor) ratio)
                   bar-height
-                  :fill-paint light-color)
-    ;; (draw-image (gamekit:subt pos (gk:vec2 21 7.5))
-    ;;             :bar-overlay)
-    ))
+                  :fill-paint light-color)))

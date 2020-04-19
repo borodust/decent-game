@@ -145,7 +145,6 @@
                         (gk:vec2 (* sign 500) 0)))))))
 
 
-
 (defun register-player-damage (player)
   (with-slots (body next-dmg-time) player
     (unless (untouchable-p player)

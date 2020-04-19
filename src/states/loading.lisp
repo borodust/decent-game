@@ -23,7 +23,6 @@
     (gk:with-pushed-canvas ()
       (draw-loading-bar prepared-percentage (gk:vec2 8 8) :bar-height 16 :bar-width 240)
       (gk:draw-image +zero-pos+ 'loading-screen-bar-overlay))
-
     (gk:with-pushed-canvas ()
       (gk:translate-canvas 9 10)
       (gk:scale-canvas 0.5 0.5)
