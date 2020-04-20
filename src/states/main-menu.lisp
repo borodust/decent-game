@@ -1,10 +1,12 @@
 (cl:in-package :decent-game)
 
 (gk:define-sound menu-theme (asset-path "snd/music/intro.wav"))
+(gk:define-sound credits-tune (asset-path "snd/music/Hip2BCube_-_P_10.ogg"))
 
 
 (define-resource-pack main-menu-resources (font-resources)
-  'menu-theme)
+  'menu-theme
+  'credits-tune)
 
 
 (defclass main-menu (state-input-handler)

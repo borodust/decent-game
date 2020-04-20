@@ -2,6 +2,7 @@
 
 (defparameter *credits-pos* (gk:vec2 16 124))
 
+
 (defclass credits-screen (state-input-handler)
   ((credits-finished-p :initform nil :accessor credits-finished-p)))
 
@@ -16,7 +17,13 @@
         (t nil)))
 
 (defmethod gk:post-initialize ((this credits-screen))
+  (gk:play-sound 'credits-tune)
   (setf *credits-pos* (gk:vec2 16 124)))
+
+
+(defmethod gk:pre-destroy ((this credits-screen))
+  (gk:stop-sound 'credits-tune))
+
 
 (defmethod gk:draw ((this credits-screen))
   (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
