@@ -52,12 +52,12 @@
   (finish-output t))
 
 
-(defun draw-multiline-text (text position &key font line-height)
+(defun draw-multiline-text (text position &key font line-height (fill-color +black+))
   (let ((total-height 0)
         (line-height (- (or line-height 0))))
     (gk:with-pushed-canvas ()
       (bodge-util:dolines (line text)
-        (gk:draw-text line position :font font)
+        (gk:draw-text line position :font font :fill-color fill-color)
         (gk:translate-canvas 0 line-height)
         (incf total-height line-height)))
     total-height))
