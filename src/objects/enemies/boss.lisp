@@ -34,5 +34,10 @@
   (make-instance 'boss))
 
 
-(defmethod render ((this boss))
-  )
+(defmethod render ((this boss) &key)
+  (with-slots (states body) this
+    (let ((position (body-position body)))
+      (gk:with-pushed-canvas ()
+       (gk:translate-canvas (- (gk:x position) 14) (- (gk:y position) 12))
+       (let ((time (now)))
+         (cond (t (draw-animation 'boss-idle time +zero-pos+))))))))
