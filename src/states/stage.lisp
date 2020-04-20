@@ -55,25 +55,25 @@
    (destroy :initarg :destroy :initform (error ":destroy missing"))))
 
 
-(defun spawn-flyer (spawn)
+(defun spawn-stinger (spawn &optional count)
   (with-slots (world) (gk.fsm:current-state)
-    (loop repeat 1
-          for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
+    (loop repeat (or count 1)
+          for offset = (gk:vec2 (- (random 20) 10) (- (random 20) 10))
           do (spawn-enemy world 'alien-stinger spawn :offset offset))))
 
 
-(defun spawn-shooter (spawn)
+(defun spawn-shooter (spawn &optional count)
   (with-slots (world) (gk.fsm:current-state)
-    (loop repeat 1
-          for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
+    (loop repeat (or count 1)
+          for offset = (gk:vec2 (- (random 20) 10) (- (random 20) 10))
           do (spawn-enemy world 'alien-shooter spawn :offset offset))))
 
 
-(defun call-enemy (action &key spawn type)
+(defun call-enemy (action &key spawn type count)
   (declare (ignore action))
   (a:switch (type :test #'equal)
-    ("shooter" (spawn-shooter spawn))
-    ("stinger" (spawn-shooter spawn))))
+    ("shooter" (spawn-shooter spawn count))
+    ("stinger" (spawn-stinger spawn count))))
 
 
 (defun kill-player (action &key)

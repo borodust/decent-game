@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="44">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="53">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="2" name="background" width="256" height="18" visible="0" locked="1">
   <properties>
@@ -208,6 +208,86 @@
     <property name="event" value="enemy-call"/>
     <property name="kind" value="sensor"/>
     <property name="spawn" value="spawn-0"/>
+    <property name="type" value="shooter"/>
+   </properties>
+  </object>
+  <object id="44" x="199.525" y="-6.73626" width="14.1143" height="125.104">
+   <properties>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-1"/>
+    <property name="type" value="stinger"/>
+   </properties>
+  </object>
+  <object id="45" x="382.37" y="-7.37782" width="14.1143" height="125.104">
+   <properties>
+    <property name="count" type="int" value="2"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-2"/>
+    <property name="type" value="shooter"/>
+   </properties>
+  </object>
+  <object id="46" x="423.43" y="-6.0947" width="14.1143" height="125.104">
+   <properties>
+    <property name="count" type="int" value="1"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-3"/>
+    <property name="type" value="shooter"/>
+   </properties>
+  </object>
+  <object id="47" x="625.521" y="-7.37782" width="14.1143" height="125.104">
+   <properties>
+    <property name="count" type="int" value="2"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-4"/>
+    <property name="type" value="stinger"/>
+   </properties>
+  </object>
+  <object id="48" x="807.083" y="-4.81158" width="14.1143" height="125.104">
+   <properties>
+    <property name="count" type="int" value="3"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-5"/>
+    <property name="type" value="stinger"/>
+   </properties>
+  </object>
+  <object id="49" x="1151.6" y="-2.88689" width="14.1143" height="143.068">
+   <properties>
+    <property name="count" type="int" value="1"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-6"/>
+    <property name="type" value="stinger"/>
+   </properties>
+  </object>
+  <object id="50" x="1120.81" y="-4.17017" width="14.1143" height="143.068">
+   <properties>
+    <property name="count" type="int" value="1"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-7"/>
+    <property name="type" value="shooter"/>
+   </properties>
+  </object>
+  <object id="51" x="1353.69" y="-3.52861" width="14.1143" height="143.068">
+   <properties>
+    <property name="count" type="int" value="3"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-8"/>
+    <property name="type" value="stinger"/>
+   </properties>
+  </object>
+  <object id="52" x="1431.96" y="-2.24549" width="14.1143" height="143.068">
+   <properties>
+    <property name="count" type="int" value="3"/>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-9"/>
     <property name="type" value="shooter"/>
    </properties>
   </object>

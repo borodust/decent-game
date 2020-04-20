@@ -31,7 +31,7 @@
    (pack :initarg :pack)))
 
 
-(defun spawn-flyer (action &key)
+(defun spawn-debug-flyer (action &key)
   (declare (ignore action))
   (with-slots (world) (gk.fsm:current-state)
     (loop repeat 1
@@ -39,7 +39,7 @@
           do (spawn-enemy world 'alien-stinger "flyer-0" :offset offset))))
 
 
-(defun spawn-shooter (action &key)
+(defun spawn-debug-shooter (action &key)
   (declare (ignore action))
   (with-slots (world) (gk.fsm:current-state)
     (loop repeat 1
@@ -50,8 +50,8 @@
 (defmethod gk:post-initialize ((this gameplay-debug-screen))
   (with-slots (world) this
     (setf world (make-world 'test-level))
-    (subscribe-to-event :spawn-flyer-0 'spawn-flyer)
-    (subscribe-to-event :spawn-shooter-0 'spawn-shooter)))
+    (subscribe-to-event :spawn-flyer-0 'spawn-debug-flyer)
+    (subscribe-to-event :spawn-shooter-0 'spawn-debug-shooter)))
 
 
 (defmethod gk:pre-destroy ((this gameplay-debug-screen))
