@@ -68,11 +68,6 @@
                          :position position))
 
 
-(defmethod dispose :after ((this player))
-  (with-slots (body) this
-    (dispose body)))
-
-
 (defun stop-player (player)
   (setf (states player) (list)))
 
