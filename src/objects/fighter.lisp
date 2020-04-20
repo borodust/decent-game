@@ -21,6 +21,10 @@
 
 (defgeneric provide-fighter-body (fighter &key &allow-other-keys))
 
+(defmethod dispose :after ((this fighter))
+  (with-slots (body) this
+    (dispose body)))
+
 (defmethod initialize-instance :after ((this fighter) &rest args &key &allow-other-keys)
   (with-slots (body) this
     (setf body (apply #'provide-fighter-body this args))))
