@@ -201,3 +201,7 @@ With the exception of :left and :right. Those are added to `facing'."
 
 (defmethod untouchable-p ((this fighter))
   (< (now) (next-dmg-time this)))
+
+
+(defmethod kill ((this fighter))
+  (setf (hp this) 0))
