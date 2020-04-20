@@ -84,16 +84,14 @@
     (unsubscribe-from-event :player-death 'kill-player)))
 
 
-(defmethod gk:act ((this stage))
+(defmethod gk:act :before ((this stage))
   (with-slots (world) this
     (observe-world world)))
 
 
-(defmethod gk:draw ((this stage))
+(defmethod gk:draw :before ((this stage))
   (with-slots (world) this
     (render world)
-    (when (boss-exists-p world)
-      (draw-boss-life-bar (get-boss-of world) (gk:vec2 50 50)))
     (draw-player-life-bar (player-of world) (gk:vec2 10 125))))
 
 ;;;
