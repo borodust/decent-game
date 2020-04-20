@@ -15,6 +15,7 @@
          (incf (gk:y *credits-pos*) .25))
         (t nil)))
 
+
 (defmethod gk:post-initialize ((this credits-screen))
   (gk:play-sound 'credits-tune)
   (setf *credits-pos* (gk:vec2 16 124)))

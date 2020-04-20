@@ -111,8 +111,6 @@
   (with-slots (world) this
     (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
     (render world)
-    (when (boss-exists-p world)
-      (draw-boss-life-bar (get-boss-of world) (gk:vec2 156 126)))
     (draw-player-life-bar (player-of world) (gk:vec2 10 125))))
 
 ;;;

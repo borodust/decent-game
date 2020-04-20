@@ -291,56 +291,56 @@
   (:TYPE :OBJGR :NAME "control" :PROPERTIES NIL :OBJECTS
    ((:ID 52 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1431.96d0 -2.24549d0)
      :WIDTH 14.1143d0 :HEIGHT 143.068d0 :ROTATION 0.0d0 :PROPERTIES
-     (("spawn" "spawn-9") ("kind" "sensor") ("event" "enemy-call") ("count" 3)
-      ("type" "shooter")))
+     (("type" "shooter") ("spawn" "spawn-9") ("kind" "sensor") ("count" 3)
+      ("event" "enemy-call")))
     (:ID 51 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1353.69d0 -3.52861d0)
      :WIDTH 14.1143d0 :HEIGHT 143.068d0 :ROTATION 0.0d0 :PROPERTIES
-     (("type" "stinger") ("event" "enemy-call") ("count" 3) ("kind" "sensor")
-      ("spawn" "spawn-8")))
+     (("type" "stinger") ("spawn" "spawn-8") ("kind" "sensor")
+      ("event" "enemy-call") ("count" 3)))
     (:ID 50 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1120.81d0 -4.17017d0)
      :WIDTH 14.1143d0 :HEIGHT 143.068d0 :ROTATION 0.0d0 :PROPERTIES
-     (("spawn" "spawn-7") ("kind" "sensor") ("count" 1) ("event" "enemy-call")
-      ("type" "shooter")))
+     (("type" "shooter") ("spawn" "spawn-7") ("event" "enemy-call") ("count" 1)
+      ("kind" "sensor")))
     (:ID 49 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1151.6d0 -2.88689d0)
      :WIDTH 14.1143d0 :HEIGHT 143.068d0 :ROTATION 0.0d0 :PROPERTIES
-     (("spawn" "spawn-6") ("event" "enemy-call") ("count" 1) ("type" "stinger")
-      ("kind" "sensor")))
+     (("type" "stinger") ("kind" "sensor") ("count" 1) ("event" "enemy-call")
+      ("spawn" "spawn-6")))
     (:ID 48 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (807.083d0 -4.81158d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("type" "stinger") ("event" "enemy-call") ("kind" "sensor")
-      ("spawn" "spawn-5") ("count" 3)))
+     (("type" "stinger") ("kind" "sensor") ("event" "enemy-call") ("count" 3)
+      ("spawn" "spawn-5")))
     (:ID 47 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (625.521d0 -7.37782d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("count" 2) ("type" "stinger") ("spawn" "spawn-4") ("kind" "sensor")
-      ("event" "enemy-call")))
+     (("type" "stinger") ("kind" "sensor") ("spawn" "spawn-4")
+      ("event" "enemy-call") ("count" 2)))
     (:ID 46 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (423.43d0 -6.0947d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "sensor") ("type" "shooter") ("spawn" "spawn-3")
-      ("event" "enemy-call") ("count" 1)))
+     (("kind" "sensor") ("event" "enemy-call") ("type" "shooter")
+      ("spawn" "spawn-3") ("count" 1)))
     (:ID 45 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (382.37d0 -7.37782d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("type" "shooter") ("spawn" "spawn-2") ("event" "enemy-call")
-      ("kind" "sensor") ("count" 2)))
+     (("spawn" "spawn-2") ("kind" "sensor") ("event" "enemy-call") ("count" 2)
+      ("type" "shooter")))
     (:ID 44 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (199.525d0 -6.73626d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("spawn" "spawn-1") ("type" "stinger") ("event" "enemy-call")
-      ("kind" "sensor")))
+     (("type" "stinger") ("kind" "sensor") ("spawn" "spawn-1")
+      ("event" "enemy-call")))
     (:ID 43 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (84.686d0 -6.4156d0)
      :WIDTH 14.1143d0 :HEIGHT 125.104d0 :ROTATION 0.0d0 :PROPERTIES
-     (("event" "enemy-call") ("type" "shooter") ("kind" "sensor")
-      ("spawn" "spawn-0")))
+     (("spawn" "spawn-0") ("kind" "sensor") ("type" "shooter")
+      ("event" "enemy-call")))
     (:ID 39 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1657.38d0 57.9641d0)
      :WIDTH 14.5984d0 :HEIGHT 20.7692d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "sensor") ("event" "level-finished")))
+     (("event" "level-finished") ("kind" "sensor")))
     (:ID 38 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1645.82d0 107.848d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "enemy-spawn") ("enemy" "spawn-9")))
+     (("enemy" "spawn-9") ("kind" "enemy-spawn")))
     (:ID 37 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1358.53d0 76.1283d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "enemy-spawn") ("enemy" "spawn-7")))
+     (("enemy" "spawn-7") ("kind" "enemy-spawn")))
     (:ID 36 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1508.07d0 21.751d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "enemy-spawn") ("enemy" "spawn-8")))
+     (("enemy" "spawn-8") ("kind" "enemy-spawn")))
     (:ID 35 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1357.62d0 25.3761d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
      (("kind" "enemy-spawn") ("enemy" "spawn-6")))
@@ -349,16 +349,16 @@
      (("kind" "enemy-spawn") ("enemy" "spawn-5")))
     (:ID 33 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (851.006d0 40.783d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("enemy" "spawn-4") ("kind" "enemy-spawn")))
-    (:ID 32 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (623.527d0 99.6919d0)
+     (("kind" "enemy-spawn") ("enemy" "spawn-4")))
+    (:ID 32 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (623.527d0 95.2009d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("kind" "enemy-spawn") ("enemy" "spawn-3")))
-    (:ID 31 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (562.806d0 75.222d0)
+     (("enemy" "spawn-3") ("kind" "enemy-spawn")))
+    (:ID 31 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (562.806d0 70.7311d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("enemy" "spawn-2") ("kind" "enemy-spawn")))
+     (("kind" "enemy-spawn") ("enemy" "spawn-2")))
     (:ID 30 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (406.077d0 54.6642d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
-     (("enemy" "spawn-1") ("kind" "enemy-spawn")))
+     (("kind" "enemy-spawn") ("enemy" "spawn-1")))
     (:ID 29 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (254.863d0 51.8245d0)
      :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
      (("kind" "enemy-spawn") ("enemy" "spawn-0")))

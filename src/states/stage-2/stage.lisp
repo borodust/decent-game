@@ -40,11 +40,17 @@
 (defclass stage-2 (stage)
   ()
   (:default-initargs :init 'init-stage-2
-                     :next 'init-screen
+                     :next 'credits-screen
                      :destroy 'destroy-stage-2))
 
 
-(defmethod gk:draw ((this stage-2)))
+(defmethod gk:act ((this stage-2))
+  (unless (boss-exists-p (world-of this))
+    (trigger-event :level-finished)))
+
+
+(defmethod gk:draw ((this stage-2))
+  (draw-boss-life-bar (get-boss-of (world-of this)) (gk:vec2 156 126)))
 
 
 (defmethod gk:post-initialize ((this stage-2))

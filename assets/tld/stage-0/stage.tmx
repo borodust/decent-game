@@ -141,14 +141,14 @@
    </properties>
    <point/>
   </object>
-  <object id="31" x="562.806" y="75.222">
+  <object id="31" x="562.806" y="70.7311">
    <properties>
     <property name="enemy" value="spawn-2"/>
     <property name="kind" value="enemy-spawn"/>
    </properties>
    <point/>
   </object>
-  <object id="32" x="623.527" y="99.6919">
+  <object id="32" x="623.527" y="95.2009">
    <properties>
     <property name="enemy" value="spawn-3"/>
     <property name="kind" value="enemy-spawn"/>
