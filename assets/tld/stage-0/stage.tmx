@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="28">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="44">
  <tileset firstgid="1" source="tiles.tsx"/>
- <layer id="2" name="background" width="256" height="18" visible="0">
+ <layer id="2" name="background" width="256" height="18" visible="0" locked="1">
   <properties>
    <property name="kind" value="background"/>
   </properties>
@@ -26,7 +26,7 @@
 135,136,522,515,516,517,518,519,520,521,522,523,524,148,515,516,517,518,519,520,521,522,523,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,524,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="1" name="foreground" width="256" height="18">
+ <layer id="1" name="foreground" width="256" height="18" locked="1">
   <properties>
    <property name="kind" value="foreground"/>
   </properties>
@@ -125,6 +125,90 @@
   <object id="27" x="1672.95" y="-15.0264" width="21.0592" height="159.507">
    <properties>
     <property name="kind" value="platform"/>
+   </properties>
+  </object>
+  <object id="29" x="254.863" y="51.8245">
+   <properties>
+    <property name="enemy" value="spawn-0"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="30" x="406.077" y="54.6642">
+   <properties>
+    <property name="enemy" value="spawn-1"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="31" x="562.806" y="75.222">
+   <properties>
+    <property name="enemy" value="spawn-2"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="32" x="623.527" y="99.6919">
+   <properties>
+    <property name="enemy" value="spawn-3"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="33" x="851.006" y="40.783">
+   <properties>
+    <property name="enemy" value="spawn-4"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="34" x="1097.52" y="29.9076">
+   <properties>
+    <property name="enemy" value="spawn-5"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="35" x="1357.62" y="25.3761">
+   <properties>
+    <property name="enemy" value="spawn-6"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="36" x="1508.07" y="21.751">
+   <properties>
+    <property name="enemy" value="spawn-8"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="37" x="1358.53" y="76.1283">
+   <properties>
+    <property name="enemy" value="spawn-7"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="38" x="1645.82" y="107.848">
+   <properties>
+    <property name="enemy" value="spawn-9"/>
+    <property name="kind" value="enemy-spawn"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="39" x="1657.38" y="57.9641" width="14.5984" height="20.7692">
+   <properties>
+    <property name="event" value="level-finished"/>
+    <property name="kind" value="sensor"/>
+   </properties>
+  </object>
+  <object id="43" x="84.686" y="-6.4156" width="14.1143" height="125.104">
+   <properties>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-0"/>
+    <property name="type" value="shooter"/>
    </properties>
   </object>
  </objectgroup>
