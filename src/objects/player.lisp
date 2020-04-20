@@ -142,11 +142,9 @@
       (unless (zerop last-direction)
         (let ((sign (/ last-direction (abs last-direction)))
               (pos (body-position (body-of this))))
-          (when (facing-right-p this)
-            (spawn-bullet 'player-bullet world
-                          (gk:add pos (gk:vec2 10 10))
-                          (gk:vec2 (* sign 500) 0))
-            ))))))
+          (spawn-bullet 'player-bullet world
+                        (gk:add pos (gk:vec2 0 10))
+                        (gk:vec2 (* sign 500) 0)))))))
 
 
 (defun register-player-damage (player)
