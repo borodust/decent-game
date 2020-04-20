@@ -78,13 +78,14 @@
 
 
 (defun jump-player (player)
-  (unless (or (jumping-p player) (falling-p player))
-   (with-slots (states body direction) player
-     (cond ((idle-p player)
-            (apply-force body (gk:vec2 0 *player-jump-strength*)))
-           (t (let ((reverse-thrust (gk:vec2 0 1) ;;(gk:vec2 (* -.3713907  direction) 0.92847675)
-                      )) ;; -0.3713907 0.92847675
-                (apply-force body (gk:mult reverse-thrust *player-jump-strength*))))))))
+  (unless (null player)
+   (unless (or (jumping-p player) (falling-p player))
+     (with-slots (states body direction) player
+       (cond ((idle-p player)
+              (apply-force body (gk:vec2 0 *player-jump-strength*)))
+             (t (let ((reverse-thrust (gk:vec2 0 1) ;;(gk:vec2 (* -.3713907  direction) 0.92847675)
+                                      )) ;; -0.3713907 0.92847675
+                  (apply-force body (gk:mult reverse-thrust *player-jump-strength*)))))))))
 
 
 (defmethod collide :after ((this sensor) (that player))

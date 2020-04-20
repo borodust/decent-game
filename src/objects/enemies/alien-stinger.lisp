@@ -27,6 +27,8 @@
 
 (defclass alien-stinger (alien fighter)
   ()
+  (:default-initargs
+   :hp-max 1)
   (:documentation "A medium sized alien enemy, which stings downwards."))
 
 

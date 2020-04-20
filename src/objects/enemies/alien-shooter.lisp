@@ -39,7 +39,7 @@
 (defclass alien-shooter (alien ground-fighter)
   ((last-shot :initform nil))
   (:default-initargs
-   :hp-max 15
+   :hp-max 2
    :strength 5
    :attack-speed 12                     ; frames between attacks
    :movement-speed 50)

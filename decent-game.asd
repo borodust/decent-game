@@ -47,6 +47,7 @@
                              (:file "dialogue")
                              (:file "replay")
                              (:file "pause")
+                             (:file "credits")
                              (:file "stage")
                              (:module "stage-0"
                               :components ((:file "stage")))
