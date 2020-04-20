@@ -93,6 +93,9 @@ With the exception of :left and :right. Those are added to `facing'."
 (defmethod observe :before ((this fighter))
   (maintain-upright-stance this))
 
+(defmethod hurt-p ((this fighter))
+  (member :hurt (states this)))
+
 
 ;;;
 ;;; GROUND FIGHTER
@@ -119,7 +122,10 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defmethod dead-p ((this fighter))
-  (>= 0 (hp this)))
+  (member :dead (states this)))
+
+(defmethod dying-p ((this fighter))
+  (member :dying (states this)))
 
 
 (defmethod facing-right-p ((this ground-fighter))
@@ -204,4 +210,4 @@ With the exception of :left and :right. Those are added to `facing'."
 
 
 (defmethod kill ((this fighter))
-  (setf (hp this) 0))
+  (add-state :dead this))

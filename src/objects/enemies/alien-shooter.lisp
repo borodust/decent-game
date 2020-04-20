@@ -16,6 +16,14 @@
     (asset-path "img/alien-shooter-0/alien-shooter-0-attack-ranged-0.png")
   :frames 2)
 
+(define-animation alien-shooter-0-hurt
+    (asset-path "img/alien-shooter-0/alien-shooter-0-hurt.png")
+  :frame 1)
+
+(define-animation alien-shooter-0-dying
+    (asset-path "img/alien-shooter-0/alien-shooter-0-dying.png")
+  :frame 4)
+
 (define-animation alien-shooter-0-attack-projectile-0
     (asset-path "img/alien-shooter-0/alien-shooter-0-projectile-0.png")
   :frames 1)
@@ -23,6 +31,8 @@
 (define-resource-pack alien-shooter-0-resources ()
   'alien-shooter-0-walk-0
   'alien-shooter-0-attack-shoot-0
+  'alien-shooter-0-hurt
+  'alien-shooter-0-dying
   'alien-shooter-0-attack-projectile-0)
 
 
@@ -109,9 +119,13 @@
     (let ((time (bodge-util:real-time-seconds)))
       (cond ((facing-right-p this)
              (cond
+               ((dying-p this) (draw-animation 'alien-shooter-0-dying time +zero-pos+ :mirror-x t))
+               ((hurt-p this) (draw-animation 'alien-shooter-0-hurt time +zero-pos+ :mirror-x t))
                (t (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+ :mirror-x t))))
             ((facing-left-p this)
              (cond
+               ((dying-p this) (draw-animation 'alien-shooter-0-dying time +zero-pos+))
+               ((hurt-p this) (draw-animation 'alien-shooter-0-hurt time +zero-pos+))
                (t (draw-animation 'alien-shooter-0-walk-0 time +zero-pos+))))
             (t (error "Alien-shooter should only be able to either face left or right.")))
       )))
