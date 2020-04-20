@@ -84,12 +84,12 @@
     (unsubscribe-from-event :player-death 'kill-player)))
 
 
-(defmethod gk:act ((this stage))
+(defmethod gk:act :before ((this stage))
   (with-slots (world) this
     (observe-world world)))
 
 
-(defmethod gk:draw ((this stage))
+(defmethod gk:draw :before ((this stage))
   (with-slots (world) this
     (render world)
     (when (boss-exists-p world)
