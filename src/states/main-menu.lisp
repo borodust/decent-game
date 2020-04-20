@@ -16,18 +16,21 @@
   (with-slots (menu) this
     (flet ((%start-game ()
              (gk.fsm:transition-to 'init-stage-0))
-           (%gameplay-debug-screen ()
-             (gk.fsm:transition-to 'init-gameplay-debug-screen))
-           (%animation-debug-screen ()
-             (gk.fsm:transition-to 'init-animation-debug-screen))
-           (%dialogue-debug-screen ()
-             (gk.fsm:transition-to 'dialogue-debug-screen))
+           ;; (%gameplay-debug-screen ()
+           ;;   (gk.fsm:transition-to 'init-gameplay-debug-screen))
+           ;; (%animation-debug-screen ()
+           ;;   (gk.fsm:transition-to 'init-animation-debug-screen))
+           ;; (%dialogue-debug-screen ()
+           ;;   (gk.fsm:transition-to 'dialogue-debug-screen))
+           (%credits-screen ()
+             (gk.fsm:transition-to 'credits-screen))
            (%exit ()
              (gk:stop)))
       (setf menu (make-instance 'menu :items (list "START GAME" #'%start-game
-                                                   "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
-                                                   "DEBUG-ANIMATION" #'%animation-debug-screen
-                                                   "DEBUG-DIALOGUE" #'%dialogue-debug-screen
+                                                   ;; "DEBUG-GAMEPLAY" #'%gameplay-debug-screen
+                                                   ;; "DEBUG-ANIMATION" #'%animation-debug-screen
+                                                   ;; "DEBUG-DIALOGUE" #'%dialogue-debug-screen
+                                                   "CREDITS" #'%credits-screen
                                                    "EXIT" #'%exit))))))
 
 
@@ -84,5 +87,5 @@
   (with-slots (menu) this
     (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
     (gk:with-pushed-canvas ()
-      (gk:translate-canvas 60 140)
+      (gk:translate-canvas 90 100)
       (render menu))))
