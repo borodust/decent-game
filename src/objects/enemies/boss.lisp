@@ -40,4 +40,6 @@
       (gk:with-pushed-canvas ()
        (gk:translate-canvas (- (gk:x position) 14) (- (gk:y position) 12))
        (let ((time (now)))
-         (cond (t (draw-animation 'boss-idle time +zero-pos+))))))))
+         (cond ((dying-p this) (draw-animation 'boss-dying time +zero-pos+))
+               ((hurt-p this) (draw-animation 'boss-hurt time +zero-pos+))
+               (t (draw-animation 'boss-idle time +zero-pos+))))))))

@@ -20,8 +20,15 @@
 
 
 (defun register-enemy-damage (enemy)
-  (damage-for (strength (get-player)) (owner-of enemy))
-  (shout "ENEMY DAMAGED"))
+  (unless (>= 0 (hp (owner-of enemy)))
+    (damage-for (strength (get-player)) (owner-of enemy))
+    (add-state :hurt (owner-of enemy))
+    (add-timer (+ (now) .2)
+               (lambda () (remove-state :hurt (owner-of enemy))))
+    (when (>= 0 (hp (owner-of enemy)))
+      (add-state :dying (owner-of enemy))
+      (add-timer (+ (now) .3) (lambda () (kill (owner-of enemy)))))
+   (shout "ENEMY DAMAGED")))
 
 
 (defmethod collide :after ((this enemy-hitbox) (that player-bullet))

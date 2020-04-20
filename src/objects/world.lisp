@@ -43,7 +43,12 @@
       (observe-universe universe *observation-step* *observation-repeats*)
       (observe player)
       (loop for enemy in enemies
-            do (observe enemy))
+            do (if (dead-p enemy)
+                   (progn
+                     (a:deletef enemies enemy)
+                     (dispose enemy))
+                   (observe enemy)))
+
       (loop for bullet in bullets
             do (if (bullet-destroyed-p bullet)
                    (progn
