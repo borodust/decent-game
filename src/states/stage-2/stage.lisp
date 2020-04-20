@@ -42,8 +42,7 @@
   (:default-initargs :init 'init-stage-2))
 
 
-(defmethod gk:draw ((this stage-2))
-  (draw-boss-life-bar (get-boss-of (world-of this)) (gk:vec2 50 50)))
+(defmethod gk:draw ((this stage-2)))
 
 
 (defmethod gk:post-initialize ((this stage-2))
