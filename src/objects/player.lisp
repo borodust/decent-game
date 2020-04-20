@@ -25,6 +25,8 @@
 (define-animation player-projectile-0-right (asset-path "img/player/player-projectile-0-right.png") :frames 2)
 (define-animation player-projectile-0-left (asset-path "img/player/player-projectile-0-left.png") :frames 2)
 
+(gk:define-sound blaster-shot (asset-path "snd/sfx/select_001.ogg"))
+
 (define-resource-pack player-resources (player-life-bar-resources)
   'player-idle-right
   'player-idle-left
@@ -45,7 +47,8 @@
   'player-dying-right
   'player-dying-left
   'player-projectile-0-right
-  'player-projectile-0-left)
+  'player-projectile-0-left
+  'blaster-shot)
 
 
 (defclass player (ground-fighter)
@@ -140,7 +143,8 @@
               (pos (body-position (body-of this))))
           (spawn-bullet 'player-bullet world
                         (gk:add pos (gk:vec2 0 10))
-                        (gk:vec2 (* sign 500) 0)))))))
+                        (gk:vec2 (* sign 500) 0))
+          (gk:play-sound 'blaster-shot))))))
 
 
 (defun register-player-damage (player)
