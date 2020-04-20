@@ -78,6 +78,7 @@
 (defclass sensor (control)
   ((body :initform nil)
    (fired :initform nil)
+   (options :initarg :options)
    (event :initarg :event)
    (width :initarg :width)
    (height :initarg :height)))
@@ -90,10 +91,10 @@
 
 
 (defun trigger-sensor-event (sensor)
-  (with-slots (fired event) sensor
+  (with-slots (fired event options) sensor
     (unless fired
       (setf fired t)
-      (trigger-event event))))
+      (apply #'trigger-event event options))))
 
 
 (defmethod collide :around ((this sensor) that)
@@ -274,6 +275,14 @@
   (first (gethash key props)))
 
 
+(defun level-properties->plist (props)
+  (loop for key being the hash-key of props using (hash-value value)
+        append (list (a:make-keyword (uiop:standard-case-symbol-name key))
+                     (if (rest value)
+                         value
+                         (first value)))))
+
+
 (defun parse-platform (&key kind position width height points &allow-other-keys)
   (let ((position (destructuring-bind (x y) position
                     (gk:vec2 x (invert-absolute-y y height))))
@@ -297,7 +306,8 @@
                                       :height height
                                       :event (a:make-keyword
                                               (uiop:standard-case-symbol-name
-                                               (get-level-property props "event"))))))))
+                                               (get-level-property props "event")))
+                                      :options (level-properties->plist props))))))
 
 
 (defun parse-control-plane (&key objects &allow-other-keys)

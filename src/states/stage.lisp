@@ -55,20 +55,25 @@
    (destroy :initarg :destroy :initform (error ":destroy missing"))))
 
 
-(defun spawn-flyer (action &key)
-  (declare (ignore action))
+(defun spawn-flyer (spawn)
   (with-slots (world) (gk.fsm:current-state)
     (loop repeat 1
           for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
-          do (spawn-enemy world 'alien-stinger "flyer-0" :offset offset))))
+          do (spawn-enemy world 'alien-stinger spawn :offset offset))))
 
 
-(defun spawn-shooter (action &key)
-  (declare (ignore action))
+(defun spawn-shooter (spawn)
   (with-slots (world) (gk.fsm:current-state)
     (loop repeat 1
           for offset = (gk:vec2 (- (random 10) 5) (- (random 10) 5))
-          do (spawn-enemy world 'alien-shooter "shooter-0" :offset offset))))
+          do (spawn-enemy world 'alien-shooter spawn :offset offset))))
+
+
+(defun call-enemy (action &key spawn type)
+  (declare (ignore action))
+  (a:switch (type :test #'equal)
+    ("shooter" (spawn-shooter spawn))
+    ("stinger" (spawn-shooter spawn))))
 
 
 (defun kill-player (action &key)
@@ -86,12 +91,14 @@
 (defmethod gk:post-initialize :before ((this stage))
   (with-slots (world) this
     (subscribe-to-event :player-death 'kill-player)
+    (subscribe-to-event :enemy-call 'call-enemy)
     (subscribe-to-event :level-finished 'finish-level)))
 
 
 (defmethod gk:pre-destroy :after ((this stage))
   (with-slots (world pack) this
     (unsubscribe-from-event :player-death 'kill-player)
+    (unsubscribe-from-event :enemy-call 'call-enemy)
     (unsubscribe-from-event :level-finished 'finish-level)))
 
 

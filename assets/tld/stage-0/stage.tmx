@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="40">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-up" width="256" height="18" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="44">
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="2" name="background" width="256" height="18" visible="0" locked="1">
   <properties>
@@ -201,6 +201,14 @@
    <properties>
     <property name="event" value="level-finished"/>
     <property name="kind" value="sensor"/>
+   </properties>
+  </object>
+  <object id="43" x="84.686" y="-6.4156" width="14.1143" height="125.104">
+   <properties>
+    <property name="event" value="enemy-call"/>
+    <property name="kind" value="sensor"/>
+    <property name="spawn" value="spawn-0"/>
+    <property name="type" value="shooter"/>
    </properties>
   </object>
  </objectgroup>
