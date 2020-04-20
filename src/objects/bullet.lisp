@@ -10,7 +10,7 @@
 (defclass bullet ()
   ((body :initform nil)
    (spawn-time :initform (bodge-util:real-time-seconds))
-   (velocity :initarg :velocity)))
+   (velocity :initarg :velocity :accessor velocity-of)))
 
 
 (defmethod ttl-of ((this bullet))

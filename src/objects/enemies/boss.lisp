@@ -32,3 +32,7 @@
 
 (defun make-boss ()
   (make-instance 'boss))
+
+
+(defmethod render ((this boss))
+  )

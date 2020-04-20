@@ -131,7 +131,9 @@
 
 
 (defmethod render-bullet ((this player-bullet))
-  (gk:draw-image +zero-pos+ 'player-projectile-0-right))
+  (if (plusp (gk:x (velocity-of this)))
+      (gk:draw-image +zero-pos+ 'player-projectile-0-right)
+      (gk:draw-image +zero-pos+ 'player-projectile-0-left)))
 
 
 (defmethod shoot ((this player))
@@ -140,9 +142,11 @@
       (unless (zerop last-direction)
         (let ((sign (/ last-direction (abs last-direction)))
               (pos (body-position (body-of this))))
-          (spawn-bullet 'player-bullet world
-                        (gk:add pos (gk:vec2 10 10))
-                        (gk:vec2 (* sign 500) 0)))))))
+          (when (facing-right-p this)
+            (spawn-bullet 'player-bullet world
+                          (gk:add pos (gk:vec2 10 10))
+                          (gk:vec2 (* sign 500) 0))
+            ))))))
 
 
 (defun register-player-damage (player)
