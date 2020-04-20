@@ -91,6 +91,7 @@
 
 (defmethod gk:draw :before ((this stage))
   (with-slots (world) this
+    (gk:draw-rect +zero-pos+ 256 144 :fill-paint +black+)
     (render world)
     (when (boss-exists-p world)
       (draw-boss-life-bar (get-boss-of world) (gk:vec2 156 126)))
