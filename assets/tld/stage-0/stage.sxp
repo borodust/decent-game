@@ -289,7 +289,40 @@
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0))
   (:TYPE :OBJGR :NAME "control" :PROPERTIES NIL :OBJECTS
-   ((:ID 27 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1672.95d0 -15.0264d0)
+   ((:ID 39 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1657.38d0 57.9641d0)
+     :WIDTH 14.5984d0 :HEIGHT 20.7692d0 :ROTATION 0.0d0 :PROPERTIES
+     (("event" "level-finished") ("kind" "sensor")))
+    (:ID 38 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1645.82d0 107.848d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-9")))
+    (:ID 37 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1358.53d0 76.1283d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-7")))
+    (:ID 36 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1508.07d0 21.751d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("enemy" "spawn-8") ("kind" "enemy-spawn")))
+    (:ID 35 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1357.62d0 25.3761d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-6")))
+    (:ID 34 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (1097.52d0 29.9076d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-5")))
+    (:ID 33 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (851.006d0 40.783d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-4")))
+    (:ID 32 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (623.527d0 99.6919d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-3")))
+    (:ID 31 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (562.806d0 75.222d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("enemy" "spawn-2") ("kind" "enemy-spawn")))
+    (:ID 30 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (406.077d0 54.6642d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-1")))
+    (:ID 29 :KIND :POINT :NAME NIL :TYPE NIL :POSITION (254.863d0 51.8245d0)
+     :WIDTH 0.0d0 :HEIGHT 0.0d0 :ROTATION 0.0d0 :PROPERTIES
+     (("kind" "enemy-spawn") ("enemy" "spawn-0")))
+    (:ID 27 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (1672.95d0 -15.0264d0)
      :WIDTH 21.0592d0 :HEIGHT 159.507d0 :ROTATION 0.0d0 :PROPERTIES
      (("kind" "platform")))
     (:ID 26 :KIND :SQUARE :NAME NIL :TYPE NIL :POSITION (-165.25d0 136.333d0)

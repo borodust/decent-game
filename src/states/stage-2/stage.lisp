@@ -39,7 +39,9 @@
 ;;;
 (defclass stage-2 (stage)
   ()
-  (:default-initargs :init 'init-stage-2))
+  (:default-initargs :init 'init-stage-2
+                     :next 'init-screen
+                     :destroy 'destroy-stage-2))
 
 
 (defmethod gk:draw ((this stage-2))

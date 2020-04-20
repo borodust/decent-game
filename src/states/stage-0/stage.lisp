@@ -40,7 +40,9 @@
 ;;;
 (defclass stage-0 (stage)
   ()
-  (:default-initargs :init 'init-stage-0))
+  (:default-initargs :init 'init-stage-0
+                     :next 'init-stage-2
+                     :destroy 'destroy-stage-0))
 
 
 ;;;

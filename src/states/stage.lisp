@@ -32,24 +32,27 @@
 ;;;
 ;;; DESTROY
 ;;;
-(defclass destroy-stage (loading-screen)
+(defclass destroy-stage ()
   ((world :initarg :world :initform (error ":world missing"))
-   (pack :initarg :pack :initform (error ":pack missing"))))
+   (pack :initarg :pack :initform (error ":pack missing"))
+   (next :initarg :next :initform (error ":next missing"))))
 
 
-(defmethod gk:pre-destroy :after ((this destroy-stage))
-  (with-slots (world pack) this
+(defmethod gk:post-initialize :after ((this destroy-stage))
+  (with-slots (world pack next) this
     (dispose world)
     (dispose-resource-pack pack)
-    (call-next-method)))
+    (gk.fsm:transition-to next)))
 
 ;;;
 ;;; PLAY
 ;;;
 (defclass stage (state-input-handler)
-  ((world :initarg :world :initform (error ":pack missing") :reader world-of)
+  ((world :initarg :world :initform (error ":world missing") :reader world-of)
    (pack :initarg :pack :initform (error ":pack missing"))
-   (init :initarg :init :initform (error ":init missing"))))
+   (init :initarg :init :initform (error ":init missing"))
+   (next :initarg :next :initform (error ":next missing"))
+   (destroy :initarg :destroy :initform (error ":destroy missing"))))
 
 
 (defun spawn-flyer (action &key)
@@ -74,14 +77,22 @@
     (gk.fsm:transition-to init)))
 
 
+(defun finish-level (action &key)
+  (declare (ignore action))
+  (with-slots (next destroy world pack) (gk.fsm:current-state)
+    (gk.fsm:transition-to destroy :next next :world world :pack pack)))
+
+
 (defmethod gk:post-initialize :before ((this stage))
   (with-slots (world) this
-    (subscribe-to-event :player-death 'kill-player)))
+    (subscribe-to-event :player-death 'kill-player)
+    (subscribe-to-event :level-finished 'finish-level)))
 
 
 (defmethod gk:pre-destroy :after ((this stage))
   (with-slots (world pack) this
-    (unsubscribe-from-event :player-death 'kill-player)))
+    (unsubscribe-from-event :player-death 'kill-player)
+    (unsubscribe-from-event :level-finished 'finish-level)))
 
 
 (defmethod gk:act :before ((this stage))
