@@ -9,10 +9,9 @@
 (defmethod gk:act ((this credits-screen))
   (cond ((and (> (gk:y *credits-pos*) 420)
               (not (credits-finished-p this)))
-         (setf (credits-finished-p this) t)
-         (add-timer (+ (now) 2) (lambda () (gk.fsm:transition-to 'main-menu))))
+         (setf (credits-finished-p this) t))
         ((not (credits-finished-p this))
-         (incf (gk:y *credits-pos*) .5))
+         (incf (gk:y *credits-pos*) .25))
         (t nil)))
 
 (defmethod gk:post-initialize ((this credits-screen))
@@ -77,8 +76,13 @@ Additional testing by:
 (defmethod gk.input:button-pressed ((this credits-screen) (key (eql :up)))
   (scroll-up this))
 
+
 (defmethod gk.input:dpad-changed ((this credits-screen) (key (eql :up)))
   (scroll-up this))
+
+
+(defmethod gk.input:button-pressed ((this credits-screen) (key (eql :escape)))
+  (gk.fsm:transition-to 'main-menu))
 
 (defmethod scroll-up ((this credits-screen))
   (decf (gk:y *credits-pos*) 5))
