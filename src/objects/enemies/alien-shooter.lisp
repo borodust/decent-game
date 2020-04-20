@@ -18,11 +18,11 @@
 
 (define-animation alien-shooter-0-hurt
     (asset-path "img/alien-shooter-0/alien-shooter-0-hurt.png")
-  :frame 1)
+  :frames 1)
 
 (define-animation alien-shooter-0-dying
     (asset-path "img/alien-shooter-0/alien-shooter-0-dying.png")
-  :frame 4)
+  :frames 4)
 
 (define-animation alien-shooter-0-attack-projectile-0
     (asset-path "img/alien-shooter-0/alien-shooter-0-projectile-0.png")
